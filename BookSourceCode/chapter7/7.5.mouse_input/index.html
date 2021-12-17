@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Example 7.5: The Mouse Input Project </title>
+        <link rel ="icon" type ="image/x-icon" href="./assets/favicon.png">
+
+        <!-- the following says there are javascript source code contained in 
+             the external source files
+        -->
+        <!-- external library -->
+        <script type="text/javascript" src="src/lib/gl-matrix.js"></script>
+
+        <!-- our game -->
+        <script type="module" src="./src/my_game/my_game.js"></script>
+    </head>
+
+     <body>    
+        <canvas id="GLCanvas" width="640" height="480">
+            <!-- GLCanvas is the area we will draw in: a 640x480 area. -->
+            Your browser does not support the HTML5 canvas.
+            <!-- this message will show only if WebGL clearing failed -->
+        </canvas>
+    </body>
+</html>

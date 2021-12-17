@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Example 9.9: The Physics Presets Project </title>
+        <link rel ="icon" type ="image/x-icon" href="./assets/favicon.png">
+
+        <!-- the following says there are javascript source code contained in 
+             the external source files
+        -->
+        <!-- external library -->
+        <script type="text/javascript" src="./src/lib/gl-matrix.js"></script>
+
+        <!-- our game -->
+        <script type="module" src="./src/my_game/my_game.js"></script>
+    </head>
+
+     <body>    
+        <canvas id="GLCanvas" width="800" height="600">
+            <!-- GLCanvas is the area we will draw in -->
+            Your browser does not support the HTML5 canvas.
+            <!-- this message will show only if WebGL clearing failed -->
+        </canvas>
+
+        <div id="physics" style="display: none">
+            <div style="display: table" >
+            <div style="float: left; padding-left: 10px">
+                <b>Behavior Controls:</b>
+                <ul>
+                    <li>
+                        <b>Z/X</b>: Sequence through arenas </li>
+                    <li>
+                        <b>C/V</b>: Decrease/Increase Arena Restitution </li>
+                    <li>
+                        <b>R/T</b>: Decrease/Increase Arena Friction </li>
+                    <li>
+                        <b>H</b>: Inject random velocity to all objects in the selected arena </li>
+                    <li>
+                        <b>WASD</b>: Move selected object </li>
+                    <li>
+                        <b>Left/Right</b>: Sequence through selected object </li>
+                    <li>
+                        <b>Up/Down + M/N/F</b>: Increase/Decrease Mass/Restitution/Friction</li>
+                    <li>
+                        <b>U/J/I/K/O/L</b>: Create a Bouncy Ball/Soccer Ball/Rock/Wooden Ball/Ice/Bowling Ball </li>
+                </ul>
+            </div>
+            <table style="float: right">
+              <tr>
+                  <th colspan='2'>Selected RigidBody Physics Values</th>
+              </tr>
+              <tr>
+                <th>Description</th> 
+                <th>Value</th>
+              </tr>
+              <tr>
+                <td>Mass</td>
+                <td><bdi id="value11"></bdi></td>
+              </tr>
+              <tr>
+                <td>Restitution</td>
+                <td><bdi id="value12"></bdi></td>
+              </tr>
+              <tr>
+                  <td>Friction</td>
+                  <td><bdi id="value13"></bdi></td>
+              </tr>
+            </table>
+        </div>
+        <div><b>Warning: </b>Changing restitution/mass/friction should be gradual and at a rate that can 
+            guarantee these values remain constant with respect to each relaxation loop. For example, varying 
+            restitution within relaxation steps can result in an unstable system.
+         </div>
+        </div>
+    </body>
+</html>

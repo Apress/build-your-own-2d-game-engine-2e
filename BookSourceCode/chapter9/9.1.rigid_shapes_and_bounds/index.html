@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Example 9.1: The Rigid Shapes and Bounds Project </title>
+        <link rel ="icon" type ="image/x-icon" href="./assets/favicon.png">
+
+        <!-- the following says there are javascript source code contained in 
+             the external source files
+        -->
+        <!-- external library -->
+        <script type="text/javascript" src="./src/lib/gl-matrix.js"></script>
+
+        <!-- our game -->
+        <script type="module" src="./src/my_game/my_game.js"></script>
+    </head>
+
+     <body>    
+        <canvas id="GLCanvas" width="800" height="600">
+            <!-- GLCanvas is the area we will draw in -->
+            Your browser does not support the HTML5 canvas.
+            <!-- this message will show only if WebGL clearing failed -->
+        </canvas>
+
+        <div style="display: table" >
+          <div style="float: left; padding-left: 10px">
+              <b>Behavior Controls:</b>
+              <ul>
+                  <li>
+                      <b>G</b>: Create new Rectangle/Circle (randomly)</li>
+              </ul>
+              <b>Selected Objet Controls:</b>
+              <ul>
+                  <li>
+                      <b>Left/Right</b>: Sequence through selected object </li>
+                  <li>
+                    <b>WASD-Z/X</b>: Move/Rotate(Z/X) selected object </li>
+                <li>
+                    <b>Y/U</b>: Inc/Dec RigidShape size (not the Renderable) </li>
+              </ul>
+          </div>
+          
+          <div style="float: left">
+              <b>Drawing Controls:</b>
+              <ul>
+                  <li>
+                      <b>T</b>: Texture&nbsp; </li>
+                  <li>
+                      <b>R</b>: RigidShape&nbsp;  </li>
+                  <li>
+                      <b>B</b>: Primitive Bounds (only when RigidShape shows)&nbsp; </li>
+
+              </ul>
+              
+          </div>
+      </div>
+    </body>
+</html>
