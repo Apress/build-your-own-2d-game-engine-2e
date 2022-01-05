@@ -6,7 +6,7 @@
 
 import engine from "../engine/index.js";
 
-class MyGmae {
+class MyGame {
     constructor(htmlCanvasID) {
         // Step A: Initialize the game engine
         engine.init(htmlCanvasID);
@@ -70,5 +70,5 @@ class MyGmae {
 }
 
 window.onload = function() {
-    new MyGmae('GLCanvas');
+    new MyGame('GLCanvas');
 }
