@@ -100,7 +100,7 @@ class BlueLevel extends engine.Scene {
             }
         }
 
-        // continously change texture tinting
+        // continuously change texture tinting
         let c = this.mSqSet[1].getColor();
         let ca = c[3] + deltaX;
         if (ca > 1) {

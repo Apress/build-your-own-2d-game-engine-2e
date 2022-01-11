@@ -120,7 +120,7 @@ class MyGame extends engine.Scene {
             }
         }
 
-        // continously change texture tinting
+        // continuously change texture tinting
         let c = this.mPortal.getColor();
         let ca = c[3] + deltaX;
         if (ca > 1) {
