@@ -48,7 +48,7 @@ class LightShader extends SpriteShader {
         this.mLight = l;
     }
 
-    _loadToShader(aCamera) {
+    _loadToShader() {
         let gl = glSys.get();
         gl.uniform1i(this.mIsOnRef, this.mLight.isLightOn());
         if (this.mLight.isLightOn()) {
