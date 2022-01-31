@@ -8,7 +8,7 @@
  */
 "use strict";
 
-// general utiities
+// general utilities
 import Renderable from "./renderable.js";
 
 // local to this file only

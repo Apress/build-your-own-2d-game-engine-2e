@@ -12,7 +12,7 @@
 import * as xml from "./resources/xml.js";
 import * as text from "./resources/text.js";
 
-// general utiities
+// general utilities
 import * as input from "./input.js";
 import Scene from "./scene.js";
 import Camera from "./camera.js";

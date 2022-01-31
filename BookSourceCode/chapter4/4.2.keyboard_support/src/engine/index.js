@@ -8,7 +8,7 @@
  */
 "use strict";
 
-// general utiities
+// general utilities
 import * as input from "./input.js";
 import Camera from "./camera.js";
 import Transform from "./transform.js";

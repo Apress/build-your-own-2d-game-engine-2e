@@ -11,7 +11,7 @@
 // Resources
 import * as text from "./resources/text.js";
 
-// general utiities
+// general utilities
 import * as input from "./input.js";
 import Camera from "./camera.js";
 import Transform from "./transform.js";

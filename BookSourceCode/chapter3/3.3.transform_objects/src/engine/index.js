@@ -8,7 +8,7 @@
  */
 "use strict";
 
-// general utiities
+// general utilities
 import Transform from "./transform.js";
 import Renderable from "./renderable.js";
 
