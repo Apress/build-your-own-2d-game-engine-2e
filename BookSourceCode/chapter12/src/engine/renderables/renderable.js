@@ -11,6 +11,9 @@ import Transform from "../utils/transform.js";
 import * as shaderResources from "../core/shader_resources.js";
 
 class Renderable {
+    /**
+     * @constructor Renderable
+     */
     constructor() {
         this.mShader = shaderResources.getConstColorShader();  // get the constant color shader
         this.mXform = new Transform(); // transform that moves this object around
