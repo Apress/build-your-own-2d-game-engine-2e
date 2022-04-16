@@ -14,6 +14,7 @@ class LerpVec2 extends Lerp {
      * @param {vec2} value  - starting value of interpolation
      * @param {integer} cycles - number of cycles it should take to reach the target value
      * @param {float} rate - rate at which the value should change at each cycle
+     * @returns {LerpVec2} a new LerpVec2 instance
      */
     constructor(value, cycle, rate) {
         super(value, cycle, rate);

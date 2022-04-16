@@ -15,6 +15,7 @@ class Lerp {
      * @param {float} value  - starting value of interpolation
      * @param {integer} cycles - number of cycles it should take to reach the target value
      * @param {float} rate - rate at which the value should change at each cycle
+     * @returns {Lerp} a new Lerp instance
      */
     constructor(value, cycles, rate) {
         this.mCurrentValue = value;    // begin value of interpolation

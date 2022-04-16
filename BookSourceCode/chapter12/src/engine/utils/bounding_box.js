@@ -22,6 +22,7 @@ class BoundingBox {
      * @param {vec2} centerPos - center position of the bounding box in world coordinates
      * @param {float} w - width of the bounding box
      * @param {float} h - height of the bounding box
+     * @return {BoundingBox} a new BoundingBox instance
      */
     constructor(centerPos, w, h) {
         this.mLL = vec2.fromValues(0, 0);

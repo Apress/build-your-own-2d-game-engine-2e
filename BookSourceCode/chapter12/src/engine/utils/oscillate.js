@@ -12,6 +12,14 @@
 // duration: for how long in number of update cycles
 //
 class Oscillate {
+    /**
+     * Object for simple, under-dampened harmonic oscillation
+     * @constructor
+     * @param {float} delta  - the maximum magnitude of the oscillation
+     * @param {float} frequency - the frequency of the oscillation in revolutions per cycle
+     * @param {integer} duration - the number of cycles the oscillation should take
+     * @returns {Oscillate} a new Oscillate instance
+     */
     constructor(delta, frequency, duration) {
         this.mMag = delta;
 
@@ -20,15 +28,28 @@ class Oscillate {
 
         this.mNumCyclesLeft = duration;
     }
-
+    /**
+     * Restarts this Oscillation
+     * @method
+     */
     reStart() {
         this.mNumCyclesLeft = this.mCycles;
     }
 
+    /**
+     * Returns if the Oscillation has completed
+     * @method
+     * @returns {boolean} if duration of this Oscillation has been reached
+     */
     done() {
         return (this.mNumCyclesLeft <= 0);
     }
 
+    /**
+     * Returns the next amplitude for this OScillation
+     * @method
+     * @returns {float} the next amplitude for this Oscillation
+     */
     getNext() {
         this.mNumCyclesLeft--;
         let v = 0;
@@ -43,6 +64,11 @@ class Oscillate {
         return (this._nextDampedHarmonic());
     }
 
+    /**
+     * Internal method to return the next dampened cosine value
+     * @method 
+     * @returns {float} the next dampened cosine value
+     */
     _nextDampedHarmonic() {
         // computes (Cycles) * cos(  Omega * t )
         let frac = this.mNumCyclesLeft / this.mCycles;
