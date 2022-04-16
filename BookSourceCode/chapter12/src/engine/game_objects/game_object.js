@@ -13,8 +13,8 @@ class GameObject {
     /**
      * Template for elements of the game that interact with others
      * @constructor GameObject
-     * @param {Renderable} renderable - the renderable to be associated with this game object
-     * @returns {GameObject} New instance of GameObject
+     * @param {Renderable} renderable - the renderable to be associated with this GameObject
+     * @returns {GameObject} a new instance of GameObject
      */
     constructor(renderable) {
         this.mRenderComponent = renderable;
@@ -25,16 +25,16 @@ class GameObject {
         this.mDrawRigidShape = false;
     }
     /**
-     * Returns the Transform of the Renderable associated with this gameObject
+     * Returns the Transform of the Renderable associated with this GameObject
      * @method
-     * @returns {Transform} mRenderComponent - the Transform of this gameObject
+     * @returns {Transform} the Transform of this GameObject
      */
     getXform() { return this.mRenderComponent.getXform(); }
 
     /**
      * Returns the BoundingBox for this gameObject
      * @method
-     * @returns {BoundingBox} b - a new copy of the bounding box of this gameObject
+     * @returns {BoundingBox} b - a new copy of the bounding box of this GameObject
      */
     getBBox() {
         let xform = this.getXform();
@@ -115,7 +115,7 @@ class GameObject {
         }
     }
     /**
-     * Updates the rigid body of this gameObject
+     * Method called by Gameloop, updates the rigid body of this gameObject
      * @method
      */
     update() {
