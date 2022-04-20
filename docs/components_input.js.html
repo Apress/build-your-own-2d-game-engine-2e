@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/input.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/input.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * File: input.js
+ *  
+ * interfaces with HTML5 to to receive keyboard events
+ * 
+ * For a complete list of key codes, see
+ * https://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
+ */
+"use strict";
+
+/**
+ * Mapping and functions for live user input
+ * @module input
+ */
+// Key code constants
+
+/**
+ * Keyboard enums
+ * @export input
+ * 
+ */
+const keys = {
+    Backspace: 8,
+    Enter: 13,
+
+    // arrows
+    Left: 37,
+    Up: 38,
+    Right: 39,
+    Down: 40,
+
+    // space bar
+    Space: 32,
+
+    // numbers 
+    Zero: 48,
+    One: 49,
+    Two: 50,
+    Three: 51,
+    Four: 52,
+    Five: 53,
+    Six: 54,
+    Seven: 55,
+    Eight: 56,
+    Nine: 57,
+
+    // Alphabets
+    A: 65,
+    B: 66,
+    C: 67,
+    D: 68,
+    E: 69,
+    F: 70,
+    G: 71,
+    H: 72,
+    I: 73,
+    J: 74,
+    K: 75,
+    L: 76,
+    M: 77,
+    N: 78,
+    O: 79,
+    P: 80,
+    Q: 81,
+    R: 82,
+    S: 83,
+    T: 84,
+    U: 85,
+    V: 86,
+    W: 87,
+    X: 88,
+    Y: 89,
+    Z: 90,
+
+    LastKeyCode: 222
+}
+
+// mouse button enums
+/**
+ * Mouse button enums
+ * @export input
+ * @enum
+ */
+const eMouseButton = Object.freeze({
+    eLeft: 0,
+    eMiddle: 1,
+    eRight: 2
+});
+
+// Previous key state
+let mKeyPreviousState = []; // a new array
+// The pressed keys.
+let mIsKeyPressed = [];
+// Click events: once an event is set, it will remain there until polled
+let mIsKeyClicked = [];
+
+// Event handler functions
+function onKeyDown(event) {
+    mIsKeyPressed[event.keyCode] = true;
+}
+
+function onKeyUp(event) {
+    mIsKeyPressed[event.keyCode] = false;
+}
+
+// Support mouse
+let mCanvas = null;
+let mButtonPreviousState = [];
+let mIsButtonPressed = [];
+let mIsButtonClicked = [];
+let mMousePosX = -1;
+let mMousePosY = -1;
+
+function onMouseMove(event) {
+    let inside = false;
+    let bBox = mCanvas.getBoundingClientRect();
+    // In Canvas Space now. Convert via ratio from canvas to client.
+    let x = Math.round((event.clientX - bBox.left) * (mCanvas.width / bBox.width));
+    let y = Math.round((event.clientY - bBox.top) * (mCanvas.height / bBox.height));
+
+    if ((x >= 0) &amp;&amp; (x &lt; mCanvas.width) &amp;&amp;
+        (y >= 0) &amp;&amp; (y &lt; mCanvas.height)) {
+        mMousePosX = x;
+        mMousePosY = mCanvas.height - 1 - y;
+        inside = true;
+    }
+    return inside;
+}
+
+function onMouseDown(event) {
+    if (onMouseMove(event)) {
+        mIsButtonPressed[event.button] = true;
+    }
+}
+
+function onMouseUp(event) {
+    onMouseMove(event);
+    mIsButtonPressed[event.button] = false;
+}
+
+function cleanUp() { }  // nothing to do for now
+
+/**
+ * Initialize the input manager and instantiate input listeners
+ * @export input
+ * @param {string} canvasID - the case sensitive html canvas id
+ */
+function init(canvasID) {
+    let i;
+
+    // keyboard support
+    for (i = 0; i &lt; keys.LastKeyCode; i++) {
+        mIsKeyPressed[i] = false;
+        mKeyPreviousState[i] = false;
+        mIsKeyClicked[i] = false;
+    }
+
+    // register handlers 
+    window.addEventListener('keyup', onKeyUp);
+    window.addEventListener('keydown', onKeyDown);
+
+    // Mouse support
+    for (i = 0; i &lt; 3; i++) {
+        mButtonPreviousState[i] = false;
+        mIsButtonPressed[i] = false;
+        mIsButtonClicked[i] = false;
+    }
+    window.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mouseup', onMouseUp);
+    window.addEventListener('mousemove', onMouseMove);
+    mCanvas = document.getElementById(canvasID);
+}
+/**
+ * Update function called from GameLoop
+ * @export input
+ */
+function update() {
+    let i;
+    // update keyboard input state
+    for (i = 0; i &lt; keys.LastKeyCode; i++) {
+        mIsKeyClicked[i] = (!mKeyPreviousState[i]) &amp;&amp; mIsKeyPressed[i];
+        mKeyPreviousState[i] = mIsKeyPressed[i];
+    }
+
+    // update mouse input state
+    for (i = 0; i &lt; 3; i++) {
+        mIsButtonClicked[i] = (!mButtonPreviousState[i]) &amp;&amp; mIsButtonPressed[i];
+        mButtonPreviousState[i] = mIsButtonPressed[i];
+    }
+}
+
+// Function for GameEngine programmer to test if a key is pressed down
+/**
+ * Returns if a specific key is pressed
+ * @export input
+ * @param {keys} keyCode - key to check for pressed state
+ * @returns {boolean} true if the key is pressed
+ */
+function isKeyPressed(keyCode) {
+    return mIsKeyPressed[keyCode];
+}
+
+/**
+ * Returns if a specific key is clicked
+ * @export input
+ * @param {keys} keyCode - key to check for clicked state
+ * @returns {boolean} true if the key is clicked
+ */
+function isKeyClicked(keyCode) {
+    return mIsKeyClicked[keyCode];
+}
+
+// Functions for query mouse button state and position
+/**
+ * Returns if a specific mouse button is pressed
+ * @export input
+ * @param {eMouseButton} button - button to check for pressed state
+ * @returns {boolean} true if the button is pressed
+ */
+function isButtonPressed(button) {
+    return mIsButtonPressed[button];
+}
+
+/**
+ * Returns if a specific mouse button is clicked
+ * For a button to be clicked it must have been pressed then released
+ * @export input
+ * @param {eMouseButton} button - button to check for ckicked state
+ * @returns {boolean} true if the button is clicked
+ */
+function isButtonClicked(button) {
+    return mIsButtonClicked[button];
+}
+
+/**
+ * Returns mouse X position
+ * @export input
+ * @returns {float} X position of mouse
+ */
+function getMousePosX() { return mMousePosX; }
+
+/**
+ * Returns mouse Y position
+ * @export input
+ * @returns {float} Y position of mouse
+ */
+function getMousePosY() { return mMousePosY; }
+
+export {
+    keys, eMouseButton,
+
+    init, cleanUp, update,
+
+    // keyboard
+    isKeyClicked, isKeyPressed,
+
+    // mouse
+    isButtonClicked, isButtonPressed, getMousePosX, getMousePosY
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-input.html">input</a></li><li><a href="module-physics.html">physics</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="particle_system.html">particle_system</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Apr 20 2022 11:55:17 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

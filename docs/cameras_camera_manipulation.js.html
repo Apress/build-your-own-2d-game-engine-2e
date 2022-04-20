@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: cameras/camera_manipulation.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: cameras/camera_manipulation.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * File: camera_manipulation.js
+ *
+ * Adds the manipulation functions to the Camera class
+ */
+"use strict";
+
+import Camera from "./camera_main.js"
+import { eBoundCollideStatus } from "../utils/bounding_box.js";
+import CameraShake from "./camera_shake.js";
+
+/**
+ * Update function to be called from GameLoop
+ * @memberof Camera
+ */
+Camera.prototype.update = function () {
+    if (this.mCameraShake !== null) {
+        if (this.mCameraShake.done()) {
+            this.mCameraShake = null;
+        } else {
+            this.mCameraShake.setRefCenter(this.getWCCenter());
+            this.mCameraShake.update();
+        }
+    }
+    this.mCameraState.update();
+}
+
+// For LERP function configuration
+/**
+ * Configure the linear interpolation of this Camera
+ * @memberof Camera
+ * @param {float} stiffness - the rate for the interpolations
+ * @param {integer} duration - the number of cycles for the interpolations
+ */
+Camera.prototype.configLerp = function (stiffness, duration) {
+    this.mCameraState.config(stiffness, duration);
+}
+
+// Define camera shake
+/**
+ * Define a new CameraShake for this Camera
+ * @memberof Camera
+ * @param {vec2} deltas - the [x,y] magnitudes of the shake
+ * @param {float} freqs - the frequency of the shaking in revolutions per cycle
+ * @param {float} shakeDuration - the number of cycles for the shaking
+ */
+Camera.prototype.shake = function (deltas, freqs, duration) {
+    this.mCameraShake = new CameraShake(this.mCameraState, deltas, freqs, duration);
+}
+
+// Restart the shake
+/**
+ * Restart the shaking of this Camera
+ * @memberof Camera
+ * @returns {boolean} true if this Camera has a defined CameraShake
+ */
+Camera.prototype.reShake = function () {
+    let success = (this.mCameraShake !== null);
+    if (success)
+        this.mCameraShake.reShake();
+    return success;
+}
+
+// pan the camera to ensure aXform is within camera bounds
+// this is complementary to the ClampAtBound: instead of clamping aXform, now, move the camera
+/**
+ * Pan this Camera to follow the Transform argument
+ * @memberof Camera
+ * @param {Transform} aXform - Transform to follow
+ * @param {float} zone - world coordinate distance from the border of this Camera
+ */
+Camera.prototype.panWith = function (aXform, zone) {
+    let status = this.collideWCBound(aXform, zone);
+    if (status !== eBoundCollideStatus.eInside) {
+        let pos = aXform.getPosition();
+        let newC = vec2.clone(this.getWCCenter());
+        if ((status &amp; eBoundCollideStatus.eCollideTop) !== 0) {
+            newC[1] = pos[1] + (aXform.getHeight() / 2) - (zone * this.getWCHeight() / 2);
+        }
+        if ((status &amp; eBoundCollideStatus.eCollideBottom) !== 0) {
+            newC[1] = pos[1] - (aXform.getHeight() / 2) + (zone * this.getWCHeight() / 2);
+        }
+        if ((status &amp; eBoundCollideStatus.eCollideRight) !== 0) {
+            newC[0] = pos[0] + (aXform.getWidth() / 2) - (zone * this.getWCWidth() / 2);
+        }
+        if ((status &amp; eBoundCollideStatus.eCollideLeft) !== 0) {
+            newC[0] = pos[0] - (aXform.getWidth() / 2) + (zone * this.getWCWidth() / 2);
+        }
+        this.mCameraState.setCenter(newC);
+    }
+}
+/**
+ * Pan the Camera by dx,dy
+ * @memberof Camera
+ * @param {float} dx - change in x world coordinate
+ * @param {float} dy - change in y world coordinate
+ */
+Camera.prototype.panBy = function (dx, dy) {
+    let newC = vec2.clone(this.getWCCenter());
+    newC[0] += dx;
+    newC[1] += dy;
+    this.mCameraState.setCenter(newC);
+}
+
+/**
+ * Pan the Camera to be centered at cx,cy
+ * @memberof Camera
+ * @param {float} cx - x world coordinate
+ * @param {float} cy - y world coordinate
+ */
+Camera.prototype.panTo = function (cx, cy) {
+    this.setWCCenter(cx, cy);
+}
+
+// zoom with respect to the center
+// zoom > 1 ==> zooming out, see more of the world
+// zoom &lt; 1 ==> zooming in, see less of the world, more detailed
+// zoom &lt; 0 is ignored
+/**
+ * Change the zoom level of this Camera with respect to the center
+ * @memberof Camera
+ * @param {float} zoom - scaling factor for the width of this Camera
+ */
+Camera.prototype.zoomBy = function (zoom) {
+    if (zoom > 0) {
+        this.setWCWidth(this.getWCWidth() * zoom);
+    }
+}
+
+// zoom towards (pX, pY) by zoom: 
+// zoom > 1 ==> zooming out, see more of the world
+// zoom &lt; 1 ==> zooming in, see less of the world, more detailed
+// zoom &lt; 0 is ignored
+/**
+ * Change zoom level of this Camera with respect to pos agrument
+ * @memberof Camera
+ * @param {vec2} pos - Point to scale this Camera with respect to
+ * @param {float} zoom - sacling factor for the width of this Camera
+ */
+Camera.prototype.zoomTowards = function (pos, zoom) {
+    let delta = [];
+    let newC = [];
+    vec2.sub(delta, pos, this.getWCCenter());
+    vec2.scale(delta, delta, zoom - 1);
+    vec2.sub(newC, this.getWCCenter(), delta);
+    this.zoomBy(zoom);
+    this.mCameraState.setCenter(newC);
+}
+
+export default Camera;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-input.html">input</a></li><li><a href="module-physics.html">physics</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="particle_system.html">particle_system</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Apr 20 2022 11:55:17 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
