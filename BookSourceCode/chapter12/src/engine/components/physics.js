@@ -6,6 +6,11 @@
  */
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
+/**
+ * Core the physics component
+ * @class physics
+ */
+
 import CollisionInfo from "../rigid_shapes/collision_info.js";
 
 let mSystemAcceleration = [0, -20];        // system-wide default acceleration
@@ -16,7 +21,18 @@ let mCorrectPosition = true;
 let mHasMotion = true;
 
 // getters and setters
+/**
+ * Returns the acceleration of the system in world coordinates
+ * @memberof physics
+ * @returns {vec2} the [X,Y] acceleration vector
+ */
 function getSystemAcceleration() { return vec2.clone(mSystemAcceleration); }
+/**
+ * Sets the acceleration of the sytsem in world coordinates
+ * @memberof physics
+ * @param {float} x - the acceleration in the X direction
+ * @param {flaot} y - the acceleration in the Y direction
+ */
 function setSystemAcceleration(x, y) {
     mSystemAcceleration[0] = x;
     mSystemAcceleration[1] = y;

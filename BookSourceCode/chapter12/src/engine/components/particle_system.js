@@ -8,11 +8,19 @@ import RigidCircle from "../rigid_shapes/rigid_circle.js";
 import CollisionInfo from "../rigid_shapes/collision_info.js";
 
   // Operate in Strict mode such that variables must be declared before used!
+  /**
+   * Particle System support
+   * @class particle_system
+   */
 
 let mXform = null;  // for collision with rigid shapes
 let mCircleCollider = null;
 let mCollisionInfo = null;
 let mFrom1to2 = [0, 0];
+/**
+ * Initialize the Transform, RigidCircle, and CollisionInfo for the particle system
+ * @memberof particle_system
+ */
 function init() {
     mXform = new Transform();
     mCircleCollider = new RigidCircle(mXform, 1.0);
@@ -20,7 +28,19 @@ function init() {
 }
 
 let mSystemAcceleration = [0, -50.0];   
+/**
+ * Returns the acceleration vector for the system
+ * @memberof particle_system
+ * @returns {vec2} the system acceleration
+ */
 function getSystemAcceleration() { return vec2.clone(mSystemAcceleration); }
+
+/**
+ * Set the particle system acceleration
+ * @memberof particle_system
+ * @param {float} x - the acceleration in the x direction
+ * @param {float} y - the acceleration in the y direction
+ */
 function setSystemAcceleration(x, y) {
     mSystemAcceleration[0] = x;
     mSystemAcceleration[1] = y;

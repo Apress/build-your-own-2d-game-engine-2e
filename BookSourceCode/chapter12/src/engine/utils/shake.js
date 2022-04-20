@@ -10,6 +10,7 @@ class Shake extends Oscillate {
     /**
      * Ocsillate object with randomized sign
      * @constructor
+     * @extends Oscillate
      * @param {float} delta  - the maximum magnitude of the oscillation
      * @param {float} frequency - the frequency of the oscillation in revolutions per cycle
      * @param {integer} duration - the number of cycles the oscillation should take

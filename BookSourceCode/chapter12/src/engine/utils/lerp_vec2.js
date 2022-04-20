@@ -11,6 +11,7 @@ class LerpVec2 extends Lerp {
     /**
      * Encapsulates linear interpolation of vec2, calls gl-matrixjs::lerp
      * @constructor
+     * @extends Lerp
      * @param {vec2} value  - starting value of interpolation
      * @param {integer} cycles - number of cycles it should take to reach the target value
      * @param {float} rate - rate at which the value should change at each cycle

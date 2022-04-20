@@ -5,7 +5,11 @@
  * 
  */
 "use strict";
-
+/**
+ * Enum for collision location
+ * @memberof BoundingBox
+ * @enum
+ */
 const eBoundCollideStatus = Object.freeze({
     eCollideLeft: 1,
     eCollideRight: 2,
@@ -74,7 +78,7 @@ class BoundingBox {
      * Returns the collision status of this BoundingBox with another BoundingBox
      * @method
      * @param {BoundingBox} otherBound - the other BoundingBox to test collision with
-     * @returns {Object} status - enum for collision location
+     * @returns {eBoundCollideStatus} status - enum of collision location
      */
     boundCollideStatus(otherBound) {
         let status = eBoundCollideStatus.eOutside;
