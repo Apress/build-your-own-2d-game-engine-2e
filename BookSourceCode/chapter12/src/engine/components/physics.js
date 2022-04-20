@@ -8,7 +8,7 @@
 
 /**
  * Core the physics component
- * @class physics
+ * @module physics
  */
 
 import CollisionInfo from "../rigid_shapes/collision_info.js";
@@ -23,13 +23,13 @@ let mHasMotion = true;
 // getters and setters
 /**
  * Returns the acceleration of the system in world coordinates
- * @memberof physics
+ * @export physics
  * @returns {vec2} the [X,Y] acceleration vector
  */
 function getSystemAcceleration() { return vec2.clone(mSystemAcceleration); }
 /**
  * Sets the acceleration of the sytsem in world coordinates
- * @memberof physics
+ * @export physics
  * @param {float} x - the acceleration in the X direction
  * @param {flaot} y - the acceleration in the Y direction
  */

@@ -16,7 +16,7 @@ class Renderable {
      * Encapsulate the Shader and vertexBuffer into the same object (and will include
      * other attributes later) to represent a Renderable object on the game screen.
      * @constructor Renderable
-     * @returns a new instance of Renderable
+     * @returns {Renderable} a new instance of Renderable
      */
     constructor() {
         this.mShader = shaderResources.getConstColorShader();  // get the constant color shader

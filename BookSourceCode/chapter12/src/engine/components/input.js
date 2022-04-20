@@ -16,7 +16,7 @@
 
 /**
  * Keyboard enums
- * @memberof input
+ * @export input
  * 
  */
 const keys = {
@@ -78,7 +78,7 @@ const keys = {
 // mouse button enums
 /**
  * Mouse button enums
- * @memberof input
+ * @export input
  * @enum
  */
 const eMouseButton = Object.freeze({
@@ -142,8 +142,8 @@ function cleanUp() { }  // nothing to do for now
 
 /**
  * Initialize the input manager and instantiate input listeners
- * @memberof input
- * @param {} canvasID 
+ * @export input
+ * @param {string} canvasID - the case sensitive html canvas id
  */
 function init(canvasID) {
     let i;
@@ -172,7 +172,7 @@ function init(canvasID) {
 }
 /**
  * Update function called from GameLoop
- * @memberof input
+ * @export input
  */
 function update() {
     let i;
@@ -192,7 +192,7 @@ function update() {
 // Function for GameEngine programmer to test if a key is pressed down
 /**
  * Returns if a specific key is pressed
- * @memberOf input
+ * @export input
  * @param {keys} keyCode - key to check for pressed state
  * @returns {boolean} true if the key is pressed
  */
@@ -202,7 +202,7 @@ function isKeyPressed(keyCode) {
 
 /**
  * Returns if a specific key is clicked
- * @memberOf input
+ * @export input
  * @param {keys} keyCode - key to check for clicked state
  * @returns {boolean} true if the key is clicked
  */
@@ -213,7 +213,7 @@ function isKeyClicked(keyCode) {
 // Functions for query mouse button state and position
 /**
  * Returns if a specific mouse button is pressed
- * @memberOf input
+ * @export input
  * @param {eMouseButton} button - button to check for pressed state
  * @returns {boolean} true if the button is pressed
  */
@@ -224,7 +224,7 @@ function isButtonPressed(button) {
 /**
  * Returns if a specific mouse button is clicked
  * For a button to be clicked it must have been pressed then released
- * @memberOf input
+ * @export input
  * @param {eMouseButton} button - button to check for ckicked state
  * @returns {boolean} true if the button is clicked
  */
@@ -234,14 +234,14 @@ function isButtonClicked(button) {
 
 /**
  * Returns mouse X position
- * @memberof input
+ * @export input
  * @returns {float} X position of mouse
  */
 function getMousePosX() { return mMousePosX; }
 
 /**
  * Returns mouse Y position
- * @memberof input
+ * @export input
  * @returns {float} Y position of mouse
  */
 function getMousePosY() { return mMousePosY; }
