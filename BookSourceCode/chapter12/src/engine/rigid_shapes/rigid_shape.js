@@ -18,6 +18,12 @@ let kRigidShapeUIDelta = 0.01;   // for UI interactive debugging
 let kPrintPrecision = 2;         // for printing float precision
 
 class RigidShape {
+    /**
+     * Base class for objects to participate in physics system
+     * @constructor
+     * @param {Transform} xf - the Transform for this RigidShape
+     * @returns {RigidShape} a new RigidShape instance
+     */
     constructor(xf) {
         this.mXform = xf;
         this.mAcceleration = physics.getSystemAcceleration();
@@ -38,8 +44,17 @@ class RigidShape {
     }
 
     // #region getters and setters
+    /**
+     * Returns what subtype this RigidShape is
+     * @returns {string} mType - whether this is a RigidCircle or RigidRectangle
+     */
+
     getType() { return this.mType; }
 
+    /**
+     * 
+     * @returns 
+     */
     getInvMass() { return this.mInvMass; }
     setMass(m) {
         if (m > 0) {

@@ -7,7 +7,7 @@
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 /**
- * Core the physics component
+ * Core of the physics component supporting projection and collision resolution
  * @module physics
  */
 
@@ -37,11 +37,28 @@ function setSystemAcceleration(x, y) {
     mSystemAcceleration[0] = x;
     mSystemAcceleration[1] = y;
 }
-
+/**
+ * Returns whether the RigidShapes are in correct positions
+ * @export physics
+ * @returns {boolean} true if every RigidShape is in the correct position
+ */
 function getPositionalCorrection() { return mCorrectPosition; }
+/**
+ * Toggles the state of the correction flag
+ * @export physics
+ */
 function togglePositionalCorrection() { mCorrectPosition = !mCorrectPosition; }
 
+/**
+ * Returns whether there is motion
+ * @exports physics
+ * @returns {boolean} true if there is motion
+ */
 function getHasMotion() { return mHasMotion; }
+/**
+ * Toggles the state of the has motion flag
+ * @export physics
+ */
 function toggleHasMotion() { mHasMotion = !mHasMotion; }
 
 function getRelaxationCount() { return mRelaxationCount; }

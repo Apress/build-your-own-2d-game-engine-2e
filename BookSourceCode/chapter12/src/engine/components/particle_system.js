@@ -10,7 +10,7 @@ import CollisionInfo from "../rigid_shapes/collision_info.js";
   // Operate in Strict mode such that variables must be declared before used!
   /**
    * Particle System support
-   * @class particle_system
+   * @module particle_system
    */
 
 let mXform = null;  // for collision with rigid shapes
@@ -19,7 +19,7 @@ let mCollisionInfo = null;
 let mFrom1to2 = [0, 0];
 /**
  * Initialize the Transform, RigidCircle, and CollisionInfo for the particle system
- * @memberof particle_system
+ * @export particle_system
  */
 function init() {
     mXform = new Transform();
@@ -30,14 +30,14 @@ function init() {
 let mSystemAcceleration = [0, -50.0];   
 /**
  * Returns the acceleration vector for the system
- * @memberof particle_system
+ * @export particle_system
  * @returns {vec2} the system acceleration
  */
 function getSystemAcceleration() { return vec2.clone(mSystemAcceleration); }
 
 /**
  * Set the particle system acceleration
- * @memberof particle_system
+ * @export particle_system
  * @param {float} x - the acceleration in the x direction
  * @param {float} y - the acceleration in the y direction
  */
