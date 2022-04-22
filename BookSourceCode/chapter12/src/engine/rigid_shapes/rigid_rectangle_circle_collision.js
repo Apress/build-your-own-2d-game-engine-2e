@@ -9,12 +9,12 @@ import RigidRectangle from "./rigid_rectangle_collision.js";
 
 /**
  * Determines if there is collision between the shapes
- * @memberOf RigidRectangle
- * @param {float[]} v1 The rectangle vertex that is closest to the center of the circle
- * @param {float[]} cirCenter The center of the circle
- * @param {float} r The radius of the circle
- * @param {CollisionInfo} info Used to store the collision info
- * @returns {Boolean} If there is collision between the 2 shapes
+ * @memberof RigidRectangle
+ * @param {vec2} v1 - the rectangle vertex that is closest to the center of the circle
+ * @param {vec2} cirCenter - the center of the circle
+ * @param {float} r - the radius of the circle
+ * @param {CollisionInfo} info - used to store the collision info
+ * @returns {boolean} true if there is collision between the 2 shapes
  */
 RigidRectangle.prototype.checkCircRectVertex = function(v1, cirCenter, r, info) {
     // the center of circle is in corner region of mVertex[nearestEdge]
@@ -33,10 +33,10 @@ RigidRectangle.prototype.checkCircRectVertex = function(v1, cirCenter, r, info) 
 
 /**
  * Check for collision between RigidRectangle and Circle
- * @param {Circle} otherCir circle to check for collision status against
- * @param {CollisionInfo} collisionInfo Where the Collision Info is stored
- * @returns {Boolean} true if collision occurs
- * @memberOf RigidRectangle
+ * @memberof RigidRectangle
+ * @param {RigidCircle} otherCir - circle to check for collision status against
+ * @param {CollisionInfo} collisionInfo - Where the Collision Info is stored
+ * @returns {boolean} true if collision occurs
  */
 RigidRectangle.prototype.collideRectCirc = function (otherCir, collisionInfo) {
     let outside = false;

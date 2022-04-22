@@ -53,10 +53,10 @@ let mCollisionInfoR2 = new CollisionInfo();
 
 /**
  * Decides on which collision function to call based on the type of shape passed
- * @memberOf RigidRectangle 
- * @param {RigidShape} otherShape The other shape that's involved
- * @param {CollisionInfo} collisionInfo Where the collision information is stored
- * @returns {Boolean} The results of the collision
+ * @memberof RigidRectangle 
+ * @param {RigidShape} otherShape - The other shape to test collision
+ * @param {CollisionInfo} collisionInfo - Where the collision information is stored
+ * @returns {boolean} the results of the collision
  */
 RigidRectangle.prototype.collisionTest = function (otherShape, collisionInfo) {
     let status = false;
@@ -69,9 +69,10 @@ RigidRectangle.prototype.collisionTest = function (otherShape, collisionInfo) {
 }
 
 /**
- * Finds the support point.
- * @param {type} dir
- * @param {type} ptOnEdge
+ * Calculates a support point for a point on the edge of this RigidRectangle
+ * @memberof RigidRectangle
+ * @param {vec2} dir - the direction of the support point 
+ * @param {vec2} ptOnEdge - a point on the edge of this RigidRectangle 
  */
 RigidRectangle.prototype.findSupportPoint = function (dir, ptOnEdge) {
     // the longest project length
@@ -94,15 +95,13 @@ RigidRectangle.prototype.findSupportPoint = function (dir, ptOnEdge) {
     }
 }
 
+
 /**
- * /**
- * Find the shortest axis that overlapping
+ * Find the shortest axis of penetration between this RigidRectangle and another
  * @memberOf RigidRectangle
- * @param {RigidRectangle} otherRect  Another rectangle that being tested
- * @param {CollisionInfo} collisionInfo  Record the collision information
- * @returns {Boolean} True if has overlap part in all four directions.
- * this code is referenced and adapted from 
- * http://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-oriented-rigid-bodies--gamedev-8032
+ * @param {RigidRectangle} otherRect - the other rectangle being tested
+ * @param {CollisionInfo} collisionInfo - Record of the collision information
+ * @returns {boolean} true if there is overlap in all four directions.
  */
 RigidRectangle.prototype.findAxisLeastPenetration = function (otherRect, collisionInfo) {
     let n;
@@ -147,12 +146,12 @@ RigidRectangle.prototype.findAxisLeastPenetration = function (otherRect, collisi
 }
     
 /**
- * Check for collision between RigidRectangle and RigidRectangle
- * @param {RigidRectangle} r1 RigidRectangle object to check for collision status
- * @param {RigidRectangle} r2 RigidRectangle object to check for collision status against
- * @param {CollisionInfo} collisionInfo Collision info of collision
- * @returns {Boolean} true if collision occurs
- * @memberOf RigidRectangle
+ * Check for collision between a RigidRectangle and another RigidRectangle
+ * @memberof RigidRectangle
+ * @param {RigidRectangle} r1 - RigidRectangle object to check for collision status
+ * @param {RigidRectangle} r2 - RigidRectangle object to check for collision status against
+ * @param {CollisionInfo} collisionInfo - the information object for the collision
+ * @returns {boolean} true if collision occurs
  */   
 RigidRectangle.prototype.collideRectRect = function (r1, r2, collisionInfo) {
     let status1 = false;
@@ -190,13 +189,13 @@ export default RigidRectangle;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-input.html">input</a></li><li><a href="module-physics.html">physics</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="particle_system.html">particle_system</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-input.html">input</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Apr 20 2022 15:38:40 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Apr 22 2022 13:48:23 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

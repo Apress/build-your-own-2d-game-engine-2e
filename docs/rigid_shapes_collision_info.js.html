@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: rigid_shapes/collision_info.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: rigid_shapes/collision_info.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* 
+ * File: collision_info.js
+ *      normal: vector upon which collision interpenetrates
+ *      depth: how much penetration
+ */
+"use strict";
+
+import * as debugDraw from "../core/debug_draw.js";
+
+let kInfoColor = [1, 0, 1, 1]; // draw the info in magenta
+
+
+class CollisionInfo {
+    /**
+     * Encapsulates collision resolution information
+     * All properties are zeroed until set
+     * @constructor
+     * @returns {CollisionInfo} a new CollisionInfo instance
+     */
+    constructor() {
+        this.mDepth = 0;
+        this.mNormal = vec2.fromValues(0, 0);
+        this.mStart = vec2.fromValues(0, 0);
+        this.mEnd = vec2.fromValues(0, 0);
+    }
+
+    /**
+     * Returns the interpenetration depth between the colliding shapes
+     * @method
+     * @returns {float} mDepth - interpenetration depth
+     */
+    getDepth() { return this.mDepth; }
+    /**
+     * Sets the interpenetration depth between the colliding shapes
+     * @method
+     * @param {float} s - the new interpenetration depth  
+     */
+    setDepth(s) { this.mDepth = s; }
+
+    /**
+     * Returns the normal vector for this CollisionInfo
+     * @method
+     * @returns {vec2} mNormal - the normal vector
+     */
+    getNormal() { return this.mNormal; }
+
+    /**
+     * Sets the normal vector for this CollisionInfo
+     * @method
+     * @param {vec2} s - the new normal vector 
+     */
+    setNormal(s) { this.mNormal = s; } 
+
+    /**
+     * Returns the starting [X,Y] position for this CollisionInfo
+     * @method
+     * @returns {vec2} mStart - starting position
+     */
+    getStart() { return this.mStart; }
+    
+    /**
+     * Returns the ending [X,Y] position for this CollisionInfo
+     * @method
+     * @returns {vec2} mEnd - ending position
+     */
+    getEnd() { return this.mEnd; }
+
+    /**
+     * Sets all the properties that describe this CollisionInfo.
+     * Calculates ending position based on starting position, normal vector, and depth
+     * @method
+     * @param {float} d - the depth of interpenetration between the shapes
+     * @param {vec2} n - the normal vector for the collision
+     * @param {vec2} s - the [X,Y] starting position in world coordinates
+     */
+    setInfo(d, n, s) {
+        this.mDepth = d;
+        this.mNormal[0] = n[0];
+        this.mNormal[1] = n[1];
+        this.mStart[0] = s[0];
+        this.mStart[1] = s[1];
+        vec2.scaleAndAdd(this.mEnd, s, n, d);
+    }
+    /**
+     * Reverses the direction of the interpenetration resolution this CollisionInfo encapsulates
+     * @method
+     */
+    changeDir() {
+        vec2.scale(this.mNormal, this.mNormal, -1);
+        let n = this.mStart;
+        this.mStart = this.mEnd;
+        this.mEnd = n;
+    }
+    /**
+     * Draw a line on aCamera that shows this CollisionInfo
+     * @param {Camera} aCamera - the Camera to draw to
+     */
+    draw(aCamera) {
+        debugDraw.drawLine(aCamera, this.mStart, this.mEnd, true, kInfoColor);
+    }
+}
+
+export default CollisionInfo;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-input.html">input</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Apr 22 2022 13:48:23 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utils/shake_vec2.js</title>
+    <title>JSDoc: Source: rigid_shapes/rigid_circle_main.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utils/shake_vec2.js</h1>
+    <h1 class="page-title">Source: rigid_shapes/rigid_circle_main.js</h1>
 
     
 
@@ -27,50 +27,85 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/* 
- * File: shake_vec2.js
- * Shakes a vec2, sub class from Shake (use as y-value) 
+ * File: rigid_circle_main.js
+ * 
+ *       Rigid circle class definition file
  */
 "use strict";
 
-import Shake from "./shake.js";
+import RigidShape from "./rigid_shape.js";
+import * as debugDraw from "../core/debug_draw.js";
 
-// deltas, and freqs: are vec2
-// duration is a float
-class ShakeVec2 extends Shake {
+class RigidCircle extends RigidShape {
+
     /**
-     * Class to model shaking in x and y directions
+     * Defines a rigid rectangle shape supported by the physics systems
+     * @extends RigidShape
      * @constructor
-     * @extends Shake
-     * @param {vec2} deltas - the maximum magnitude of the oscillation
-     * @param {vec2} freqs - the frequency of the oscillation in revolutions per cycle
-     * @param {integer} duration - the number of cycles the oscillation should take
-     * @returns {ShakeVec2} a new ShakeVec2 instance
+     * @param {Transform} xf - the Transform for this RigidCircle
+     * @param {float} radius - radius of the circle
+     * @returns {RigidCircle} a new RigidCircle instance
      */
-    constructor(deltas, freqs, duration) {
-        super(deltas[1], freqs[1], duration);  // super is shake in y-direction
-        this.xShake = new Shake(deltas[0], freqs[0], duration);
+    constructor(xf, radius) {
+        super(xf);
+        this.mType = "RigidCircle";
+        this.mRadius = radius;
+        this.mBoundRadius = radius;
+
+        this.updateInertia();
     }
+
     /**
-     * Restarts the shake in the x and y directions
+     * Recalculates the inertia of this RigidCircle
      * @method
      */
-    reStart() {
-        super.reStart();
-        this.xShake.reStart();
+    updateInertia() {
+        if (this.mInvMass === 0) {
+            this.mInertia = 0;
+        } else {
+            // this.mInvMass is inverted!!
+            // Inertia=mass * radius^2
+            // 12 is a constant value that can be changed
+            this.mInertia = (1 / this.mInvMass) * (this.mRadius * this.mRadius) / 12;
+        }
     }
+
     /**
-     * Returns the next oscillation x and y magnitude with random sign
+     * Add a value to the radius of this RigidCircle
      * @method
-     * @returns {float[]} [x,y] - next x and y oscillation magnitude with random sign
+     * @param {float} dt - change in the radius
      */
-    getNext() {
-        let x = this.xShake.getNext();
-        let y = super.getNext();
-        return [x, y];
+    incShapeSizeBy(dt) { 
+        this.mRadius += dt; 
+        this.mBoundRadius = this.mRadius;
+        this.updateInertia();
     }
+
+    /**
+     * Draw this RigidCircle to aCamera
+     * @param {Camera} aCamera - the Camera to draw to
+     */
+    draw(aCamera) {
+        let p = this.mXform.getPosition();
+        debugDraw.drawCircle(aCamera, p, this.mRadius, this._shapeColor());  // the circle object
+
+        let u = [p[0], p[1] + this.mBoundRadius];
+        // angular motion
+        vec2.rotateWRT(u, u, this.mXform.getRotationInRad(), p);
+        debugDraw.drawLine(aCamera, p, u, false, this._shapeColor()); // show rotation 
+
+        super.draw(aCamera);  // draw last to be on top
+    }
+
+    /**
+     * Returns the radius of this RigidCircle
+     * @method
+     * @returns {float} mRadius - the radius
+     */
+    getRadius() { return this.mRadius; }
 }
 
-export default ShakeVec2;</code></pre>
+export default RigidCircle;</code></pre>
         </article>
     </section>
 

@@ -9,6 +9,15 @@ import RigidShape from "./rigid_shape.js";
 import * as debugDraw from "../core/debug_draw.js";
 
 class RigidCircle extends RigidShape {
+
+    /**
+     * Defines a rigid rectangle shape supported by the physics systems
+     * @extends RigidShape
+     * @constructor
+     * @param {Transform} xf - the Transform for this RigidCircle
+     * @param {float} radius - radius of the circle
+     * @returns {RigidCircle} a new RigidCircle instance
+     */
     constructor(xf, radius) {
         super(xf);
         this.mType = "RigidCircle";
@@ -18,6 +27,10 @@ class RigidCircle extends RigidShape {
         this.updateInertia();
     }
 
+    /**
+     * Recalculates the inertia of this RigidCircle
+     * @method
+     */
     updateInertia() {
         if (this.mInvMass === 0) {
             this.mInertia = 0;
@@ -29,12 +42,21 @@ class RigidCircle extends RigidShape {
         }
     }
 
+    /**
+     * Add a value to the radius of this RigidCircle
+     * @method
+     * @param {float} dt - change in the radius
+     */
     incShapeSizeBy(dt) { 
         this.mRadius += dt; 
         this.mBoundRadius = this.mRadius;
         this.updateInertia();
     }
 
+    /**
+     * Draw this RigidCircle to aCamera
+     * @param {Camera} aCamera - the Camera to draw to
+     */
     draw(aCamera) {
         let p = this.mXform.getPosition();
         debugDraw.drawCircle(aCamera, p, this.mRadius, this._shapeColor());  // the circle object
@@ -47,6 +69,11 @@ class RigidCircle extends RigidShape {
         super.draw(aCamera);  // draw last to be on top
     }
 
+    /**
+     * Returns the radius of this RigidCircle
+     * @method
+     * @returns {float} mRadius - the radius
+     */
     getRadius() { return this.mRadius; }
 }
 

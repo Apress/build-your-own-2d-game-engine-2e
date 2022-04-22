@@ -5,6 +5,13 @@
 
 import RigidCircle from "./rigid_circle_main.js";
 
+/**
+ * Tests for collision between this RigidCircle and another RigidShape
+ * @memberof RigidCircle
+ * @param {RigidShape} otherShape - the other shape to test for collision
+ * @param {CollisionInfo} collisionInfo - record of the collision and its resolution
+ * @returns {boolean} true if a collision occured
+ */
 RigidCircle.prototype.collisionTest = function (otherShape, collisionInfo) {
     let status = false;
     if (otherShape.mType === "RigidCircle") {
@@ -15,6 +22,14 @@ RigidCircle.prototype.collisionTest = function (otherShape, collisionInfo) {
     return status;
 }
 
+/**
+ * Tests for collision between two RigidCircles
+ * @memberof RigidCircle
+ * @param {RigidCircle} c1 - the first RigidCircle involved
+ * @param {RigidCircle} c2 - the second RigidCircle involved
+ * @param {CollisionInfo} collisionInfo - record of the collision and its resolution
+ * @returns {boolean} true if a collision occured
+ */
 RigidCircle.prototype.collideCircCirc = function (c1, c2, collisionInfo) {
     let vFrom1to2 = [0, 0];
     // Step 1: Determine if the circles overlap
