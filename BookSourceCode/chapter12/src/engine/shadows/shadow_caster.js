@@ -12,6 +12,8 @@ import { eLightType } from "../lights/light.js";
 // shadowCaster:    must be GameObject referencing at least a LightRenderable
 // shadowReceiver:  must be GameObject referencing at least a SpriteRenderable
 class ShadowCaster {
+
+   
     constructor(shadowCaster, shadowReceiver) {
         this.mShadowCaster = shadowCaster;
         this.mShadowReceiver = shadowReceiver;
