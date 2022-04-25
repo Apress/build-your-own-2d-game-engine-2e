@@ -97,25 +97,70 @@ class Light {
      */
     getDirection() { return this.mDirection; }
 
+    /**
+     * Set the near radius in WC space for this Light
+     * @method
+     * @param {float} n - the new near radius 
+     */
     setNear(n) { this.mNear = n; }
+    /**
+     * Returns the near radius in WC space for this Light
+     * @returns {float} mNear - current near radius
+     */
     getNear() { return this.mNear; }
 
+    
+    /**
+     * Set the far radius in WC space for this Light
+     * @method
+     * @param {float} f - the new far radius 
+     */
     setFar(f) { this.mFar = f; }
+     /**
+     * Returns the far radius in WC space for this Light
+     * @returns {float} mFar - current far radius
+     */
     getFar() { return this.mFar; }
 
     setInner(r) { this.mInner = r; }
     getInner() { return this.mInner; }
 
+    /**
+     * 
+     * @param {*} r 
+     */
     setOuter(r) { this.mOuter = r; }
     getOuter() { return this.mOuter; }
 
+    /**
+     * Set the intensity level of this Light
+     * @method
+     * @param {float} i - the new intensity 
+     */
+
     setIntensity(i) { this.mIntensity = i; }
+    /**
+     * Returns the intensity level of this Light
+     * @method
+     * @returns {float} mIntensity - the current intensity 
+     */
     getIntensity() { return this.mIntensity; }
 
+    
     setDropOff(d) { this.mDropOff = d; }
     getDropOff() { return this.mDropOff; }
 
+    /**
+     * Set what type of light this Light is
+     * @method
+     * @param {eLightType} t - enum for point, directional, or spotlight 
+     */
     setLightType(t) { this.mLightType = t; }
+    /**
+     * Returns what type of light this Light is
+     * @method
+     * @returns {eLightType} mLightType - enum for point, directional, or spotlight
+     */
     getLightType() { return this.mLightType; }
 
     /**

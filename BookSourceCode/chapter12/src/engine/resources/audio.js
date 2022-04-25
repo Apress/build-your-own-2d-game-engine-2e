@@ -25,11 +25,25 @@ let mMasterGain = null;     // overall/master volume
 
 let kDefaultInitGain = 0.1;
 
+/**
+ * logic for loading an audio file into the resource_map and
+ * provides control of the loaded audio 
+ * @module audio
+ */
+
+/**
+ * Closes the support for audio 
+ * @exports audio
+ */
 function cleanUp() {
     mAudioContext.close();
     mAudioContext = null;
 }
 
+/**
+ * Initialize the web audio system support
+ * @exports audio
+ */
 function init() {
     try {
         let AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -64,10 +78,22 @@ function parseResource(data) {
     return mAudioContext.decodeAudioData(data);
 }
 
+/**
+ * Load an audio file into the resource map
+ * @exports audio
+ * @param {string} path - the path to the audio file 
+ * @returns {}
+ */
 function load(path) {
     return map.loadDecodeParse(path, decodeResource, parseResource);
 }
 
+/**
+ * Play an audio cue
+ * @exports audio
+ * @param {string} path - the path to the audio file 
+ * @param {float} volume - the volume to play the audio at
+ */
 function playCue(path, volume) {
     let source = mAudioContext.createBufferSource();
     source.buffer = map.get(path);
@@ -78,6 +104,12 @@ function playCue(path, volume) {
     mCueGain.gain.value = volume;
 }
 
+/**
+ * Begins playing background audio file
+ * @exports audio
+ * @param {string} path - path to the audio file
+ * @param {float} volume - the volume 
+ */
 function playBackground(path, volume) {
     if (has(path)) {
         stopBackground();
@@ -93,11 +125,10 @@ function playBackground(path, volume) {
 }
 
 /**
-     * Set the volume of the background audio clip
-     * @memberOf engine.audio
-     * @param {float} volume
-     * @returns {void}
-     */
+ * Set the volume of the background audio clip
+ * @exports audio
+ * @param {float} volume - the new background volume
+ */
 function setBackgroundVolume(volume) {
     if (mBackgroundGain !== null) {
         mBackgroundGain.gain.value = volume;
@@ -106,9 +137,8 @@ function setBackgroundVolume(volume) {
 
 /**
  * Increment the volume of the background audio clip
- * @memberOf engine.audio
- * @param {float} increment
- * @returns {void}
+ * @exports audio
+ * @param {float} increment - value to add to background volume
  */
 function  incBackgroundVolume(increment) {
     if (mBackgroundGain !== null) {
@@ -123,9 +153,8 @@ function  incBackgroundVolume(increment) {
 
 /**
  * Set the Master volume
- * @memberOf engine.audio
- * @param {float} volume
- * @returns {void}
+ * @exports audio
+ * @param {float} volume - the new master volume
  */
 function  setMasterVolume(volume) {
     if (mMasterGain !== null) {
@@ -135,9 +164,8 @@ function  setMasterVolume(volume) {
 
 /**
  * Increment the Master volume
- * @memberOf engine.audio
- * @param {float} increment
- * @returns {void}
+ * @exports audio
+ * @param {float} increment - the value to add to the volume
  */
 function  incMasterVolume(increment) {
     if (mMasterGain !== null) {
@@ -150,6 +178,10 @@ function  incMasterVolume(increment) {
     }
 }
 
+/**
+ * Stop playing background music and clear the variable
+ * @exports audio
+ */
 function stopBackground() {
     if (mBackgroundAudio !== null) {
         mBackgroundAudio.stop(0);
@@ -157,6 +189,11 @@ function stopBackground() {
     }
 }
 
+/**
+ * Returns if there is background audio playing
+ * @exports audio
+ * @returns {boolean} true if there is background audio
+ */
 function isBackgroundPlaying() {
     return (mBackgroundAudio !== null);
 }

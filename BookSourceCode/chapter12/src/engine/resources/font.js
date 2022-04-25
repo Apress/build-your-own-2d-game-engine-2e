@@ -11,12 +11,29 @@
 import * as texture from "./texture.js";
 import * as xml from "./xml.js";
 
+/**
+ * Logics for loading font into the resource_map,
+ * note that "font" consists of two files
+ *    => the bitmap font image
+ *    => the associated xml descriptor file
+ * @module font 
+ */
+
+
 let kImageExt = ".png";  // extension for the bitmap font image
 let kDescExt = ".fnt";   // extension for the bitmap font description
+
 
 // for convenient communication of per-character information
 // all size returned are in normalize unit (range between 0 to 1)
 class CharacterInfo {
+    /**
+     * Object for convenient communication of per-character information,
+     * all size returned are in normalize unit (range between 0 to 1)
+     * @memberof font
+     * @constructs CharacterInfo
+     * @returns {CharacterInfo} a new CharacterInfo instance
+     */
     constructor() {
         // in texture coordinate (0 to 1) maps to the entire image
         this.mTexCoordLeft = 0;
@@ -35,7 +52,17 @@ class CharacterInfo {
     }
 }
 
+/**
+ * Returns the fontName with ".png" appened
+ * @param {string} fontName - the path to the font image
+ * @returns {string} fontName with file extension
+ */
 function imageName(fontName) { return fontName+kImageExt;}
+/**
+ * 
+ * @param {*} fontName 
+ * @returns 
+ */
 function descName(fontName) { return fontName+kDescExt;}
 
 function load(fontName) {
@@ -54,6 +81,12 @@ function has(fontName) {
     return texture.has(imageName(fontName)) && xml.has(descName(fontName));
 }
 
+/**
+ * Create a new CharacterInfo instance with
+ * @param {*} fontName 
+ * @param {*} aChar 
+ * @returns 
+ */
 function getCharInfo(fontName, aChar) {
     let returnInfo = null;
     let fontInfo = xml.get(descName(fontName));

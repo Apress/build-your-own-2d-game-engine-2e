@@ -7,10 +7,19 @@
 
 import LineRenderable from "../renderables/line_renderable.js";
 
+/**
+ * Support drawing of basic shapes for debugging purposes
+ * @module debug_draw
+ */
+
 let kDrawNumCircleSides = 16;    // for approx circumference as line segments
 let mUnitCirclePos = [];
 let mLine = null;
 
+/**
+ * Initialize the LineRenderable and list of circle points for simple drawing
+ * @exports debug_draw
+ */
 function init() {
     mLine = new LineRenderable();
     mLine.setPointSize(5);  // make sure when shown, its visible
@@ -25,6 +34,14 @@ function init() {
     }
 }
 
+/**
+ * Draws a LineRenderable from p1 to p2
+ * @param {*} camera 
+ * @param {*} p1 
+ * @param {*} p2 
+ * @param {*} drawVertex 
+ * @param {*} color 
+ */
 function drawLine(camera, p1, p2, drawVertex, color) {
     mLine.setColor(color);
     mLine.setDrawVertices(drawVertex);
