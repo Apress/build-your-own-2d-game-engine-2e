@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: rigid_shapes/rigid_rectangle_collision.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: rigid_shapes/rigid_rectangle_collision.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* File: rigid_rectangle_collision.js
+ *       Adds the collision functions for RigidRectangle class
+ */
+"use strict";
+
+import CollisionInfo from "./collision_info.js";
+import RigidRectangle from "./rigid_rectangle_main.js";
+
+/**
+ * default constructor
+ * @ignore
+ * @returns {SupportStruct}
+ */
+class SupportStruct {
+    constructor() {
+        this.mSupportPoint = null;
+        this.mSupportPointDist = 0;
+    }
+}
+
+// temp work area to conserve run time dynamic allocation cost
+let mTmpSupport = new SupportStruct();
+let mCollisionInfoR1 = new CollisionInfo();
+let mCollisionInfoR2 = new CollisionInfo();
+
+/**
+ * Decides on which collision function to call based on the type of shape passed
+ * @memberof RigidRectangle 
+ * @param {RigidShape} otherShape - The other shape to test collision
+ * @param {CollisionInfo} collisionInfo - Where the collision information is stored
+ * @returns {boolean} the results of the collision
+ */
+RigidRectangle.prototype.collisionTest = function (otherShape, collisionInfo) {
+    let status = false;
+    if (otherShape.mType === "RigidCircle") {
+        status = this.collideRectCirc(otherShape, collisionInfo);
+    } else {
+        status = this.collideRectRect(this, otherShape, collisionInfo);
+    }
+    return status;
+}
+
+/**
+ * Calculates a support point for a point on the edge of this RigidRectangle
+ * @memberof RigidRectangle
+ * @param {vec2} dir - the direction of the support point 
+ * @param {vec2} ptOnEdge - a point on the edge of this RigidRectangle 
+ */
+RigidRectangle.prototype.findSupportPoint = function (dir, ptOnEdge) {
+    // the longest project length
+    let vToEdge = [0, 0];
+    let projection;
+
+    mTmpSupport.mSupportPointDist = -Number.MAX_VALUE;
+    mTmpSupport.mSupportPoint = null;
+    // check each vector of other object
+    for (let i = 0; i &lt; this.mVertex.length; i++) {
+        vec2.subtract(vToEdge, this.mVertex[i], ptOnEdge);
+        projection = vec2.dot(vToEdge, dir);
+        
+        // find the longest distance with certain edge
+        // dir is -n direction, so the distance should be positive       
+        if ((projection > 0) &amp;&amp; (projection > mTmpSupport.mSupportPointDist)) {
+            mTmpSupport.mSupportPoint = this.mVertex[i];
+            mTmpSupport.mSupportPointDist = projection;
+        }
+    }
+}
+
+
+/**
+ * Find the shortest axis of penetration between this RigidRectangle and another
+ * @memberOf RigidRectangle
+ * @param {RigidRectangle} otherRect - the other rectangle being tested
+ * @param {CollisionInfo} collisionInfo - Record of the collision information
+ * @returns {boolean} true if there is overlap in all four directions.
+ */
+RigidRectangle.prototype.findAxisLeastPenetration = function (otherRect, collisionInfo) {
+    let n;
+    let supportPoint;
+
+    let bestDistance = Number.MAX_VALUE;
+    let bestIndex = null;
+
+    let hasSupport = true;
+    let i = 0;
+
+    let dir = [0, 0];
+    while ((hasSupport) &amp;&amp; (i &lt; this.mFaceNormal.length)) {
+        // Retrieve a face normal from A
+        n = this.mFaceNormal[i];
+
+        // use -n as direction and the vertex on edge i as point on edge    
+        vec2.scale(dir, n, -1);
+        let ptOnEdge = this.mVertex[i];
+        // find the support on B
+        // the point has longest distance with edge i 
+        otherRect.findSupportPoint(dir, ptOnEdge);
+        hasSupport = (mTmpSupport.mSupportPoint !== null);
+        
+        // get the shortest support point depth
+        if ((hasSupport) &amp;&amp; (mTmpSupport.mSupportPointDist &lt; bestDistance)) {
+            bestDistance = mTmpSupport.mSupportPointDist;
+            bestIndex = i;
+            supportPoint = mTmpSupport.mSupportPoint;
+        }
+        i = i + 1;
+    }
+    if (hasSupport) {
+        // all four directions have support point
+        let bestVec = [0, 0];
+        vec2.scale(bestVec, this.mFaceNormal[bestIndex], bestDistance);
+        let atPos = [0, 0];
+        vec2.add(atPos, supportPoint, bestVec);
+        collisionInfo.setInfo(bestDistance, this.mFaceNormal[bestIndex], atPos);
+    }
+    return hasSupport;
+}
+    
+/**
+ * Check for collision between a RigidRectangle and another RigidRectangle
+ * @memberof RigidRectangle
+ * @param {RigidRectangle} r1 - RigidRectangle object to check for collision status
+ * @param {RigidRectangle} r2 - RigidRectangle object to check for collision status against
+ * @param {CollisionInfo} collisionInfo - the information object for the collision
+ * @returns {boolean} true if collision occurs
+ */   
+RigidRectangle.prototype.collideRectRect = function (r1, r2, collisionInfo) {
+    let status1 = false;
+    let status2 = false;
+
+    // find Axis of Separation for both rectangle
+    status1 = r1.findAxisLeastPenetration(r2, mCollisionInfoR1);
+
+    if (status1) {
+        status2 = r2.findAxisLeastPenetration(r1, mCollisionInfoR2);
+        if (status2) {
+            let depthVec = [0, 0];
+            // if both of rectangles are overlapping, choose the shorter normal as the normal       
+            if (mCollisionInfoR1.getDepth() &lt; mCollisionInfoR2.getDepth()) {
+                vec2.scale(depthVec, mCollisionInfoR1.getNormal(), mCollisionInfoR1.getDepth());
+                let pos = [0, 0];
+                vec2.subtract(pos, mCollisionInfoR1.mStart, depthVec);
+                collisionInfo.setInfo(mCollisionInfoR1.getDepth(), mCollisionInfoR1.getNormal(), pos);
+            } else {
+                vec2.scale(depthVec, mCollisionInfoR2.getNormal(), -1);
+                collisionInfo.setInfo(mCollisionInfoR2.getDepth(), depthVec, mCollisionInfoR2.mStart);
+            }
+        } 
+    }
+    return status1 &amp;&amp; status2;
+}
+
+export default RigidRectangle;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-input.html">input</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-shader_resources.html">shader_resources</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-vertex_buffer.html">vertex_buffer</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="IllumRenderable.html">IllumRenderable</a></li><li><a href="IllumShader.html">IllumShader</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightRenderable.html">LightRenderable</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LightShader.html">LightShader</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="LineShader.html">LineShader</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="module-texture-TextureInfo.html">TextureInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Particle.html">Particle</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="ShaderLightAt.html">ShaderLightAt</a></li><li><a href="ShaderMaterial.html">ShaderMaterial</a></li><li><a href="ShadowCaster.html">ShadowCaster</a></li><li><a href="ShadowCasterShader.html">ShadowCasterShader</a></li><li><a href="ShadowReceiver.html">ShadowReceiver</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SimpleShader.html">SimpleShader</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="SpriteShader.html">SpriteShader</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TextureShader.html">TextureShader</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Apr 27 2022 16:39:51 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

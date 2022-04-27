@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: particles/particle.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: particles/particle.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* 
+ * File: particle.js
+ * Defines a particle
+ */
+"use strict";
+
+import * as loop from "../core/loop.js";
+import * as particleSystem from "../components/particle_system.js";
+import ParticleRenderable from "../renderables/particle_renderable.js";
+import * as debugDraw from "../core/debug_draw.js";
+
+let kSizeFactor = 0.2;
+
+class Particle {
+    /**
+     * @classdesc Defines a square particle that has physics support and whose size and color changes over a set lifetime
+     * 
+     * 
+     * &lt;p>
+     * Found on page ____ in the text book
+     * &lt;/p>
+     * 
+     * @param {string} texture - path to the texture file for this Particle
+     * @param {float} x - starting X world coordinate 
+     * @param {float} y - starting Y world coordinate 
+     * @param {integer} life - number of cycles this particle lives for
+     * @returns {Particle} a new Particle instance
+     */
+    constructor(texture, x, y, life) {
+        this.mRenderComponent = new ParticleRenderable(texture);
+        this.setPosition(x, y);
+
+        // position control
+        this.mVelocity = vec2.fromValues(0, 0);
+        this.mAcceleration = particleSystem.getSystemAcceleration();
+        this.mDrag = 0.95;
+
+        // Color control
+        this.mDeltaColor = [0, 0, 0, 0];
+
+        // Size control
+        this.mSizeDelta = 0;
+
+        // Life control
+        this.mCyclesToLive = life;
+    }
+
+    /**
+     * Draw a cross marker on this Particle for debugging
+     * @method
+     * @param {Camera} aCamera - the Camera to draw to
+     */
+    drawMarker(aCamera) {
+        let size = this.getSize();
+        debugDraw.drawCrossMarker(aCamera, this.getPosition(), size[0] * kSizeFactor, [0, 1, 0, 1]);
+    }
+
+    /**
+     * Draw the ParticleRenderable of this Particle to the Camera
+     * @method
+     * @param {Camera} aCamera - the Camera to draw to
+     */
+    draw(aCamera) {
+        this.mRenderComponent.draw(aCamera);
+    }
+
+    update() {
+        this.mCyclesToLive--;
+
+        let dt = loop.getUpdateIntervalInSeconds();
+
+        // Symplectic Euler
+        //    v += a * dt
+        //    x += v * dt
+        let p = this.getPosition();
+        vec2.scaleAndAdd(this.mVelocity, this.mVelocity, this.mAcceleration, dt);
+        vec2.scale(this.mVelocity, this.mVelocity, this.mDrag);
+        vec2.scaleAndAdd(p, p, this.mVelocity, dt);
+
+        // update color
+        let c = this.mRenderComponent.getColor();
+        vec4.add(c, c, this.mDeltaColor);
+    
+        // update size
+        let xf = this.mRenderComponent.getXform();
+        let s = xf.getWidth() * this.mSizeDelta;
+        xf.setSize(s, s);
+    }
+
+    setFinalColor = function(f) {    
+        vec4.sub(this.mDeltaColor, f, this.getColor());
+        if (this.mCyclesToLive !== 0) {
+            vec4.scale(this.mDeltaColor, this.mDeltaColor, 1/this.mCyclesToLive);
+        }
+    }
+    setColor(c) { this.mRenderComponent.setColor(c); }
+    getColor() { return this.mRenderComponent.getColor(); }
+
+    getDrawBounds() { return this.mDrawBounds; }
+    setDrawBounds(d) { this.mDrawBounds = d; }
+
+    getPosition() { return this.mRenderComponent.getXform().getPosition(); }
+    setPosition(xPos, yPos) { 
+        this.mRenderComponent.getXform().setXPos(xPos); 
+        this.mRenderComponent.getXform().setYPos(yPos); 
+    }
+
+    getSize() { return this.mRenderComponent.getXform().getSize(); }
+    setSize(x, y) { this.mRenderComponent.getXform().setSize(x, y); }
+
+    getVelocity() { return this.mVelocity; }
+    setVelocity(x, y) { 
+        this.mVelocity[0] = x;
+        this.mVelocity[1] = y;
+    }
+    getAcceleration() { return this.mAcceleration; }
+    setAcceleration(x, y) { 
+        this.mAcceleration[0] = x;
+        this.mAcceleration[1] = y;
+    }
+
+    setDrag(d) { this.mDrag = d; }
+    getDrag() { return this.mDrag; }
+
+    setSizeDelta(d) { this.mSizeDelta = d; }
+
+    /**
+     * Returns whether this Particle has reached the end of its lifetime
+     * @method
+     * @returns {boolean} true if lifetime has ended
+     */
+    hasExpired() { return (this.mCyclesToLive &lt; 0); }
+}
+
+export default Particle;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-input.html">input</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-shader_resources.html">shader_resources</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-vertex_buffer.html">vertex_buffer</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="IllumRenderable.html">IllumRenderable</a></li><li><a href="IllumShader.html">IllumShader</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightRenderable.html">LightRenderable</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LightShader.html">LightShader</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="LineShader.html">LineShader</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="module-texture-TextureInfo.html">TextureInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Particle.html">Particle</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="ShaderLightAt.html">ShaderLightAt</a></li><li><a href="ShaderMaterial.html">ShaderMaterial</a></li><li><a href="ShadowCaster.html">ShadowCaster</a></li><li><a href="ShadowCasterShader.html">ShadowCasterShader</a></li><li><a href="ShadowReceiver.html">ShadowReceiver</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SimpleShader.html">SimpleShader</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="SpriteShader.html">SpriteShader</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TextureShader.html">TextureShader</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Apr 27 2022 16:39:51 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

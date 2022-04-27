@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: resources/audio.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: resources/audio.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * File: audio.js
+ *
+ * logics for loading an audio file into the resource_map and
+ * provides control of the loaded audio 
+ */
+"use strict";
+
+import * as map from "../core/resource_map.js";
+// functions from resource_map
+let unload = map.unload;
+let has = map.has;
+
+
+let mAudioContext = null;
+let mBackgroundAudio = null;
+
+// volume control support
+// https://www.davrous.com/2015/11/05/creating-fun-immersive-audio-experiences-with-web-audio/
+// https://developer.mozilla.org/en-US/docs/Web/API/GainNode/gain
+// https://www.html5rocks.com/en/tutorials/webaudio/positional_audio/
+let mBackgroundGain = null;         // background volume
+let mCueGain = null;        // cue/special effects volume
+let mMasterGain = null;     // overall/master volume
+
+let kDefaultInitGain = 0.1;
+
+/**
+ * logic for loading an audio file into the resource_map and
+ * provides control of the loaded audio 
+ * @module audio
+ */
+
+/**
+ * Closes the support for audio 
+ * @export audio
+ */
+function cleanUp() {
+    mAudioContext.close();
+    mAudioContext = null;
+}
+
+/**
+ * Initialize the web audio system support
+ * @export audio
+ */
+function init() {
+    try {
+        let AudioContext = window.AudioContext || window.webkitAudioContext;
+        mAudioContext = new AudioContext();
+
+        // connect Master volume control
+        mMasterGain = mAudioContext.createGain();
+        mMasterGain.connect(mAudioContext.destination);
+        // set default Master volume
+        mMasterGain.gain.value = kDefaultInitGain;
+         
+        // connect Background volume control
+        mBackgroundGain = mAudioContext.createGain();
+        mBackgroundGain.connect(mMasterGain);
+        // set default Background volume
+        mBackgroundGain.gain.value = 1.0;
+         
+        // connect Cuevolume control
+        mCueGain = mAudioContext.createGain();
+        mCueGain.connect(mMasterGain);
+        // set default Cue volume
+        mCueGain.gain.value = 1.0;
+    } catch (e) {
+        throw new Error("Web Audio is not supported. Engine initialization failed.");
+    }
+}
+
+function decodeResource(data) {
+    return data.arrayBuffer();
+}
+function parseResource(data) {
+    return mAudioContext.decodeAudioData(data);
+}
+
+/**
+ * Load an audio file into the resource map
+ * @export audio
+ * @param {string} path - the path to the audio file 
+ * @returns {}
+ */
+function load(path) {
+    return map.loadDecodeParse(path, decodeResource, parseResource);
+}
+
+/**
+ * Play an audio cue
+ * @export audio
+ * @param {string} path - the path to the audio file 
+ * @param {float} volume - the volume to play the audio at
+ */
+function playCue(path, volume) {
+    let source = mAudioContext.createBufferSource();
+    source.buffer = map.get(path);
+    source.start(0);
+
+    // volume support for cue
+    source.connect(mCueGain);
+    mCueGain.gain.value = volume;
+}
+
+/**
+ * Begins playing background audio file
+ * @export audio
+ * @param {string} path - path to the audio file
+ * @param {float} volume - the volume 
+ */
+function playBackground(path, volume) {
+    if (has(path)) {
+        stopBackground();
+        mBackgroundAudio = mAudioContext.createBufferSource();
+        mBackgroundAudio.buffer = map.get(path);
+        mBackgroundAudio.loop = true;
+        mBackgroundAudio.start(0);
+
+         // connect volume accordingly
+         mBackgroundAudio.connect(mBackgroundGain);
+         setBackgroundVolume(volume);
+    }
+}
+
+/**
+ * Set the volume of the background audio clip
+ * @export audio
+ * @param {float} volume - the new background volume
+ */
+function setBackgroundVolume(volume) {
+    if (mBackgroundGain !== null) {
+        mBackgroundGain.gain.value = volume;
+    }
+}
+
+/**
+ * Increment the volume of the background audio clip
+ * @export audio
+ * @param {float} increment - value to add to background volume
+ */
+function  incBackgroundVolume(increment) {
+    if (mBackgroundGain !== null) {
+        mBackgroundGain.gain.value += increment;
+
+        // need this since volume increases when negative
+        if (mBackgroundGain.gain.value &lt; 0) {
+            setBackgroundVolume(0);
+        }
+    }
+}
+
+/**
+ * Set the Master volume
+ * @export audio
+ * @param {float} volume - the new master volume
+ */
+function  setMasterVolume(volume) {
+    if (mMasterGain !== null) {
+        mMasterGain.gain.value = volume;
+    }
+}
+
+/**
+ * Increment the Master volume
+ * @export audio
+ * @param {float} increment - the value to add to the volume
+ */
+function  incMasterVolume(increment) {
+    if (mMasterGain !== null) {
+        mMasterGain.gain.value += increment;
+
+        // need this since volume increases when negative
+        if (mMasterGain.gain.value &lt; 0) {
+            mMasterGain.gain.value = 0;
+        }
+    }
+}
+
+/**
+ * Stop playing background music and clear the variable
+ * @export audio
+ */
+function stopBackground() {
+    if (mBackgroundAudio !== null) {
+        mBackgroundAudio.stop(0);
+        mBackgroundAudio = null;
+    }
+}
+
+/**
+ * Returns if there is background audio playing
+ * @export audio
+ * @returns {boolean} true if there is background audio
+ */
+function isBackgroundPlaying() {
+    return (mBackgroundAudio !== null);
+}
+
+
+export {init, cleanUp,
+        has, load, unload,
+
+        playCue,  
+
+        playBackground, stopBackground, isBackgroundPlaying,
+        setBackgroundVolume, incBackgroundVolume,
+
+        setMasterVolume, incMasterVolume
+    }</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-input.html">input</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-shader_resources.html">shader_resources</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-vertex_buffer.html">vertex_buffer</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="IllumRenderable.html">IllumRenderable</a></li><li><a href="IllumShader.html">IllumShader</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightRenderable.html">LightRenderable</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LightShader.html">LightShader</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="LineShader.html">LineShader</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="module-texture-TextureInfo.html">TextureInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Particle.html">Particle</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="ShaderLightAt.html">ShaderLightAt</a></li><li><a href="ShaderMaterial.html">ShaderMaterial</a></li><li><a href="ShadowCaster.html">ShadowCaster</a></li><li><a href="ShadowCasterShader.html">ShadowCasterShader</a></li><li><a href="ShadowReceiver.html">ShadowReceiver</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SimpleShader.html">SimpleShader</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="SpriteShader.html">SpriteShader</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TextureShader.html">TextureShader</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Apr 27 2022 16:39:50 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

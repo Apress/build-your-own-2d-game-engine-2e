@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: game_objects/game_object.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: game_objects/game_object.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * File: game_object.js
+ *
+ * defines the behavior and appearance of a game object
+ * 
+ */
+"use strict";
+import BoundingBox from "../utils/bounding_box.js";
+
+
+class GameObject {
+
+    /**
+     * Template for elements of the game that interact with others
+     * @constructor GameObject
+     * @param {Renderable} renderable - the renderable to be associated with this GameObject
+     * @returns {GameObject} a new instance of GameObject
+     */
+    constructor(renderable) {
+        this.mRenderComponent = renderable;
+        this.mVisible = true;
+        this.mCurrentFrontDir = vec2.fromValues(0, 1);  // this is the current front direction of the object
+        this.mRigidBody = null;
+        this.mDrawRenderable = true;
+        this.mDrawRigidShape = false;
+    }
+    /**
+     * Returns the Transform of the Renderable associated with this GameObject
+     * @method
+     * @returns {Transform} the Transform of this GameObject
+     */
+    getXform() { return this.mRenderComponent.getXform(); }
+
+    /**
+     * Returns the BoundingBox for this gameObject
+     * @method
+     * @returns {BoundingBox} b - a new copy of the bounding box of this GameObject
+     */
+    getBBox() {
+        let xform = this.getXform();
+        let b = new BoundingBox(xform.getPosition(), xform.getWidth(), xform.getHeight());
+        return b;
+    }
+
+    /**
+     * Sets the visibility of this gameObject to true or false
+     * @method
+     * @param {boolean} f - boolean to set if this gameObject is visibile or not
+     */
+    setVisibility(f) { this.mVisible = f; }
+
+    /**
+     * Returns the visibility of this gameObject
+     * @method
+     * @returns {boolean} mVisible - the visivility of this gameObject
+     */
+    isVisible() { return this.mVisible; }
+
+    /**
+     * Changes this gameObject's current facing direction
+     * @method
+     * @param {vec2} f - vector that will be put into mCurrentFrontDir after being normalized
+     */
+    setCurrentFrontDir(f) { vec2.normalize(this.mCurrentFrontDir, f); }
+
+    /**
+     * Returns the front direction of this gameObject
+     * @method
+     * @returns {vec2} mCurrentFrontDir - the current front direction of this gameObject
+     */
+    getCurrentFrontDir() { return this.mCurrentFrontDir; }
+
+    /**
+     * Returns the renderable associated with this gameObject
+     * @returns {Renderable} mRenderComponent - the renderable associated with this gameObject
+     */
+    getRenderable() { return this.mRenderComponent; }
+
+    /**
+     * Sets the rigid body this gameObject will use
+     * @method
+     * @param {RigidShape} r - the rigid body
+     */
+    setRigidBody(r) { this.mRigidBody = r; }
+
+    /**
+     * Returns the RigidShape of this gameObject 
+     * @method
+     * @returns {RigidShape} mRigidBody - the RigidShape of this gameObject 
+     */
+    getRigidBody() { return this.mRigidBody; }
+
+    /**
+     * Switches whether this gameObject's renderable is drawn
+     * @method
+     */
+    toggleDrawRenderable() { this.mDrawRenderable = !this.mDrawRenderable; }
+
+    /**
+     * Switches whether this gameObject's rigid shape is drawn
+     * @method
+     */
+    toggleDrawRigidShape() { this.mDrawRigidShape = !this.mDrawRigidShape; }
+    
+    /**
+     * Draws this gameObject if it is visible the draw flags are set to true
+     * @param {Camera} aCamera  - The camera 
+     */
+    draw(aCamera) {
+        if (this.isVisible()) {
+            if (this.mDrawRenderable)
+                this.mRenderComponent.draw(aCamera);
+            if ((this.mRigidBody !== null) &amp;&amp; (this.mDrawRigidShape))
+                this.mRigidBody.draw(aCamera);
+        }
+    }
+    /**
+     * Method called by Gameloop, updates the rigid body of this gameObject
+     * @method
+     */
+    update() {
+        // simple default behavior
+        if (this.mRigidBody !== null)
+            this.mRigidBody.update();
+    }
+
+    // Support for per-pixel collision
+    /**
+     * Determines if this GameObject has an overlapping pixel with another GameObject
+     * @method
+     * @param {GameObject} otherObj  - the other GameObject
+     * @param {vec2} wcTouchPos  - vector to store the first world coordinates where the pixels touch
+     * @returns {boolean} pixelTouch - whether this GameOjbect has a pixel overlapping otherObj
+     */
+    pixelTouches(otherObj, wcTouchPos) {
+        // only continue if both objects have getColorArray defined 
+        // if defined, should have other texture intersection support!
+        let pixelTouch = false;
+        let myRen = this.getRenderable();
+        let otherRen = otherObj.getRenderable();
+
+        if ((typeof myRen.pixelTouches === "function") &amp;&amp; (typeof otherRen.pixelTouches === "function")) {
+            if ((myRen.getXform().getRotationInRad() === 0) &amp;&amp; (otherRen.getXform().getRotationInRad() === 0)) {
+                // no rotation, we can use bbox ...
+                let otherBbox = otherObj.getBBox();
+                if (otherBbox.intersectsBound(this.getBBox())) {
+                    myRen.setColorArray();
+                    otherRen.setColorArray();
+                    pixelTouch = myRen.pixelTouches(otherRen, wcTouchPos);
+                }
+            } else {
+                // One or both are rotated, compute an encompassing circle
+                // by using the hypotenuse as radius
+                let mySize = myRen.getXform().getSize();
+                let otherSize = otherRen.getXform().getSize();
+                let myR = Math.sqrt(0.5 * mySize[0] * 0.5 * mySize[0] + 0.5 * mySize[1] * 0.5 * mySize[1]);
+                let otherR = Math.sqrt(0.5 * otherSize[0] * 0.5 * otherSize[0] + 0.5 * otherSize[1] * 0.5 * otherSize[1]);
+                let d = [];
+                vec2.sub(d, myRen.getXform().getPosition(), otherRen.getXform().getPosition());
+                if (vec2.length(d) &lt; (myR + otherR)) {
+                    myRen.setColorArray();
+                    otherRen.setColorArray();
+                    pixelTouch = myRen.pixelTouches(otherRen, wcTouchPos);
+                }
+            }
+        }
+        return pixelTouch;
+    }
+}
+
+export default GameObject;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-input.html">input</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-shader_resources.html">shader_resources</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-vertex_buffer.html">vertex_buffer</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="IllumRenderable.html">IllumRenderable</a></li><li><a href="IllumShader.html">IllumShader</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightRenderable.html">LightRenderable</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LightShader.html">LightShader</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="LineShader.html">LineShader</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="module-texture-TextureInfo.html">TextureInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Particle.html">Particle</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="ShaderLightAt.html">ShaderLightAt</a></li><li><a href="ShaderMaterial.html">ShaderMaterial</a></li><li><a href="ShadowCaster.html">ShadowCaster</a></li><li><a href="ShadowCasterShader.html">ShadowCasterShader</a></li><li><a href="ShadowReceiver.html">ShadowReceiver</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SimpleShader.html">SimpleShader</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="SpriteShader.html">SpriteShader</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TextureShader.html">TextureShader</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Apr 27 2022 16:39:50 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

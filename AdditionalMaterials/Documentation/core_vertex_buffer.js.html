@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: core/vertex_buffer.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: core/vertex_buffer.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * File: vertex_buffer.js
+ *  
+ * defines the module that supports the loading and using of the buffer that 
+ * contains vertex positions of a square onto the gl context
+ * 
+ */
+"use strict";
+
+import * as glSys from "./gl.js";
+
+
+/**
+ * Supports loading and using the buffer that contains vertex positions of a square on the webGl context
+ * @module vertex_buffer
+ */
+
+// reference to the vertex positions for the square in the gl context
+let mGLVertexBuffer = null;
+function get() { return mGLVertexBuffer; }
+
+// First: define the vertices for a square
+let mVerticesOfSquare = [
+    0.5, 0.5, 0.0,
+    -0.5, 0.5, 0.0,
+    0.5, -0.5, 0.0,
+    -0.5, -0.5, 0.0
+];
+
+
+// reference to the texture coordinates for the square vertices in the gl context
+let mGLTextureCoordBuffer = null;
+function getTexCoord() { return mGLTextureCoordBuffer; }
+
+// Second: define the corresponding texture coordinates
+let mTextureCoordinates = [
+    1.0, 1.0,
+    0.0, 1.0,
+    1.0, 0.0,
+    0.0, 0.0
+];
+
+// For line drawing: to support physics engine debugging
+let mLineVertexBuffer = null;
+function getLineVertexBuffer() { return mLineVertexBuffer; }
+let mVerticesOfLine = [
+     0.5, 0.5, 0.0,
+    -0.5, -0.5, 0.0
+];
+
+function cleanUp() {
+    let gl = glSys.get();
+    if (mGLVertexBuffer !== null) {
+        gl.deleteBuffer(mGLVertexBuffer);
+        mGLVertexBuffer = null;
+    }
+
+    if (mGLTextureCoordBuffer !== null) {
+        gl.deleteBuffer(mGLTextureCoordBuffer);
+        mGLTextureCoordBuffer = null;
+    }
+
+    if (mLineVertexBuffer !== null) {
+        gl.deleteBuffer(mLineVertexBuffer);
+        mLineVertexBuffer = null;
+    }
+}
+
+function init() {
+    let gl = glSys.get();
+
+    // #region: support for the square vertices
+    // Step A: Create a buffer on the gl context for our vertex positions
+    mGLVertexBuffer = gl.createBuffer();
+
+    // Step B: Activate vertexBuffer
+    gl.bindBuffer(gl.ARRAY_BUFFER, mGLVertexBuffer);
+
+    // Step C: Loads mVerticesOfSquare into the vertexBuffer
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mVerticesOfSquare), gl.STATIC_DRAW);
+    // #endregion
+
+    // #region: support texture UV coordinate
+    //  Step  D: Allocate and store texture coordinates
+    // Create a buffer on the gl context for texture coordinates
+    mGLTextureCoordBuffer = gl.createBuffer();
+
+    // Activate texture coordinate buffer
+    gl.bindBuffer(gl.ARRAY_BUFFER, mGLTextureCoordBuffer);
+
+    // Loads textureCoordinates into the mGLTextureCoordBuffer
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mTextureCoordinates), gl.STATIC_DRAW);
+    // #endregion  
+
+    // #region: support for line vertex positions 
+    // Step A: Allocate and store vertex positions into the webGL context
+    // Create a buffer on the gGL context for our vertex positions
+    mLineVertexBuffer = gl.createBuffer();
+
+    // Connect the vertexBuffer to the ARRAY_BUFFER global gl binding point.
+    gl.bindBuffer(gl.ARRAY_BUFFER, mLineVertexBuffer);
+
+    // Put the verticesOfSquare into the vertexBuffer, as non-changing drawing data (STATIC_DRAW)
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mVerticesOfLine), gl.STATIC_DRAW);
+    // #endregion
+}
+
+export {
+    init, cleanUp,
+    get, getTexCoord, getLineVertexBuffer
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-input.html">input</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-shader_resources.html">shader_resources</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-vertex_buffer.html">vertex_buffer</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="IllumRenderable.html">IllumRenderable</a></li><li><a href="IllumShader.html">IllumShader</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightRenderable.html">LightRenderable</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LightShader.html">LightShader</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="LineShader.html">LineShader</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="module-texture-TextureInfo.html">TextureInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Particle.html">Particle</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="ShaderLightAt.html">ShaderLightAt</a></li><li><a href="ShaderMaterial.html">ShaderMaterial</a></li><li><a href="ShadowCaster.html">ShadowCaster</a></li><li><a href="ShadowCasterShader.html">ShadowCasterShader</a></li><li><a href="ShadowReceiver.html">ShadowReceiver</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SimpleShader.html">SimpleShader</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="SpriteShader.html">SpriteShader</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TextureShader.html">TextureShader</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Apr 27 2022 16:39:50 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
