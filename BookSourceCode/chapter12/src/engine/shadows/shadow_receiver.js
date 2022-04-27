@@ -16,6 +16,13 @@ import ShadowCaster from "./shadow_caster.js";
 import * as glSys from "../core/gl.js";
 
 class ShadowReceiver {
+    /**
+     * Support class for a GameObject having shadows cast on it.
+     * Has only one target object, but supports several casters
+     * @constructor
+     * @param {GameObject} theReceiverObject - the GameObject that will have shadows cast onto it
+     * @returns {ShadowReceiver} a new ShadowReceiver instance
+     */
     constructor(theReceiverObject) {
         this.kShadowStencilBit = 0x01;              // The stencil bit to switch on/off for shadow
         this.kShadowStencilMask = 0xFF;             // The stencil mask 
@@ -27,6 +34,11 @@ class ShadowReceiver {
         this.mShadowCaster = [];                    // array of ShadowCasters
     }
 
+    /**
+     * Using argument lgtRenderable as casting object for a new ShadowCaster to add to this ShadowReceiver's list 
+     * @method
+     * @param {GameObject} lgtRenderable - GameObject that contains at least a LightRenderable to cast shadow
+     */
     addShadowCaster(lgtRenderable) {
         let c = new ShadowCaster(lgtRenderable, this.mReceiver);
         this.mShadowCaster.push(c);
@@ -34,6 +46,11 @@ class ShadowReceiver {
     // for now, cannot remove shadow casters
 
 
+    /**
+     * Draw the receiver GameObject of this ShadowReceicer with the shadow cast onto it
+     * @method
+     * @param {Camera} aCamera - the Camera to draw to 
+     */
     draw(aCamera) {
         let c;
 
@@ -58,6 +75,10 @@ class ShadowReceiver {
         glSys.disableDrawToStencil();
     }
 
+    /**
+     * Update the receiving GameObject
+     * @method
+     */
     update() {
         this.mReceiver.update();
     }

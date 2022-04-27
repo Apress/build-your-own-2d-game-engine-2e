@@ -137,8 +137,8 @@ class Light {
      * @method
      * @param {float} i - the new intensity 
      */
-
     setIntensity(i) { this.mIntensity = i; }
+
     /**
      * Returns the intensity level of this Light
      * @method

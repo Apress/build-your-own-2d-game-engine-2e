@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: renderables/texture_renderable_main.js</title>
+    <title>JSDoc: Source: shadows/shadow_receiver.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: renderables/texture_renderable_main.js</h1>
+    <h1 class="page-title">Source: shadows/shadow_receiver.js</h1>
 
     
 
@@ -27,84 +27,93 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/*
- * File: texture_renderable_main.js
- *
- * Supports the drawing an entire file texture mapped onto an entire Renderable
+ * File: shadow_receiver.js
+ * Shadow support
  * 
+ * Instance variables:
+ *     mReceiver: Reference to any GameObject
+ *                Treats this target for shadow receiver
+ *     mCasters: Reference to an array of Renderables that are at least LightRenderable
+ *     
+ * Draws the mReceiver, and the shadows of mCasters on this mReceiver
  */
-"use strict"; // Operate in Strict mode such that variables must be declared before used!
+"use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-import Renderable from "./renderable.js";
-import * as texture from "../resources/texture.js";
 import * as shaderResources from "../core/shader_resources.js";
+import ShadowCaster from "./shadow_caster.js";
+import * as glSys from "../core/gl.js";
 
-class TextureRenderable extends Renderable {
-
+class ShadowReceiver {
     /**
-     * Supports the drawing an entire file texture mapped onto an entire Renderable
-     * @extends Renerable
+     * Support class for a GameObject having shadows cast on it.
+     * Has only one target object, but supports several casters
      * @constructor
-     * @param {string} myTexture - the path to the image file to use as texture
-     * @returns {TextureRenderable} a new TextureRenderable instance
+     * @param {GameObject} theReceiverObject - the GameObject that will have shadows cast onto it
+     * @returns {ShadowReceiver} a new ShadowReceiver instance
      */
-    constructor(myTexture) {
-        super();
-        super.setColor([1, 1, 1, 0]); // Alpha of 0: switch off tinting of texture
-        super._setShader(shaderResources.getTextureShader());
-        
-        this.mTexture = null;
-        // these two instance variables are to cache texture information
-        // for supporting per-pixel accurate collision
-        this.mTextureInfo = null;
-        this.mColorArray = null;
-        // defined for subclass to override
-        this.mElmWidthPixels = 0;
-        this.mElmHeightPixels = 0;
-        this.mElmLeftIndex = 0;
-        this.mElmBottomIndex = 0;
+    constructor(theReceiverObject) {
+        this.kShadowStencilBit = 0x01;              // The stencil bit to switch on/off for shadow
+        this.kShadowStencilMask = 0xFF;             // The stencil mask 
+        this.mReceiverShader = shaderResources.getShadowReceiverShader();
 
-        this.setTexture(myTexture);     // texture for this object, cannot be a "null"
+        this.mReceiver = theReceiverObject;
+
+        // To support shadow drawing
+        this.mShadowCaster = [];                    // array of ShadowCasters
     }
 
     /**
-     * Draw this TextureRenderable to the camera
+     * Using argument lgtRenderable as casting object for a new ShadowCaster to add to this ShadowReceiver's list 
      * @method
-     * @param {Camera} camera - the Camera to draw this TextureRenderable to draw to
+     * @param {GameObject} lgtRenderable - GameObject that contains at least a LightRenderable to cast shadow
      */
-    draw(camera) {
-        // activate the texture
-        texture.activate(this.mTexture);
-        super.draw(camera);
+    addShadowCaster(lgtRenderable) {
+        let c = new ShadowCaster(lgtRenderable, this.mReceiver);
+        this.mShadowCaster.push(c);
+    }
+    // for now, cannot remove shadow casters
+
+
+    /**
+     * Draw the receiver GameObject of this ShadowReceicer with the shadow cast onto it
+     * @method
+     * @param {Camera} aCamera - the Camera to draw to 
+     */
+    draw(aCamera) {
+        let c;
+
+        // Step A: draw receiver as a regular renderable
+        this.mReceiver.draw(aCamera);
+
+        // Step B: draw the receiver into the stencil buffer to enable corresponding pixels
+        glSys.beginDrawToStencil(this.kShadowStencilBit, this.kShadowStencilMask);
+        //        Step B1: swap receiver shader to a ShadowReceiverShader
+        let s = this.mReceiver.getRenderable().swapShader(this.mReceiverShader);
+        //        Step B2: draw the receiver again to the stencil buffer
+        this.mReceiver.draw(aCamera);
+        this.mReceiver.getRenderable().swapShader(s);
+        glSys.endDrawToStencil(this.kShadowStencilBit, this.kShadowStencilMask);
+
+        // Step C: draw shadow color to the pixels in the stencil that are switched on
+        for (c = 0; c &lt; this.mShadowCaster.length; c++) {
+            this.mShadowCaster[c].draw(aCamera);
+        }
+
+        // switch off stencil checking
+        glSys.disableDrawToStencil();
     }
 
     /**
-     * Return the path to image file associated with this TextureRenderable
+     * Update the receiving GameObject
      * @method
-     * @returns {string} mTexture - path to image file
      */
-    getTexture() { return this.mTexture; }
-
-    /**
-     * Set the image file to serve as the texture for this TextureRenderable
-     * @method
-     * @param {string} newTexture - path to new image file
-     */
-    setTexture(newTexture) {
-        this.mTexture = newTexture;
-        // these two instance variables are to cache texture information
-        // for supporting per-pixel accurate collision
-        this.mTextureInfo = texture.get(newTexture);
-        this.mColorArray = null;
-        // defined for one sprite element for subclass to override
-        // For texture_renderable, one sprite element is the entire texture
-        this.mElmWidthPixels = this.mTextureInfo.mWidth;
-        this.mElmHeightPixels = this.mTextureInfo.mHeight;
-        this.mElmLeftIndex = 0;
-        this.mElmBottomIndex = 0;
+    update() {
+        this.mReceiver.update();
     }
 }
 
-export default TextureRenderable;</code></pre>
+export default ShadowReceiver;
+</code></pre>
         </article>
     </section>
 
