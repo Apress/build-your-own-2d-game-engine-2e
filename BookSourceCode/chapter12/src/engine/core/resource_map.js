@@ -49,7 +49,7 @@ function set(key, value) {
 
 /**
  * Clears the MapEntry for the resource to be loaded
- * @exports resource_map
+ * @export resource_map
  * @param {string} path - the path to resource file 
  */
 function loadRequested(path) {
@@ -58,7 +58,7 @@ function loadRequested(path) {
 
 /**
  * Increment the number of references to a resource
- * @exports resource_map
+ * @export resource_map
  * @param {string} path -  the resource to increment 
  */
 function incRef(path) {
@@ -69,7 +69,7 @@ function incRef(path) {
 // returns the resource of path. An error to if path is not found
 /**
  * Returns the data of the resource
- * @exports resource_map
+ * @export resource_map
  * @param {string} path - the path to the resource file
  * @returns {} the data of the resource
  */
@@ -88,7 +88,7 @@ function get(path) {
  * Step 3: parseResource on the decodedResource
  * Step 4: store result into the map
  * Push the promised operation into an array
- * @exports resource_map
+ * @export resource_map
  * @param {string} path -  the path to the resource file 
  * @param {function} decodeResource - function to decode resource, specific to the type of resource
  * @param {function} parseResource - function to parse resource, specific to the type of resource
@@ -114,7 +114,7 @@ function loadDecodeParse(path, decodeResource, parseResource) {
 /**
  * Decrements the number of references to a resource, removing it 
  * from the resource map if there are no remaining references
- * @exports resource_map
+ * @export resource_map
  * @param {string} path - the path to the resource file to be unloaded
  * @returns {boolean} true if unloading is successful
  */
@@ -128,7 +128,7 @@ function unload(path) {
 
 /**
  * Add a new promise to outstanding promise list
- * @exports resource_map
+ * @export resource_map
  * @param {Promise} p - the new promise  
  */
 function pushPromise(p) { mOutstandingPromises.push(p); }
@@ -138,7 +138,7 @@ function pushPromise(p) { mOutstandingPromises.push(p); }
 
 /**
  * Halt until all outstanding promises are fulfilled
- * @exports resource_map
+ * @export resource_map
  */
 async function waitOnPromises() {
     await Promise.all(mOutstandingPromises);

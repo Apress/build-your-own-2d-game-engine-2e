@@ -85,6 +85,12 @@ function resolveRectPos(rectShape, particle) {
 
 // obj: a GameObject (with potential mRigidBody)
 // pSet: set of particles (ParticleSet)
+/**
+ * Resolve collisions between a set of Par
+ * @param {GameObject} obj - 
+ * @param {*} pSet 
+ * @returns {boolean}
+ */
 function resolveRigidShapeCollision(obj, pSet) {
     let i, j;
     let collision = false;
@@ -103,6 +109,12 @@ function resolveRigidShapeCollision(obj, pSet) {
 
 // objSet: set of GameObjects (with potential mRigidBody)
 // pSet: set of particles (ParticleSet)
+/**
+ * 
+ * @param {*} objSet 
+ * @param {*} pSet 
+ * @returns {boolean}
+ */
 function resolveRigidShapeSetCollision(objSet, pSet) {
     let i, j;
     let collision = false;

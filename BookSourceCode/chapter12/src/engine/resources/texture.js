@@ -45,6 +45,7 @@ class TextureInfo {
  * This converts an image to the webGL texture format. 
  * This should only be called once the texture is loaded
  * @export texture
+ * @ignore
  * @param {string} path - the path to the image file
  * @param {Image} image - Image object with the image file data
  */

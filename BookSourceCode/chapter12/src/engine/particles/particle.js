@@ -12,6 +12,20 @@ import * as debugDraw from "../core/debug_draw.js";
 let kSizeFactor = 0.2;
 
 class Particle {
+    /**
+     * @classdesc Defines a square particle that has physics support and whose size and color changes over a set lifetime
+     * 
+     * 
+     * <p>
+     * Found on page ____ in the text book
+     * </p>
+     * 
+     * @param {string} texture - path to the texture file for this Particle
+     * @param {float} x - starting X world coordinate 
+     * @param {float} y - starting Y world coordinate 
+     * @param {integer} life - number of cycles this particle lives for
+     * @returns {Particle} a new Particle instance
+     */
     constructor(texture, x, y, life) {
         this.mRenderComponent = new ParticleRenderable(texture);
         this.setPosition(x, y);
@@ -31,11 +45,21 @@ class Particle {
         this.mCyclesToLive = life;
     }
 
+    /**
+     * Draw a cross marker on this Particle for debugging
+     * @method
+     * @param {Camera} aCamera - the Camera to draw to
+     */
     drawMarker(aCamera) {
         let size = this.getSize();
         debugDraw.drawCrossMarker(aCamera, this.getPosition(), size[0] * kSizeFactor, [0, 1, 0, 1]);
     }
 
+    /**
+     * Draw the ParticleRenderable of this Particle to the Camera
+     * @method
+     * @param {Camera} aCamera - the Camera to draw to
+     */
     draw(aCamera) {
         this.mRenderComponent.draw(aCamera);
     }
@@ -100,6 +124,11 @@ class Particle {
 
     setSizeDelta(d) { this.mSizeDelta = d; }
 
+    /**
+     * Returns whether this Particle has reached the end of its lifetime
+     * @method
+     * @returns {boolean} true if lifetime has ended
+     */
     hasExpired() { return (this.mCyclesToLive < 0); }
 }
 

@@ -25,6 +25,7 @@ let mParser = new DOMParser();
 /**
  * Returns the text representation of the data
  * @export xml
+ * @ignore
  * @param {} data 
  * @returns {string} the resource as text
  */
@@ -35,6 +36,7 @@ function decodeXML(data) {
 /**
  * Parses a string into an XMLDocument
  * @export xml
+ * @ignore
  * @param {string} text - the text representation of the resource to parse
  * @returns {XMLDocument} the parsed XMLDocument
  */

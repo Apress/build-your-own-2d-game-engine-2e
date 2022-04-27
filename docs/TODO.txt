@@ -1,8 +1,7 @@
 particle system WIP
 physics WIP 
-resource map - what is the type of data
+
+
 font - is aChar an int or string
 xml - what is the type of data
 text - what is the type of data
-
-light - angle vs radius

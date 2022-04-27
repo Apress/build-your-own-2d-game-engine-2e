@@ -20,6 +20,7 @@ let get = map.get;
 /**
  * Decode the data into text, used in loading
  * @export text
+ * @ignore
  * @param {} data - the data of the text file
  * @returns {string} the text representation of the data
  */
@@ -30,6 +31,7 @@ function decodeText(data) {
 /**
  * Returns the text that is passed in, used in loading
  * @export text
+ * @ignore
  * @param {string} text - the text representation of the data
  * @returns {string} the text representation of the data
  */
