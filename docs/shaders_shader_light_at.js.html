@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: shaders/shader_light_at.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: shaders/shader_light_at.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * File: shader_light_at.js 
+ *      support of loading light info to the glsl shader
+ *      references are pointing to uLight[index]
+ */
+
+"use strict";  // Operate in Strict mode such that variables must be declared before used!
+
+import * as glSys from "../core/gl.js";
+import { eLightType } from "../lights/light.js";
+
+class ShaderLightAt {
+    /**
+     * Support for loading light info to the GLSL shader
+     * @constructor
+     * @param {WebGLProgram} shader - the compiled light shader this ShaderLightAt belongs to
+     * @param {integer} index - the index of this ShaderLightAt in the LightShader list of lights
+     * @returns {ShaderLightAt} a new ShaderLightAt instance
+     */
+    constructor(shader, index) {
+        this._setShaderReferences(shader, index);
+    }
+
+    /**
+     * Attach all the necessary properties of a Light object to the gl context
+     * @method
+     * @param {Camera} aCamera - the Camera the light exists in
+     * @param {Light} aLight - the Light object to be loaded
+     */
+    loadToShader(aCamera, aLight) {
+        let gl = glSys.get();
+        gl.uniform1i(this.mIsOnRef, aLight.isLightOn());
+        // Process a light only when it is switched on
+        if (aLight.isLightOn()) {
+            let p = aCamera.wcPosToPixel(aLight.getPosition());
+            let n = aCamera.wcSizeToPixel(aLight.getNear());
+            let f = aCamera.wcSizeToPixel(aLight.getFar());
+            let c = aLight.getColor();
+            gl.uniform4fv(this.mColorRef, c);
+            gl.uniform3fv(this.mPosRef, vec3.fromValues(p[0], p[1], p[2]));
+            gl.uniform1f(this.mNearRef, n);
+            gl.uniform1f(this.mFarRef, f);
+            gl.uniform1f(this.mInnerRef, 0.0);
+            gl.uniform1f(this.mOuterRef, 0.0);
+            gl.uniform1f(this.mIntensityRef, aLight.getIntensity());
+            gl.uniform1f(this.mDropOffRef, 0);
+            gl.uniform1i(this.mLightTypeRef, aLight.getLightType());
+
+            // Point light does not need the direction
+            if (aLight.getLightType() === eLightType.ePointLight) {
+                gl.uniform3fv(this.mDirRef, vec3.fromValues(0, 0, 0));
+            } else {
+                // either spot or directional lights: must compute direction
+                let d = aCamera.wcDirToPixel(aLight.getDirection());
+                gl.uniform3fv(this.mDirRef, vec3.fromValues(d[0], d[1], d[2]));
+                if (aLight.getLightType() === eLightType.eSpotLight) {
+                    gl.uniform1f(this.mInnerRef, Math.cos(0.5 * aLight.getInner())); // stores the cosine of half of inner cone angle
+                    gl.uniform1f(this.mOuterRef, Math.cos(0.5 * aLight.getOuter())); // stores the cosine of half of outer cone angle
+                    gl.uniform1f(this.mDropOffRef, aLight.getDropOff());
+                }
+            }
+        }
+    }
+    /**
+     * Turn this Light off
+     * @method
+     */
+    switchOffLight() {
+        let gl = glSys.get();
+        gl.uniform1i(this.mIsOnRef, false);
+    }
+    //&lt;/editor-fold>
+
+    //&lt;editor-fold desc="private functions">
+    _setShaderReferences(aLightShader, index) {
+        let gl = glSys.get();
+        this.mColorRef = gl.getUniformLocation(aLightShader, "uLights[" + index + "].Color");
+        this.mPosRef = gl.getUniformLocation(aLightShader, "uLights[" + index + "].Position");
+        this.mDirRef = gl.getUniformLocation(aLightShader, "uLights[" + index + "].Direction");
+        this.mNearRef = gl.getUniformLocation(aLightShader, "uLights[" + index + "].Near");
+        this.mFarRef = gl.getUniformLocation(aLightShader, "uLights[" + index + "].Far");
+        this.mInnerRef = gl.getUniformLocation(aLightShader, "uLights[" + index + "].CosInner");
+        this.mOuterRef = gl.getUniformLocation(aLightShader, "uLights[" + index + "].CosOuter");
+        this.mIntensityRef = gl.getUniformLocation(aLightShader, "uLights[" + index + "].Intensity");
+        this.mDropOffRef = gl.getUniformLocation(aLightShader, "uLights[" + index + "].DropOff");
+        this.mIsOnRef = gl.getUniformLocation(aLightShader, "uLights[" + index + "].IsOn");
+        this.mLightTypeRef = gl.getUniformLocation(aLightShader, "uLights[" + index + "].LightType");
+    }
+
+}
+
+export default ShaderLightAt;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-input.html">input</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-shader_resources.html">shader_resources</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-vertex_buffer.html">vertex_buffer</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="IllumRenderable.html">IllumRenderable</a></li><li><a href="IllumShader.html">IllumShader</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightRenderable.html">LightRenderable</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LightShader.html">LightShader</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="LineShader.html">LineShader</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="module-texture-TextureInfo.html">TextureInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="ShaderLightAt.html">ShaderLightAt</a></li><li><a href="ShaderMaterial.html">ShaderMaterial</a></li><li><a href="ShadowCasterShader.html">ShadowCasterShader</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SimpleShader.html">SimpleShader</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="SpriteShader.html">SpriteShader</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TextureShader.html">TextureShader</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Apr 27 2022 10:06:21 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -15,6 +15,11 @@ import IllumShader from "../shaders/illum_shader.js";
 import ShadowCasterShader from "../shaders/shadow_caster_shader.js";
 import * as text from "../resources/text.js";
 import * as map from "./resource_map.js";
+
+/**
+ * Resource bank for all shaders
+ * @module shader_resources
+ */
  
 // Simple Shader
 let kSimpleVS = "src/glsl_shaders/simple_vs.glsl";  // Path to the VertexShader 
@@ -49,6 +54,10 @@ let mShadowCasterShader = null;
 let kParticleFS = "src/glsl_shaders/particle_fs.glsl";
 let mParticleShader = null;
 
+/**
+ * Create new instances of the shaders for renderables to use
+ * @export shader_resources
+ */
 function createShaders() {
     mConstColorShader = new SimpleShader(kSimpleVS, kSimpleFS);
     mTextureShader = new TextureShader(kTextureVS, kTextureFS);
@@ -61,6 +70,10 @@ function createShaders() {
     mParticleShader = new TextureShader(kTextureVS, kParticleFS);
 }
 
+/**
+ * Clean up each shader and unload their vertex and fragment shaders
+ * @export shader_resources
+ */
 function cleanUp() {
     mConstColorShader.cleanUp();
     mTextureShader.cleanUp();
@@ -84,6 +97,10 @@ function cleanUp() {
     text.unload(kParticleFS);
 }
 
+/**
+ * Initialize all the shaders, promising them to the resource map
+ * @export shader_resources
+ */
 function init() {
     let loadPromise = new Promise(
         async function(resolve) {

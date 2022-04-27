@@ -8,6 +8,11 @@
 import * as glSys from "../core/gl.js";
 
 class ShaderMaterial {
+    /**
+     * Support object for loading properties of a Material into GLSL
+     * @constructor
+     * @param {WebGLProgram} aIllumShader - compiled IllumShader program this ShaderMaterial belongs to
+     */
     constructor(aIllumShader) {
         let gl = glSys.get();
         this.mKaRef = gl.getUniformLocation(aIllumShader, "uMaterial.Ka");
@@ -15,7 +20,11 @@ class ShaderMaterial {
         this.mKsRef = gl.getUniformLocation(aIllumShader, "uMaterial.Ks");
         this.mShineRef = gl.getUniformLocation(aIllumShader, "uMaterial.Shininess");
     }
-
+    /**
+     * Loads a Material into the IllumShader
+     * @method
+     * @param {Material} aMaterial - Material to load into GLSL
+     */
     loadToShader(aMaterial) {
         let gl = glSys.get();
         gl.uniform4fv(this.mKaRef, aMaterial.getAmbient());

@@ -9,6 +9,12 @@
 
 import * as glSys from "./gl.js";
 
+
+/**
+ * Supports loading and using the buffer that contains vertex positions of a square on the webGl context
+ * @module vertex_buffer
+ */
+
 // reference to the vertex positions for the square in the gl context
 let mGLVertexBuffer = null;
 function get() { return mGLVertexBuffer; }

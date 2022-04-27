@@ -14,6 +14,13 @@ import * as defaultResources from "../resources/default_resources.js";
 class SimpleShader {
 
     // constructor of SimpleShader object
+    /**
+     * Shader for rendering simple shapes
+     * @constructor
+     * @param {string} vertexShaderPath - path to the vertex shader file
+     * @param {string} fragmentShaderPath - path to the fragment shader file
+     * @returns {SimpleShader} a new SimpleShader instance
+     */
     constructor(vertexShaderPath, fragmentShaderPath) {
         // instance variables
         // Convention: all instance variables: mVariables
@@ -56,6 +63,14 @@ class SimpleShader {
     }
 
     // Activate the shader for rendering
+
+    /**
+     * Activate this shader for rendering
+     * @method
+     * @param {vec4} pixelColor - [R,G,B,A] color array for the pixels
+     * @param {mat4} trsMatrix - translation, rotation, and scaling matrix for the object being rendered
+     * @param {mat4} cameraMatrix - translation, rotation, and scaling matrix for the Camera
+     */
     activate(pixelColor, trsMatrix, cameraMatrix) {
         let gl = glSys.get();
         gl.useProgram(this.mCompiledShader);
@@ -78,6 +93,10 @@ class SimpleShader {
         gl.uniform1f(this.mGlobalAmbientIntensityRef, defaultResources.getGlobalAmbientIntensity());
     }
 
+    /**
+     * Detaches and removes the shader from webGL
+     * @method
+     */
     cleanUp() {
         let gl = glSys.get();
         gl.detachShader(this.mCompiledShader, this.mVertexShader);

@@ -9,6 +9,14 @@ import SpriteShader from "./sprite_shader.js";
 import ShaderLightAt from "./shader_light_at.js";
 
 class LightShader extends SpriteShader {
+    /**
+     * Supports light illumination of sprites
+     * @extends SpriteShader
+     * @constructor
+     * @param {string} vertexShaderPath -  path to the vertex shader file
+     * @param {string} fragmentShaderPath - path to the fragment shader file
+     * @returns {LightShader} a new LightShader instance
+     */
     constructor(vertexShaderPath, fragmentShaderPath) {
         // Call super class constructor
         super(vertexShaderPath, fragmentShaderPath);  // call super class constructor
@@ -29,6 +37,13 @@ class LightShader extends SpriteShader {
     }
 
     // Overriding the activation of the shader for rendering
+    /**
+     * Overrides shader activation to support 
+     * @method
+     * @param {vec4} pixelColor - [R,G,B,A] color array for the pixels
+     * @param {mat4} trsMatrix - translation, rotation, and scaling matrix for the object being rendered
+     * @param {mat4} cameraMatrix - translation, rotation, and scaling matrix for the Camera
+     */
     activate(pixelColor, trsMatrix, cameraMatrix) {
         // first call the super class' activate
         super.activate(pixelColor, trsMatrix, cameraMatrix);
@@ -48,6 +63,12 @@ class LightShader extends SpriteShader {
         }
     }
 
+    /**
+     * Set the Camera and list of Lights for this LightShader, the length of argument l can not be greater than GLSL light array size
+     * @method
+     * @param {Camera} c - the Camera this LightShader illuminates
+     * @param {Lights[]} l -  List of Light objects for this LightShader
+     */
     setCameraAndLights(c, l) {
         this.mCamera = c;
         this.mLights = l;

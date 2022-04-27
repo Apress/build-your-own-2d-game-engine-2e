@@ -10,10 +10,23 @@ import * as glSys from "../core/gl.js";
 import { eLightType } from "../lights/light.js";
 
 class ShaderLightAt {
+    /**
+     * Support for loading light info to the GLSL shader
+     * @constructor
+     * @param {WebGLProgram} shader - the compiled light shader this ShaderLightAt belongs to
+     * @param {integer} index - the index of this ShaderLightAt in the LightShader list of lights
+     * @returns {ShaderLightAt} a new ShaderLightAt instance
+     */
     constructor(shader, index) {
         this._setShaderReferences(shader, index);
     }
 
+    /**
+     * Attach all the necessary properties of a Light object to the gl context
+     * @method
+     * @param {Camera} aCamera - the Camera the light exists in
+     * @param {Light} aLight - the Light object to be loaded
+     */
     loadToShader(aCamera, aLight) {
         let gl = glSys.get();
         gl.uniform1i(this.mIsOnRef, aLight.isLightOn());
@@ -48,7 +61,10 @@ class ShaderLightAt {
             }
         }
     }
-
+    /**
+     * Turn this Light off
+     * @method
+     */
     switchOffLight() {
         let gl = glSys.get();
         gl.uniform1i(this.mIsOnRef, false);

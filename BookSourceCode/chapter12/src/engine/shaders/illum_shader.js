@@ -10,6 +10,14 @@ import * as glSys from "../core/gl.js";
 
 class IllumShader extends LightShader {
     // constructor 
+    /**
+     * Shader that supports lighting and Phong illumination
+     * @extends LightShader
+     * @constructor
+     * @param {string} vertexShaderPath - path to the vertex shader file
+     * @param {string} fragmentShaderPath - path to the fragment shader file
+     * @returns {IllumShader} a new IllumShader instance
+     */
     constructor(vertexShaderPath, fragmentShaderPath) {
         // Call super class constructor
         super(vertexShaderPath, fragmentShaderPath);  // call super class constructor
@@ -28,6 +36,13 @@ class IllumShader extends LightShader {
     }
 
     // Overriding the activation of the shader for rendering
+    /**
+     * Activate this IllumShader for rendering
+     * @method
+     * @param {vec4} pixelColor - [R,G,B,A] color array for the pixels
+     * @param {mat4} trsMatrix - translation, rotation, and scaling matrix for the object being rendered
+     * @param {mat4} cameraMatrix - translation, rotation, and scaling matrix for the Camera
+     */
     activate(pixelColor, trsMatrix, cameraMatrix) {
         // first call the super class' activate
         super.activate(pixelColor, trsMatrix, cameraMatrix);
@@ -40,7 +55,12 @@ class IllumShader extends LightShader {
         gl.uniform3fv(this.mCameraPosRef, this.mCameraPos);
     }
 
-
+    /**
+     * Set the Camera position and Material for this IllumShader to use
+     * @method
+     * @param {Material} m - the Material for this IllumShader
+     * @param {vec3} p - world coordinate [X,Y,Z] Camera position
+     */
     setMaterialAndCameraPos(m, p) {
         this.mMaterial = m;
         this.mCameraPos = p;

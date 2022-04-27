@@ -1,7 +1,6 @@
 particle system WIP
 physics WIP 
 light
-debug draw
 resource map - what is the type of data
 font - is aChar an int or string
 xml - what is the type of data
