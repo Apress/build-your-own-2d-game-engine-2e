@@ -24,6 +24,7 @@ class Light {
     /**
      * Defines a simple light source, defaults to a point light
      * @constructor
+     * @returns {Light} a new Light instance
      */
     constructor() {
         this.mColor = vec4.fromValues(1, 1, 1, 1);  // light color
@@ -85,14 +86,15 @@ class Light {
     getPosition() { return this.mPosition; }
 
     /**
-     * Set the direction of this Light
+     * Set the direction vector of this Light
      * @method
      * @param {vec3} d - direction vector 
      */
     setDirection(d) { this.mDirection = vec3.clone(d); }
     
     /**
-     * 
+     * Returns the direction vector of this Light
+     * @method
      * @returns {vec3} mDirection - the direction vector
      */
     getDirection() { return this.mDirection; }
@@ -103,33 +105,56 @@ class Light {
      * @param {float} n - the new near radius 
      */
     setNear(n) { this.mNear = n; }
+
     /**
      * Returns the near radius in WC space for this Light
+     * @method
      * @returns {float} mNear - current near radius
      */
     getNear() { return this.mNear; }
 
     
     /**
-     * Set the far radius in WC space for this Light
+     * Set the far radius in WC space for this Light.
+     * Objects beyond this radius are not illuminated by this Light
      * @method
      * @param {float} f - the new far radius 
      */
     setFar(f) { this.mFar = f; }
+
      /**
      * Returns the far radius in WC space for this Light
+     * @method
      * @returns {float} mFar - current far radius
      */
     getFar() { return this.mFar; }
 
+
+    /**
+     * Set the new inner cone angle of this Light
+     * @method
+     * @param {float} r - angle in radians
+     */
     setInner(r) { this.mInner = r; }
+
+    /**
+     * Returns the inner cone angle of this Light
+     * @method
+     * @returns {float} mInner - current angle in radians
+     */
     getInner() { return this.mInner; }
 
     /**
-     * 
-     * @param {*} r 
+     * Set the new outer cone angle of this Light
+     * @method
+     * @param {float} r - angle in radians
      */
     setOuter(r) { this.mOuter = r; }
+    /**
+     * Returns the outer cone angle of this Light
+     * @method
+     * @returns {float} mOuter - current angle in radians
+     */
     getOuter() { return this.mOuter; }
 
     /**
@@ -147,7 +172,19 @@ class Light {
     getIntensity() { return this.mIntensity; }
 
     
+
+    /**
+     * Set how quickly does light intensity drops off between inner/outer, Near/Far. 
+     * A larger Drop off number results in “softer/smoother” transition from full illumination to no illumination
+     * @method
+     * @param {flaot} d - the new drop off value 
+     */
     setDropOff(d) { this.mDropOff = d; }
+    /**
+     * Returns the current drop off value of this Light
+     * @method
+     * @returns {float} mDropOff - current drop off value
+     */
     getDropOff() { return this.mDropOff; }
 
     /**
