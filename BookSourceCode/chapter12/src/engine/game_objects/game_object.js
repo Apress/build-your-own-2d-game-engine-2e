@@ -126,9 +126,10 @@ class GameObject {
 
     // Support for per-pixel collision
     /**
-     * Determines if this GameObject has an overlapping pixel with otherObj
-     * @param {GameObject} otherObj  - other TextureRenderable 
-     * @param {vec2} wcTouchPos  - The world coordinates at which the touching is tested
+     * Determines if this GameObject has an overlapping pixel with another GameObject
+     * @method
+     * @param {GameObject} otherObj  - the other GameObject
+     * @param {vec2} wcTouchPos  - vector to store the first world coordinates where the pixels touch
      * @returns {boolean} pixelTouch - whether this GameOjbect has a pixel overlapping otherObj
      */
     pixelTouches(otherObj, wcTouchPos) {

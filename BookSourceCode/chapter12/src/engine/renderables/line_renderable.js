@@ -11,6 +11,15 @@ import * as shaderResources from "../core/shader_resources.js";
 
 class LineRenderable extends Renderable {
     // p1, p2: either both there, or none
+    /**
+     * Renderable class for lines
+     * @extends Renderable
+     * @constructor
+     * @param {float} x1 - X world coordinate of first vertext
+     * @param {float} y1 - Y world coordinate of first vertext
+     * @param {float} x2 - X world coordinate of second vertext
+     * @param {float} y2 - Y world coordinate of second vertext
+     */
     constructor(x1, y1, x2, y2) {
         super();
         this.setColor([0, 0, 0, 1]);
@@ -31,6 +40,12 @@ class LineRenderable extends Renderable {
     //**-----------------------------------------
     // Public methods
     //**-----------------------------------------
+
+    /**
+     * Draw this LineRenderable to the Camera
+     * @method
+     * @param {Camera} camera - the Camera to draw to
+     */
     draw(camera) {
         let sx = this.mP1[0] - this.mP2[0];
         let sy = this.mP1[1] - this.mP2[1];
@@ -53,20 +68,55 @@ class LineRenderable extends Renderable {
         }
     }
 
+    /**
+     * Set whether points at the vertices are drawn
+     * @method
+     * @param {boolean} s - true to draw vertices
+     */
     setDrawVertices(s) { this.mDrawVertices = s; }
+    /**
+     * Set whether the line between the vertices is drawn
+     * @method
+     * @param {boolean} s - true to draw the line
+     */
     setShowLine(s) { this.mShowLine = s; }
+    /**
+     * Set the pixel diameter of the vertex points
+     * @method
+     * @param {float} s - the diameter of the point in pixels
+     */
     setPointSize(s) { this.mPointSize = s; }
 
+    /**
+     * Set world coordinates for both vertices of this LineRenderable
+     * @method
+     * @param {float} x1 - X world coordinate of first vertext
+     * @param {float} y1 - Y world coordinate of first vertext
+     * @param {float} x2 - X world coordinate of second vertext
+     * @param {float} y2 - Y world coordinate of second vertext
+     */
     setVertices(x1, y1, x2, y2) {
         this.setFirstVertex(x1, y1);
         this.setSecondVertex(x2, y2);
     }
 
+    /**
+     * Set world coordinates for the first vertex of this LineRenderable
+     * @method
+     * @param {float} x1 - X world coordinate of first vertext
+     * @param {float} y1 - Y world coordinate of first vertext
+     */
     setFirstVertex(x, y) {
         this.mP1[0] = x;
         this.mP1[1] = y;
     }
 
+    /**
+     * Set world coordinates for the second vertex of this LineRenderable
+     * @method
+     * @param {float} x1 - X world coordinate of second vertext
+     * @param {float} y1 - Y world coordinate of second vertext
+     */
     setSecondVertex(x, y) {
         this.mP2[0] = x;
         this.mP2[1] = y;

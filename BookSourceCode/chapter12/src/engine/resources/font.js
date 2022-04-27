@@ -30,8 +30,7 @@ class CharacterInfo {
     /**
      * Object for convenient communication of per-character information,
      * all size returned are in normalize unit (range between 0 to 1)
-     * @memberof font
-     * @constructs CharacterInfo
+     * @export font
      * @returns {CharacterInfo} a new CharacterInfo instance
      */
     constructor() {
@@ -54,17 +53,24 @@ class CharacterInfo {
 
 /**
  * Returns the fontName with ".png" appened
- * @param {string} fontName - the path to the font image
+ * @export font
+ * @param {string} fontName - the path to the font files
  * @returns {string} fontName with file extension
  */
 function imageName(fontName) { return fontName+kImageExt;}
 /**
- * 
- * @param {*} fontName 
- * @returns 
+ * Returns the path of the font description file with ".fnt" appened
+ * @export font
+ * @param {string} fontName - the path to the font files
+ * @returns {string} path to font description file
  */
 function descName(fontName) { return fontName+kDescExt;}
 
+/**
+ * Load the font image as a texture and the font description as an XMLDocument
+ * @export font
+ * @param {string} fontName - path to the font image and description files
+ */
 function load(fontName) {
     texture.load(imageName(fontName));
     xml.load(descName(fontName));
@@ -72,20 +78,32 @@ function load(fontName) {
 
 // Remove the reference to allow associated memory 
 // be available for subsequent garbage collection
+/**
+ * Unload the font to allow for garbage collection
+ * @export font
+ * @param {string} fontName - path to the font image and description files
+ */
 function unload(fontName) {
     texture.unload(imageName(fontName));
     xml.unload(descName(fontName));
 }
 
+/**
+ * Returns whether the font is already in the resource map
+ * @export font
+ * @param {string} fontName - path to the font image and description files
+ * @returns {boolean} true if the font image and font description are loaded
+ */
 function has(fontName) {
     return texture.has(imageName(fontName)) && xml.has(descName(fontName));
 }
 
 /**
- * Create a new CharacterInfo instance with
- * @param {*} fontName 
- * @param {*} aChar 
- * @returns 
+ * Returns a CharacterInfo object with the size and texel information for the character texture
+ * @export font
+ * @param {string} fontName - path to the font image and description files
+ * @param {string/int} aChar - the single character (code) to get information for
+ * @returns {CharacterInfo} a new instance of CharacterInfo, null if unsuccessful
  */
 function getCharInfo(fontName, aChar) {
     let returnInfo = null;

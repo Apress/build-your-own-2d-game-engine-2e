@@ -9,7 +9,13 @@
 import SpriteRenderable from "./sprite_renderable.js";
 import * as shaderResources from "../core/shader_resources.js";
 
-// Assumption is that the first sprite in an animation is always the left-most element.
+
+
+/**
+ * Enum for direction of the animation sequence.
+ * Assumption is that the first sprite in an animation is always the left-most element
+ * @memberof SpriteAnimateRenderable
+ */
 const eAnimationType = Object.freeze({
     eRight: 0,     // Animate from first (left) towards right, when hit the end, start from the left again
     eLeft: 1,      // Compute find the last element (in the right), start from the right animate left-wards, 
@@ -17,6 +23,14 @@ const eAnimationType = Object.freeze({
 });
 
 class SpriteAnimateRenderable extends SpriteRenderable {
+    /**
+     * Supports the drawing and controlling of sprite animation sequence.
+     * 
+     * Default animation type is from left to right
+     * @extends SpriteRenderable
+     * @constructor
+     * @param {string} myTexture - path to the sprite sheet image file for this SpriteAnimateRenderable
+     */
     constructor(myTexture) {
         super(myTexture);
         super._setShader(shaderResources.getSpriteShader());
@@ -67,6 +81,16 @@ class SpriteAnimateRenderable extends SpriteRenderable {
     }
 
     // Always set the left-most element to be the first
+    /**
+     * Set the sequence of sprite elements that make up the animation for this SpriteAnimateRenderable
+     * @method
+     * @param {integer} topPixel - vertical pixel offset from the top-left of the sprite sheet
+     * @param {integer} leftPixel - horizontal pixel offset from the top-left of the sprite sheet
+     * @param {integer} elmWidthInPixel - pixel width of an individual sprite element in the sequence
+     * @param {integer} elmHeightInPixel - pixel height of an individual sprite element in the sequence
+     * @param {integer} numElements - number of sprites in the animation sequence
+     * @param {integer} wPaddingInPixel - number of horizontal padding pixels between elements
+     */
     setSpriteSequence(
         topPixel,   // offset from top-left
         leftPixel, // offset from top-left
@@ -88,18 +112,33 @@ class SpriteAnimateRenderable extends SpriteRenderable {
         this._initAnimation();
     }
 
+    /**
+     * Set how many update calls before advancing the animation of this SpriteAnimateRenderable
+     * @method
+     * @param {integer} tickInterval - animation advancement interval
+     */
     setAnimationSpeed(
         tickInterval   // number of update calls before advancing the animation
     ) {
         this.mUpdateInterval = tickInterval;   // how often to advance
     }
 
+    /**
+     * Add a value to the animation advancement interval
+     * @method
+     * @param {integer} deltaInterval - the value to add to the advancement interval
+     */
    incAnimationSpeed(
         deltaInterval   // number of update calls before advancing the animation
     ) {
         this.mUpdateInterval += deltaInterval;   // how often to advance
     }
 
+    /**
+     * Set the animation type for this SpriteAnimateRenderable and restart the animation
+     * @method
+     * @param {eAnimationType} animationType - methodology for moving through the sprite sequence
+     */
     setAnimationType(animationType) {
         this.mAnimationType = animationType;
         this.mCurrentAnimAdvance = -1;
@@ -107,6 +146,10 @@ class SpriteAnimateRenderable extends SpriteRenderable {
         this._initAnimation();
     }
 
+    /**
+     * Update this SpriteAnimatedRenderable, advancing the current sprite element if the update interval has passed
+     * @method
+     */
     updateAnimation() {
         this.mCurrentTick++;
         if (this.mCurrentTick >= this.mUpdateInterval) {

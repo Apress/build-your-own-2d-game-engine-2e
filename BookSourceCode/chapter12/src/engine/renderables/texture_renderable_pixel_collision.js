@@ -12,7 +12,14 @@ import * as texture from "../resources/texture.js";
 
 
 
-// the following are support for per-pixel collision
+// the following are support for per-pixel collision\
+/**
+ * Determines if this GameObject has an overlapping pixel with otherObj
+ * @memberof TextureRenderable
+ * @param {TextureRenderable} other  - the other TextureRenderable 
+ * @param {vec2} wcTouchPos  - vector to store the first world coordinates where the pixels touch
+ * @returns {boolean} pixelTouch - whether this TextureRenderable has a pixel overlapping the other
+ */
 TextureRenderable.prototype.pixelTouches = function (other, wcTouchPos) {
     let pixelTouch = false;
     let xIndex = 0, yIndex;
@@ -45,6 +52,10 @@ TextureRenderable.prototype.pixelTouches = function (other, wcTouchPos) {
     return pixelTouch;
 }
 
+/**
+ * If the color array is null sets the color array of this TextureRenderable to the color array of its texture
+ * @memberof TextureRenderable
+ */
 TextureRenderable.prototype.setColorArray = function () {
     if (this.mColorArray === null) {
         this.mColorArray = texture.getColorArray(this.mTexture);

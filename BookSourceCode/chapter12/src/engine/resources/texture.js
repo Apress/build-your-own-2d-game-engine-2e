@@ -13,7 +13,21 @@ import * as map from "../core/resource_map.js";
 let has = map.has;
 let get = map.get;
 
+/**
+ * Defines the logic for loading and interacting with file texture resources
+ * @module texture
+ */
+
+
 class TextureInfo {
+    /**
+     * Object for convenient communication of a texture's properties
+     * @export texture
+     * @param {integer} w - the pixel width of the texture 
+     * @param {integer} h - the pixel height of the texture
+     * @param {gl.TEXTUREI} id - webGL id for the texture
+     * @returns {TextureInfo} a new TextureInfo instance
+     */
     constructor(w, h, id) {
         this.mWidth = w;
         this.mHeight = h;
@@ -22,9 +36,17 @@ class TextureInfo {
     }
 }
 
+
 /*
  * This converts an image to the webGL texture format. 
  * This should only be called once the texture is loaded.
+ */
+/**
+ * This converts an image to the webGL texture format. 
+ * This should only be called once the texture is loaded
+ * @export texture
+ * @param {string} path - the path to the image file
+ * @param {Image} image - Image object with the image file data
  */
 function processLoadedImage(path, image) {
     let gl = glSys.get();
@@ -55,7 +77,13 @@ function processLoadedImage(path, image) {
     map.set(path, texInfo);
 }
 
-// Loads an texture so that it can be drawn.
+// 
+/**
+ * Loads a texture into the resource map so that it can be drawn
+ * @export texture
+ * @param {string} textureName - the path to the image file
+ * @returns {Promise} promise to process the texture
+ */
 function load(textureName) {
     let texturePromise = null;
     if (map.has(textureName)) {
@@ -79,6 +107,11 @@ function load(textureName) {
 
 // Remove the reference to allow associated memory 
 // be available for subsequent garbage collection
+/**
+ * Remove the reference to the texture allow for garbage collection
+ * @export texture
+ * @param {string} textureName - the path to the image file
+ */
 function unload(textureName) {
     let texInfo = get(textureName);
     if (map.unload(textureName)) {
@@ -87,6 +120,12 @@ function unload(textureName) {
     }
 }
 
+/**
+ * Activate a texture file within the webGL system
+ * @export texture
+ * @param {string} textureName - the path to the image file
+ * @param {gl.TEXTUREI} textureUnit - the texture unit to be activated, defaults to TEXTURE0
+ */
 function activate(textureName, textureUnit = glSys.get().TEXTURE0) {
     let gl = glSys.get();
     let texInfo = get(textureName);
@@ -107,13 +146,21 @@ function activate(textureName, textureUnit = glSys.get().TEXTURE0) {
     // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 }
-
+/**
+ * Deactivate the webGL texture system
+ * @export texture
+ */
 function deactivate() {
     let gl = glSys.get();
     gl.bindTexture(gl.TEXTURE_2D, null);
 }
 
-
+/**
+ * Returns the one dimensional array with color information for all pixels
+ * @export texture
+ * @param {string} textureName - the path to the image file
+ * @returns {Uint8Array} array with color information for all pixels
+ */
 function getColorArray(textureName) {
     let gl = glSys.get();
     let texInfo = get(textureName);

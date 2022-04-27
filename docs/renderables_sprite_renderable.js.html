@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: renderables/sprite_renderable.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: renderables/sprite_renderable.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * File: sprite_renderable.js
+ *
+ * Supports the drawing and of one sprite element mapped onto entire Renderable
+ * 
+ */
+"use strict";
+
+import TextureRenderable from "./texture_renderable.js";
+import * as shaderResources from "../core/shader_resources.js";
+  
+// the expected texture coordinate array is an array of 8 floats where elements:
+//  [0] [1]: is u/v coordinate of Top-Right 
+//  [2] [3]: is u/v coordinate of Top-Left
+//  [4] [5]: is u/v coordinate of Bottom-Right
+//  [6] [7]: is u/v coordinate of Bottom-Left
+// Convention: eName is an enumerated data type
+
+/**
+ * Enum for expected texture coordinate array
+ * @memberof SpriteRenderable
+ */
+const eTexCoordArrayIndex = Object.freeze({
+    eLeft: 2,
+    eRight: 0,
+    eTop: 1,
+    eBottom: 5
+});
+    
+class SpriteRenderable extends TextureRenderable {
+
+    /**
+     * Supports the drawing of one sprite element mapped onto entire renderable.
+     * Default size is the entire sprite sheet
+     * @constructor
+     * @param {string} myTexture - the path to the sprite sheet image file
+     * @returns {SpriteRenderable} a new SpriteRenderable
+     */
+    constructor(myTexture) {
+        super(myTexture);
+        super._setShader(shaderResources.getSpriteShader());
+        // sprite coordinate
+        this.mElmLeft = 0.0;   // bounds of texture coordinate (0 is left, 1 is right)
+        this.mElmRight = 1.0;  // 
+        this.mElmTop = 1.0;    //   1 is top and 0 is bottom of image
+        this.mElmBottom = 0.0; // 
+
+        // sets info to support per-pixel collision 
+        this._setTexInfo();
+    }
+
+    // specify element region by texture coordinate (between 0 to 1)
+    /**
+     * Set the sprite element bounds in UV texture coordinate (0-1) for this Sprite Renderable
+     * @method
+     * @param {float} left - leftmost U coordinate 
+     * @param {float} right - rightmost U coordinate
+     * @param {float} bottom - bottommost V coordinate
+     * @param {float} top - topmost V coordinate
+     */
+    setElementUVCoordinate(left, right, bottom, top) {
+        this.mElmLeft = left;
+        this.mElmRight = right;
+        this.mElmBottom = bottom;
+        this.mElmTop = top;
+        this._setTexInfo();
+    }
+
+    // specify element region by pixel positions (between 0 to image resolutions)
+    /**
+     * Set the sprite element bounds in pixel coordinates (between 0 to image resolutions) for this Sprite Renderable
+     * @method
+     * @param {integer} left - leftmost pixel position
+     * @param {integer} right - rightmost pixel position
+     * @param {integer} bottom - bottommost pixel position
+     * @param {integer} top - topmost pixel position
+     */
+    setElementPixelPositions(left, right, bottom, top) {
+        // entire image width, height
+        let imageW = this.mTextureInfo.mWidth;
+        let imageH = this.mTextureInfo.mHeight;
+
+        this.mElmLeft = left / imageW;
+        this.mElmRight = right / imageW;
+        this.mElmBottom = bottom / imageH;
+        this.mElmTop = top / imageH;
+        this._setTexInfo();
+    }
+
+    /**
+     * Returns a one dimensional array with UV coordinates of the corners of the sprite region for this SpriteRenderable
+     * @method
+     * @returns {float[]} top-right: [0][1], top-left: [2][3], bottom-right: [4][5], bottom-left: [6][7]
+     */
+    getElementUVCoordinateArray() {
+        return [
+            this.mElmRight,  this.mElmTop,          // x,y of top-right
+            this.mElmLeft,   this.mElmTop,
+            this.mElmRight,  this.mElmBottom,
+            this.mElmLeft,   this.mElmBottom
+        ];
+    }
+
+    /**
+     * Draw this SpriteRenderable to the camera
+     * @method
+     * @param {Camera} camera - the Camera to draw to
+     */
+    draw(camera) {
+        // set the current texture coordinate
+        // 
+        // activate the texture
+        this.mShader.setTextureCoordinate(this.getElementUVCoordinateArray());
+        super.draw(camera);
+    }
+
+    // #region: specifically to support sprite's per-pxiel accurate collision
+    _setTexInfo() {
+        let imageW = this.mTextureInfo.mWidth;
+        let imageH = this.mTextureInfo.mHeight;
+    
+        this.mElmLeftIndex = this.mElmLeft * imageW;
+        this.mElmBottomIndex = this.mElmBottom * imageH;
+    
+        this.mElmWidthPixels = ((this.mElmRight - this.mElmLeft) * imageW) + 1;
+        this.mElmHeightPixels = ((this.mElmTop - this.mElmBottom) * imageH) + 1;
+    }
+    // #endregion
+}
+
+export default SpriteRenderable;
+export {eTexCoordArrayIndex}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-input.html">input</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="module-texture-TextureInfo.html">TextureInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Apr 26 2022 18:05:30 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

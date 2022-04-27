@@ -50,7 +50,7 @@ const eLightType = Object.freeze({
 
 class Light {
     /**
-     * Defines a simple light source
+     * Defines a simple light source, defaults to a point light
      * @constructor
      */
     constructor() {
@@ -80,40 +80,143 @@ class Light {
      */
     getColor() { return this.mColor; }
 
+    /**
+     * Set the 2D world coordinate position for this Light
+     * @param {vec2} p - [X,Y] position
+     */
     set2DPosition(p) { this.mPosition = vec3.fromValues(p[0], p[1], this.mPosition[2]); }
+
+    /**
+     * Set the X world coordinate position of this Light
+     * @method
+     * @param {float} x - new X position 
+     */
     setXPos(x) { this.mPosition[0] = x; }
+    /**
+     * Set the Y world coordinate position of this Light
+     * @method
+     * @param {float} y - new Y position 
+     */
     setYPos(y) { this.mPosition[1] = y; }
+    /**
+     * Set the Z world coordinate position of this Light
+     * @method
+     * @param {float} z - new Z position 
+     */
     setZPos(z) { this.mPosition[2] = z; }
+
+    /**
+     * Returns the world coordinates of this Light
+     * @method
+     * @returns {vec3} mPosition - 3D position vector
+     */
     getPosition() { return this.mPosition; }
 
+    /**
+     * Set the direction of this Light
+     * @method
+     * @param {vec3} d - direction vector 
+     */
     setDirection(d) { this.mDirection = vec3.clone(d); }
+    
+    /**
+     * 
+     * @returns {vec3} mDirection - the direction vector
+     */
     getDirection() { return this.mDirection; }
 
+    /**
+     * Set the near radius in WC space for this Light
+     * @method
+     * @param {float} n - the new near radius 
+     */
     setNear(n) { this.mNear = n; }
+    /**
+     * Returns the near radius in WC space for this Light
+     * @returns {float} mNear - current near radius
+     */
     getNear() { return this.mNear; }
 
+    
+    /**
+     * Set the far radius in WC space for this Light
+     * @method
+     * @param {float} f - the new far radius 
+     */
     setFar(f) { this.mFar = f; }
+     /**
+     * Returns the far radius in WC space for this Light
+     * @returns {float} mFar - current far radius
+     */
     getFar() { return this.mFar; }
 
     setInner(r) { this.mInner = r; }
     getInner() { return this.mInner; }
 
+    /**
+     * 
+     * @param {*} r 
+     */
     setOuter(r) { this.mOuter = r; }
     getOuter() { return this.mOuter; }
 
+    /**
+     * Set the intensity level of this Light
+     * @method
+     * @param {float} i - the new intensity 
+     */
+
     setIntensity(i) { this.mIntensity = i; }
+    /**
+     * Returns the intensity level of this Light
+     * @method
+     * @returns {float} mIntensity - the current intensity 
+     */
     getIntensity() { return this.mIntensity; }
 
+    
     setDropOff(d) { this.mDropOff = d; }
     getDropOff() { return this.mDropOff; }
 
+    /**
+     * Set what type of light this Light is
+     * @method
+     * @param {eLightType} t - enum for point, directional, or spotlight 
+     */
     setLightType(t) { this.mLightType = t; }
+    /**
+     * Returns what type of light this Light is
+     * @method
+     * @returns {eLightType} mLightType - enum for point, directional, or spotlight
+     */
     getLightType() { return this.mLightType; }
 
+    /**
+     * Returns whether this Light is on
+     * @method
+     * @returns {boolean} true if the light is on
+     */
     isLightOn() { return this.mIsOn; }
+
+    /**
+     * Set whether this Light is on or off
+     * @method
+     * @param {boolean} on - true turns this Light on
+     */
     setLightTo(on) { this.mIsOn = on; }
 
+    /**
+     *Returns whether or not this Light casts a shadow 
+     * @method
+     * @returns {boolean} mCastShadow - true if a shadow is cast
+     */
     isLightCastShadow() { return this.mCastShadow; }
+
+    /**
+     * Set whether this Light casts a shadow
+     * @method
+     * @param {boolean} on - true casts a shadow
+     */
     setLightCastShadowTo(on) { this.mCastShadow = on; }
 }
 
@@ -128,13 +231,13 @@ export default Light;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-input.html">input</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-input.html">input</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="module-texture-TextureInfo.html">TextureInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Apr 22 2022 16:36:29 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Apr 26 2022 18:05:30 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

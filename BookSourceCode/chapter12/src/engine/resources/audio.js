@@ -33,7 +33,7 @@ let kDefaultInitGain = 0.1;
 
 /**
  * Closes the support for audio 
- * @exports audio
+ * @export audio
  */
 function cleanUp() {
     mAudioContext.close();
@@ -42,7 +42,7 @@ function cleanUp() {
 
 /**
  * Initialize the web audio system support
- * @exports audio
+ * @export audio
  */
 function init() {
     try {
@@ -80,7 +80,7 @@ function parseResource(data) {
 
 /**
  * Load an audio file into the resource map
- * @exports audio
+ * @export audio
  * @param {string} path - the path to the audio file 
  * @returns {}
  */
@@ -90,7 +90,7 @@ function load(path) {
 
 /**
  * Play an audio cue
- * @exports audio
+ * @export audio
  * @param {string} path - the path to the audio file 
  * @param {float} volume - the volume to play the audio at
  */
@@ -106,7 +106,7 @@ function playCue(path, volume) {
 
 /**
  * Begins playing background audio file
- * @exports audio
+ * @export audio
  * @param {string} path - path to the audio file
  * @param {float} volume - the volume 
  */
@@ -126,7 +126,7 @@ function playBackground(path, volume) {
 
 /**
  * Set the volume of the background audio clip
- * @exports audio
+ * @export audio
  * @param {float} volume - the new background volume
  */
 function setBackgroundVolume(volume) {
@@ -137,7 +137,7 @@ function setBackgroundVolume(volume) {
 
 /**
  * Increment the volume of the background audio clip
- * @exports audio
+ * @export audio
  * @param {float} increment - value to add to background volume
  */
 function  incBackgroundVolume(increment) {
@@ -153,7 +153,7 @@ function  incBackgroundVolume(increment) {
 
 /**
  * Set the Master volume
- * @exports audio
+ * @export audio
  * @param {float} volume - the new master volume
  */
 function  setMasterVolume(volume) {
@@ -164,7 +164,7 @@ function  setMasterVolume(volume) {
 
 /**
  * Increment the Master volume
- * @exports audio
+ * @export audio
  * @param {float} increment - the value to add to the volume
  */
 function  incMasterVolume(increment) {
@@ -180,7 +180,7 @@ function  incMasterVolume(increment) {
 
 /**
  * Stop playing background music and clear the variable
- * @exports audio
+ * @export audio
  */
 function stopBackground() {
     if (mBackgroundAudio !== null) {
@@ -191,7 +191,7 @@ function stopBackground() {
 
 /**
  * Returns if there is background audio playing
- * @exports audio
+ * @export audio
  * @returns {boolean} true if there is background audio
  */
 function isBackgroundPlaying() {

@@ -30,17 +30,18 @@ let mOutstandingPromises = [];
 
 /**
  * Returns if the resource is in the resource map
- * @exports resource_map
+ * @export resource_map
  * @param {string} path - path to resource file
  * @returns {boolean} true if the resource is in the resource map
  */
 function has(path) { return mMap.has(path) }
 
 /**
- * Sets the MapEntry object for the resource key
- * @exports resource_map
+ * Sets the data of the MapEntry object for the resource key.
+ * The path must already exist in the map
+ * @export resource_map
  * @param {string} key - path to the resource file 
- * @param {MapEntry} value - stores information about the resource
+ * @param {} value - the data of the resource
  */
 function set(key, value) { 
     mMap.get(key).set(value);
@@ -70,7 +71,7 @@ function incRef(path) {
  * Returns the data of the resource
  * @exports resource_map
  * @param {string} path - the path to the resource file
- * @returns {} the resource located by the path
+ * @returns {} the data of the resource
  */
 function get(path) {
     if (!has(path)) {
@@ -79,12 +80,7 @@ function get(path) {
     return mMap.get(path).data();
 }
 
-// generic loading function, 
-//   Step 1: fetch from server
-//   Step 2: decodeResource on the loaded package
-//   Step 3: parseResource on the decodedResource
-//   Step 4: store result into the map
-// Push the promised operation into an array
+
 /**
  * Generic loading function, 
  * Step 1: fetch from server
@@ -92,10 +88,11 @@ function get(path) {
  * Step 3: parseResource on the decodedResource
  * Step 4: store result into the map
  * Push the promised operation into an array
+ * @exports resource_map
  * @param {string} path -  the path to the resource file 
- * @param {} decodeResource 
- * @param {} parseResource 
- * @returns {promise} promise to fetch the resource
+ * @param {function} decodeResource - function to decode resource, specific to the type of resource
+ * @param {function} parseResource - function to parse resource, specific to the type of resource
+ * @returns {Promise} promise to fetch the resource, null if the resource already exists in the map
  */
 function loadDecodeParse(path, decodeResource, parseResource) {
     let fetchPromise = null;
