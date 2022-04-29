@@ -8,7 +8,7 @@
 
 class GameObjectSet {
     /**
-     * Utility class for a collection of GameObject
+     * Utility class for a collection of GameObjects
      * @constructor
      */
     constructor() {

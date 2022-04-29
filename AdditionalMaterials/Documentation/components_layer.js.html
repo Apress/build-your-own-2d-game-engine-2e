@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: shaders/light_shader.js</title>
+    <title>JSDoc: Source: components/layer.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: shaders/light_shader.js</h1>
+    <h1 class="page-title">Source: components/layer.js</h1>
 
     
 
@@ -26,86 +26,122 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/* 
- * File: light_shader.js
- *      Subclass from SpriteShader
- *      Supports light illumination
+            <pre class="prettyprint source linenums"><code>/*
+ * File: layer.js 
+ * Central storage for all elements that would be drawn 
  */
-"use strict";
 
-import SpriteShader from "./sprite_shader.js";
-import ShaderLightAt from "./shader_light_at.js";
+"use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-class LightShader extends SpriteShader {
-    /**
-     * Supports light illumination of sprites
-     * @extends SpriteShader
-     * @constructor
-     * @param {string} vertexShaderPath -  path to the vertex shader file
-     * @param {string} fragmentShaderPath - path to the fragment shader file
-     * @returns {LightShader} a new LightShader instance
-     */
-    constructor(vertexShaderPath, fragmentShaderPath) {
-        // Call super class constructor
-        super(vertexShaderPath, fragmentShaderPath);  // call super class constructor
+import GameObjectSet from "../game_objects/game_object_set.js";
 
-        this.mLights = null;  // lights from the Renderable
-        this.mCamera = null;  // the camera to draw for, required for WC to DC transform
 
-        //*******WARNING***************
-        // this number MUST correspond to the GLSL uLight[] array size (for LightFS.glsl and IllumFS.glsl)
-        //*******WARNING********************
-        this.kGLSLuLightArraySize = 8;  // &lt;-- make sure this is the same as LightFS.glsl and IllumFS.glsl
-        this.mShaderLights = [];
-        let i, ls;
-        for (i = 0; i &lt; this.kGLSLuLightArraySize; i++) {
-            ls = new ShaderLightAt(this.mCompiledShader, i);
-            this.mShaderLights.push(ls);
-        }
-    }
+/**
+ * Central storage for all elements that would be drawn
+ * @module layer
+ */
 
-    // Overriding the activation of the shader for rendering
-    /**
-     * Overrides shader activation to support 
-     * @method
-     * @param {vec4} pixelColor - [R,G,B,A] color array for the pixels
-     * @param {mat4} trsMatrix - translation, rotation, and scaling matrix for the object being rendered
-     * @param {mat4} cameraMatrix - translation, rotation, and scaling matrix for the Camera
-     */
-    activate(pixelColor, trsMatrix, cameraMatrix) {
-        // first call the super class' activate
-        super.activate(pixelColor, trsMatrix, cameraMatrix);
+// enum values of array offsets
+/**
+ * Enum
+ * @export layer
+ * 
+ */
+const eBackground = 0;
+const eShadowReceiver = 1;
+const eActors = 2;
+const eFront = 3;
+const eHUD = 4;
 
-        // now push the light information to the shader
-        let numLight = 0;
-        if (this.mLights !== null) {
-            while (numLight &lt; this.mLights.length) {
-                    this.mShaderLights[numLight].loadToShader(this.mCamera, this.mLights[numLight]);
-                numLight++;
-            }
-        }
-        // switch off the left over ones.
-        while (numLight &lt; this.kGLSLuLightArraySize) {
-            this.mShaderLights[numLight].switchOffLight(); // switch off unused lights
-            numLight++;
-        }
-    }
+let kNumLayers = 5;
+let mAllLayers = [];
 
-    /**
-     * Set the Camera and list of Lights for this LightShader, the length of argument l can not be greater than GLSL light array size
-     * @method
-     * @param {Camera} c - the Camera this LightShader illuminates
-     * @param {Lights[]} l -  List of Light objects for this LightShader
-     */
-    setCameraAndLights(c, l) {
-        this.mCamera = c;
-        this.mLights = l;
-        if (this.mLights.length > this.kGLSLuLightArraySize)
-            throw new Error ("Error: " + this.mLights.length + " lights requested. Current max light source supported is: " + this.kGLSLuLightArraySize + " update kGLSLuLightArraySize variable in light_shader.js  AND  light_fs.glsl to the proper number.");
+/**
+ * Initialize the layers by setting each layer to an empty GameObjectSet
+ * @export layer
+ * @method
+ */
+function init() {
+    mAllLayers[eBackground] = new GameObjectSet();
+    mAllLayers[eShadowReceiver] = new GameObjectSet();
+    mAllLayers[eActors] = new GameObjectSet();
+    mAllLayers[eFront] = new GameObjectSet();
+    mAllLayers[eHUD] = new GameObjectSet();
+}
+
+/**
+ * Set each layer to an empty GameObjectSet
+ * @export layer
+ * @method
+ */
+function cleanUp() {
+    init();
+}
+
+/**
+ * Draw every GameObject on every layer to the Camera
+ * @export layer
+ * @param {Camera} aCamera - the Camera to draw to
+ */
+function drawAllLayers(aCamera) {
+    let i;
+    for (i = 0; i &lt; kNumLayers; i++) {
+        mAllLayers[i].draw(aCamera);
     }
 }
 
-export default LightShader;</code></pre>
+function updateAllLayers() {
+    let i;
+    for (i = 0; i &lt; kNumLayers; i++) {
+        mAllLayers[i].update();
+    }
+}
+
+// operations on the layers
+function drawLayer(layerEnum, aCamera) {
+    mAllLayers[layerEnum].draw(aCamera);
+}
+
+function updateLayer(layerEnum) {
+    mAllLayers[layerEnum].update();
+}
+
+function addToLayer(layerEnum, obj) {
+    mAllLayers[layerEnum].addToSet(obj);
+}
+
+function addAsShadowCaster(obj) {
+    let i;
+    for (i = 0; i &lt; mAllLayers[eShadowReceiver].size(); i++) {
+        mAllLayers[eShadowReceiver].getObjectAt(i).addShadowCaster(obj);
+    }
+}
+function removeFromLayer(layerEnum, obj) {
+    mAllLayers[layerEnum].removeFromSet(obj);
+}
+function moveToLayerFront(layerEnum, obj) {
+    mAllLayers[layerEnum].moveToLast(obj);
+}
+function layerSize(layerEnum) {
+    return mAllLayers[layerEnum].size();
+}
+
+export {
+    // array indices
+    eBackground, eShadowReceiver, eActors, eFront, eHUD,
+    
+    // init and cleanup
+    init, cleanUp,
+
+    // draw/update
+    drawLayer, drawAllLayers,
+    updateLayer, updateAllLayers,
+
+    // layer-specific support
+    addToLayer, addAsShadowCaster,
+    removeFromLayer, moveToLayerFront,
+    layerSize
+}</code></pre>
         </article>
     </section>
 

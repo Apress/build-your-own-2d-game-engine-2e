@@ -34,12 +34,15 @@
  */
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
+
+import CollisionInfo from "../rigid_shapes/collision_info.js";
+
+
 /**
- * Core of the physics component supporting projection and collision resolution
+ * Core of the physics component supporting motion and collision resolution
  * @module physics
  */
 
-import CollisionInfo from "../rigid_shapes/collision_info.js";
 
 let mSystemAcceleration = [0, -20];        // system-wide default acceleration
 let mPosCorrectionRate = 0.8;               // percentage of separation to project objects
@@ -74,12 +77,13 @@ function getPositionalCorrection() { return mCorrectPosition; }
 /**
  * Toggles the state of the correction flag
  * @export physics
+ * @method
  */
 function togglePositionalCorrection() { mCorrectPosition = !mCorrectPosition; }
 
 /**
  * Returns whether there is motion
- * @exports physics
+ * @export physics
  * @returns {boolean} true if there is motion
  */
 function getHasMotion() { return mHasMotion; }
@@ -89,7 +93,18 @@ function getHasMotion() { return mHasMotion; }
  */
 function toggleHasMotion() { mHasMotion = !mHasMotion; }
 
+/**
+ * Returns the relaxation count
+ * @export physics
+ * @returns {integer} mRelaxationCount - the number of relaxation cycles
+ */
 function getRelaxationCount() { return mRelaxationCount; }
+
+/**
+ * Add a value to the relaxation count
+ * @export physics
+ * @param {integer} dc - the number of relaxation cycles to add
+ */
 function incRelaxationCount(dc) { mRelaxationCount += dc; }
 
 let mS1toS2 = [0, 0];
@@ -191,6 +206,14 @@ function resolveCollision(b, a, collisionInfo) {
 }
 
 // collide two rigid shapes
+/**
+ * Collide two rigid shapes
+ * @export physics
+ * @param {RigidShape} s1 - the first RigidShape involved
+ * @param {RigidShape} s2 - the second RigidShape involved
+ * @param {CollisionInfo[]} infoSet - list of CollisionInfo objects to append to
+ * @returns {boolean} true if a collision occured
+ */
 function collideShape(s1, s2, infoSet = null) {
     let hasCollision = false;
     if ((s1 !== s2) &amp;&amp; ((s1.getInvMass() !== 0) || (s2.getInvMass() !== 0))) {
@@ -215,6 +238,14 @@ function collideShape(s1, s2, infoSet = null) {
 }
 
 // collide a given GameObject with a GameObjectSet
+/**
+ * Collide a given GameObject with an entire GameObjectSet
+ * @export physics
+ * @param {GameObject} obj - the specific GameObject to test collision with
+ * @param {GameObjectSet} set - the GameObjectSet to test collision against
+ * @param {CollisionInfo[]} infoSet - list of CollisionInfo objects to append to
+ * @returns {boolean} true if a collision occured
+ */
 function processObjToSet(obj, set, infoSet = null) {
     let j = 0, r = 0;
     let hasCollision = false;
@@ -229,6 +260,14 @@ function processObjToSet(obj, set, infoSet = null) {
 }
 
 // collide between all objects in two different GameObjectSets
+/**
+ * Collide every GameObject within a GameObjectSet with an entire other GameObjectSet
+ * @export physics
+ * @param {GameObjectSet} set1 - the first GameObjectSet to test collision with
+ * @param {GameObjectSet} set2 - the second GameObjectSet to test collision against
+ * @param {CollisionInfo[]} infoSet - list of CollisionInfo objects to append to
+ * @returns {boolean} true if a collision occured
+ */
 function processSetToSet(set1, set2, infoSet = null) {
     let i = 0, j = 0, r = 0;
     let hasCollision = false;
@@ -245,6 +284,13 @@ function processSetToSet(set1, set2, infoSet = null) {
                 }
 
 // collide all objects in the GameObjectSet with themselves
+/**
+ * Collide every GameObject within the GameObjectSet with each other
+ * @export physics
+ * @param {GameObjectSet} set - the GameObjectSet to test collision with and against
+ * @param {CollisionInfo[]} infoSet - list of CollisionInfo objects to append to
+ * @returns {boolean} true if a collision occured
+ */
 function processSet(set, infoSet = null) {
     let i = 0, j = 0, r = 0;
     let hasCollision = false;
@@ -289,13 +335,13 @@ export {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-input.html">input</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-shader_resources.html">shader_resources</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-vertex_buffer.html">vertex_buffer</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="IllumRenderable.html">IllumRenderable</a></li><li><a href="IllumShader.html">IllumShader</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightRenderable.html">LightRenderable</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LightShader.html">LightShader</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="LineShader.html">LineShader</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="module-texture-TextureInfo.html">TextureInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Particle.html">Particle</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="ShaderLightAt.html">ShaderLightAt</a></li><li><a href="ShaderMaterial.html">ShaderMaterial</a></li><li><a href="ShadowCaster.html">ShadowCaster</a></li><li><a href="ShadowCasterShader.html">ShadowCasterShader</a></li><li><a href="ShadowReceiver.html">ShadowReceiver</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SimpleShader.html">SimpleShader</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="SpriteShader.html">SpriteShader</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TextureShader.html">TextureShader</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-input.html">input</a></li><li><a href="module-layer.html">layer</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-shader_resources.html">shader_resources</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-vertex_buffer.html">vertex_buffer</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="IllumRenderable.html">IllumRenderable</a></li><li><a href="IllumShader.html">IllumShader</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightRenderable.html">LightRenderable</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LightShader.html">LightShader</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="LineShader.html">LineShader</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="module-texture-TextureInfo.html">TextureInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Particle.html">Particle</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="ShaderLightAt.html">ShaderLightAt</a></li><li><a href="ShaderMaterial.html">ShaderMaterial</a></li><li><a href="ShadowCaster.html">ShadowCaster</a></li><li><a href="ShadowCasterShader.html">ShadowCasterShader</a></li><li><a href="ShadowReceiver.html">ShadowReceiver</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SimpleShader.html">SimpleShader</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="SpriteShader.html">SpriteShader</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TextureShader.html">TextureShader</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Apr 27 2022 16:39:50 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Apr 29 2022 11:55:33 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

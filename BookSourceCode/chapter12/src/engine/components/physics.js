@@ -6,12 +6,15 @@
  */
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
+
+import CollisionInfo from "../rigid_shapes/collision_info.js";
+
+
 /**
- * Core of the physics component supporting projection and collision resolution
+ * Core of the physics component supporting motion and collision resolution
  * @module physics
  */
 
-import CollisionInfo from "../rigid_shapes/collision_info.js";
 
 let mSystemAcceleration = [0, -20];        // system-wide default acceleration
 let mPosCorrectionRate = 0.8;               // percentage of separation to project objects
@@ -46,12 +49,13 @@ function getPositionalCorrection() { return mCorrectPosition; }
 /**
  * Toggles the state of the correction flag
  * @export physics
+ * @method
  */
 function togglePositionalCorrection() { mCorrectPosition = !mCorrectPosition; }
 
 /**
  * Returns whether there is motion
- * @exports physics
+ * @export physics
  * @returns {boolean} true if there is motion
  */
 function getHasMotion() { return mHasMotion; }
@@ -61,7 +65,18 @@ function getHasMotion() { return mHasMotion; }
  */
 function toggleHasMotion() { mHasMotion = !mHasMotion; }
 
+/**
+ * Returns the relaxation count
+ * @export physics
+ * @returns {integer} mRelaxationCount - the number of relaxation cycles
+ */
 function getRelaxationCount() { return mRelaxationCount; }
+
+/**
+ * Add a value to the relaxation count
+ * @export physics
+ * @param {integer} dc - the number of relaxation cycles to add
+ */
 function incRelaxationCount(dc) { mRelaxationCount += dc; }
 
 let mS1toS2 = [0, 0];
@@ -163,6 +178,14 @@ function resolveCollision(b, a, collisionInfo) {
 }
 
 // collide two rigid shapes
+/**
+ * Collide two rigid shapes
+ * @export physics
+ * @param {RigidShape} s1 - the first RigidShape involved
+ * @param {RigidShape} s2 - the second RigidShape involved
+ * @param {CollisionInfo[]} infoSet - list of CollisionInfo objects to append to
+ * @returns {boolean} true if a collision occured
+ */
 function collideShape(s1, s2, infoSet = null) {
     let hasCollision = false;
     if ((s1 !== s2) && ((s1.getInvMass() !== 0) || (s2.getInvMass() !== 0))) {
@@ -187,6 +210,14 @@ function collideShape(s1, s2, infoSet = null) {
 }
 
 // collide a given GameObject with a GameObjectSet
+/**
+ * Collide a given GameObject with an entire GameObjectSet
+ * @export physics
+ * @param {GameObject} obj - the specific GameObject to test collision with
+ * @param {GameObjectSet} set - the GameObjectSet to test collision against
+ * @param {CollisionInfo[]} infoSet - list of CollisionInfo objects to append to
+ * @returns {boolean} true if a collision occured
+ */
 function processObjToSet(obj, set, infoSet = null) {
     let j = 0, r = 0;
     let hasCollision = false;
@@ -201,6 +232,14 @@ function processObjToSet(obj, set, infoSet = null) {
 }
 
 // collide between all objects in two different GameObjectSets
+/**
+ * Collide every GameObject within a GameObjectSet with an entire other GameObjectSet
+ * @export physics
+ * @param {GameObjectSet} set1 - the first GameObjectSet to test collision with
+ * @param {GameObjectSet} set2 - the second GameObjectSet to test collision against
+ * @param {CollisionInfo[]} infoSet - list of CollisionInfo objects to append to
+ * @returns {boolean} true if a collision occured
+ */
 function processSetToSet(set1, set2, infoSet = null) {
     let i = 0, j = 0, r = 0;
     let hasCollision = false;
@@ -217,6 +256,13 @@ function processSetToSet(set1, set2, infoSet = null) {
                 }
 
 // collide all objects in the GameObjectSet with themselves
+/**
+ * Collide every GameObject within the GameObjectSet with each other
+ * @export physics
+ * @param {GameObjectSet} set - the GameObjectSet to test collision with and against
+ * @param {CollisionInfo[]} infoSet - list of CollisionInfo objects to append to
+ * @returns {boolean} true if a collision occured
+ */
 function processSet(set, infoSet = null) {
     let i = 0, j = 0, r = 0;
     let hasCollision = false;

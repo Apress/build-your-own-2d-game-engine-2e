@@ -86,10 +86,16 @@ function resolveRectPos(rectShape, particle) {
 // obj: a GameObject (with potential mRigidBody)
 // pSet: set of particles (ParticleSet)
 /**
- * Resolve collisions between a set of Par
- * @param {GameObject} obj - 
- * @param {*} pSet 
- * @returns {boolean}
+ * Resolve collisions between a GameObject and each Particle within a ParticleSet
+ * 
+ * <p>
+ * Return is currently bugged? 
+ * also unused i variable
+ * </p>
+ * 
+ * @param {GameObject} obj - the GameObject to collide against
+ * @param {ParticleSet} pSet - the ParticleSet to collide with
+ * @returns {boolean} true if a collision occured for the last particle in the set
  */
 function resolveRigidShapeCollision(obj, pSet) {
     let i, j;
@@ -110,10 +116,10 @@ function resolveRigidShapeCollision(obj, pSet) {
 // objSet: set of GameObjects (with potential mRigidBody)
 // pSet: set of particles (ParticleSet)
 /**
- * 
- * @param {*} objSet 
- * @param {*} pSet 
- * @returns {boolean}
+ * Resolve collisions between each GameObject in a GameObjectSet and each Particle within a ParticleSet
+ * @param {GameObjectSet} objSet - the GameObjectSet to collide against
+ * @param {ParticleSet} pSet - the ParticleSet to collide with
+ * @returns {boolean} true if a collision occured
  */
 function resolveRigidShapeSetCollision(objSet, pSet) {
     let i, j;
