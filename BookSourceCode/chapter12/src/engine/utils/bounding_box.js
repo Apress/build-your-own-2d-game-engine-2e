@@ -21,7 +21,7 @@ const eBoundCollideStatus = Object.freeze({
 
 class BoundingBox {
     /**
-     * @classdesc Default constructor for BoundingBox object
+     * @classdesc Defines a rectangle that is used as the border of a GameObject for collisions
      *<p>Found in Chapter 6, page 297 of the textbook</p>
      * Example: 
      * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter6/6.3.bbox_and_collisions/index.html 6.3 Bounding Box}
