@@ -13,7 +13,7 @@ let kSizeFactor = 0.2;
 
 class Particle {
     /**
-     * @classdesc Defines a square particle that has physics support and whose size and color changes over a set lifetime
+     * @classdesc Defines a square particle that has physics support. The size and color of a particle can change over a set lifetime.
      * <p>
      * Found in Chapter 10, page 649 of the textbook
      * </p>
