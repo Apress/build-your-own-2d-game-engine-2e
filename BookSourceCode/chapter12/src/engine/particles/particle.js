@@ -14,11 +14,14 @@ let kSizeFactor = 0.2;
 class Particle {
     /**
      * @classdesc Defines a square particle that has physics support and whose size and color changes over a set lifetime
-     * 
-     * 
      * <p>
-     * Found on page ____ in the text book
+     * Found in Chapter 10, page 649 of the textbook
      * </p>
+     * Examples: 
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter10/10.1.particles/index.html Simple Particle Example},
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter10/10.2.particle_collisions/index.html Particle Collision Example},
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter10/10.3.particle_emitters/index.html Particle Emitter Example}
+     * 
      * 
      * @param {string} texture - path to the texture file for this Particle
      * @param {float} x - starting X world coordinate 
