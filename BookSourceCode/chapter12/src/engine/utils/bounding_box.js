@@ -21,8 +21,10 @@ const eBoundCollideStatus = Object.freeze({
 
 class BoundingBox {
     /**
-     * Default constructor for BoundingBox object
-     * @constructor
+     * @classdesc Default constructor for BoundingBox object
+     *<p>Found in Chapter 6, page 297 of the textbook</p>
+     * Example: 
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter6/6.3.bbox_and_collisions/index.html 6.3 Bounding Box}
      * @param {vec2} centerPos - center position of the bounding box in world coordinates
      * @param {float} w - width of the bounding box
      * @param {float} h - height of the bounding box
