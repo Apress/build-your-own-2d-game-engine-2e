@@ -66,15 +66,15 @@ function resolveRectPos(rectShape, particle) {
 // obj: a GameObject (with potential mRigidBody)
 // pSet: set of particles (ParticleSet)
 function resolveRigidShapeCollision(obj, pSet) {
-    let i, j;
+    let j;
     let collision = false;
 
     let rigidShape = obj.getRigidBody();
     for (j = 0; j < pSet.size(); j++) {
         if (rigidShape.getType() == "RigidRectangle")
-            collision = resolveRectPos(rigidShape, pSet.getObjectAt(j));
+            collision = resolveRectPos(rigidShape, pSet.getObjectAt(j)) || collision;
         else if (rigidShape.getType() == "RigidCircle")
-            collision = resolveCirclePos(rigidShape, pSet.getObjectAt(j));
+            collision = resolveCirclePos(rigidShape, pSet.getObjectAt(j)) || collision;
     }
 
     return collision;
