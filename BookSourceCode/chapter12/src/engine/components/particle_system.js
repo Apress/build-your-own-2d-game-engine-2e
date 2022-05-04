@@ -26,7 +26,7 @@ let mCollisionInfo = null;
 let mFrom1to2 = [0, 0];
 /**
  * Initialize the Transform, RigidCircle, and CollisionInfo for the particle system
- * @export particle_system
+ * @static
  */
 function init() {
     mXform = new Transform();
@@ -37,14 +37,14 @@ function init() {
 let mSystemAcceleration = [0, -50.0];   
 /**
  * Returns the acceleration vector for the system
- * @export particle_system
+ * @static
  * @returns {vec2} the system acceleration
  */
 function getSystemAcceleration() { return vec2.clone(mSystemAcceleration); }
 
 /**
  * Set the particle system acceleration
- * @export particle_system
+ * @static
  * @param {float} x - the acceleration in the x direction
  * @param {float} y - the acceleration in the y direction
  */
@@ -94,26 +94,21 @@ function resolveRectPos(rectShape, particle) {
 // pSet: set of particles (ParticleSet)
 /**
  * Resolve collisions between a GameObject and each Particle within a ParticleSet
- * 
- * <p>
- * Return is currently bugged? 
- * also unused i variable
- * </p>
- * 
+ * @static
  * @param {GameObject} obj - the GameObject to collide against
  * @param {ParticleSet} pSet - the ParticleSet to collide with
- * @returns {boolean} true if a collision occured for the last particle in the set
+ * @returns {boolean} true if a collision occured for 
  */
 function resolveRigidShapeCollision(obj, pSet) {
-    let i, j;
+    let j=0;
     let collision = false;
 
     let rigidShape = obj.getRigidBody();
     for (j = 0; j < pSet.size(); j++) {
         if (rigidShape.getType() == "RigidRectangle")
-            collision = resolveRectPos(rigidShape, pSet.getObjectAt(j));
+            collision = resolveRectPos(rigidShape, pSet.getObjectAt(j)) || collision;
         else if (rigidShape.getType() == "RigidCircle")
-            collision = resolveCirclePos(rigidShape, pSet.getObjectAt(j));
+            collision = resolveCirclePos(rigidShape, pSet.getObjectAt(j)) || collision;
     }
 
     return collision;
@@ -124,6 +119,7 @@ function resolveRigidShapeCollision(obj, pSet) {
 // pSet: set of particles (ParticleSet)
 /**
  * Resolve collisions between each GameObject in a GameObjectSet and each Particle within a ParticleSet
+ * @static
  * @param {GameObjectSet} objSet - the GameObjectSet to collide against
  * @param {ParticleSet} pSet - the ParticleSet to collide with
  * @returns {boolean} true if a collision occured
