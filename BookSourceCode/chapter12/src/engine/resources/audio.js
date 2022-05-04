@@ -26,14 +26,21 @@ let mMasterGain = null;     // overall/master volume
 let kDefaultInitGain = 0.1;
 
 /**
- * logic for loading an audio file into the resource_map and
+ * logic for loading audio files into the resource_map and
  * provides control of the loaded audio 
+ * 
+ * <p><strong>Exports the unload() and has() functions from </strong> 
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/AdditionalMaterials/Documentation/module-resource_map.html resource map}</p>
+ * 
+ * <p>Found in Chapter 4, page 172 of the textbook </p>
+ * Example:
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter4/4.6.audio_support/index.html 4.6 Audio Support}
  * @module audio
  */
 
 /**
  * Closes the support for audio 
- * @export audio
+ * @static
  */
 function cleanUp() {
     mAudioContext.close();
@@ -42,7 +49,7 @@ function cleanUp() {
 
 /**
  * Initialize the web audio system support
- * @export audio
+ * @static
  */
 function init() {
     try {
@@ -80,7 +87,7 @@ function parseResource(data) {
 
 /**
  * Load an audio file into the resource map
- * @export audio
+ * @static
  * @param {string} path - the path to the audio file 
  * @returns {}
  */
@@ -90,7 +97,7 @@ function load(path) {
 
 /**
  * Play an audio cue
- * @export audio
+ * @static
  * @param {string} path - the path to the audio file 
  * @param {float} volume - the volume to play the audio at
  */
@@ -106,7 +113,7 @@ function playCue(path, volume) {
 
 /**
  * Begins playing background audio file
- * @export audio
+ * @static
  * @param {string} path - path to the audio file
  * @param {float} volume - the volume 
  */
@@ -126,7 +133,7 @@ function playBackground(path, volume) {
 
 /**
  * Set the volume of the background audio clip
- * @export audio
+ * @static
  * @param {float} volume - the new background volume
  */
 function setBackgroundVolume(volume) {
@@ -137,7 +144,7 @@ function setBackgroundVolume(volume) {
 
 /**
  * Increment the volume of the background audio clip
- * @export audio
+ * @static
  * @param {float} increment - value to add to background volume
  */
 function  incBackgroundVolume(increment) {
@@ -153,7 +160,7 @@ function  incBackgroundVolume(increment) {
 
 /**
  * Set the Master volume
- * @export audio
+ * @static
  * @param {float} volume - the new master volume
  */
 function  setMasterVolume(volume) {
@@ -164,7 +171,7 @@ function  setMasterVolume(volume) {
 
 /**
  * Increment the Master volume
- * @export audio
+ * @static
  * @param {float} increment - the value to add to the volume
  */
 function  incMasterVolume(increment) {
@@ -180,7 +187,7 @@ function  incMasterVolume(increment) {
 
 /**
  * Stop playing background music and clear the variable
- * @export audio
+ * @static
  */
 function stopBackground() {
     if (mBackgroundAudio !== null) {
@@ -191,7 +198,7 @@ function stopBackground() {
 
 /**
  * Returns if there is background audio playing
- * @export audio
+ * @static
  * @returns {boolean} true if there is background audio
  */
 function isBackgroundPlaying() {

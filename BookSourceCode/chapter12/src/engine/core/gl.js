@@ -6,6 +6,7 @@
  */
 "use strict";
 
+
 let mCanvas = null;
 let mGL = null;
 

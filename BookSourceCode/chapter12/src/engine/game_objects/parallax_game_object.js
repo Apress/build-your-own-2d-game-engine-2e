@@ -16,8 +16,12 @@ import TiledGameObject from "./tiled_game_object.js";
 
 class ParallaxGameObject extends TiledGameObject {
     /**
-     * Represent an GameObject located at some distance D away, thus 
+     * @classdesc Represent an GameObject located at some distance D away, thus 
      * resulting in slower movements
+     * <p>Found in Chapter 11, page 681 of the textbook</p>
+     * Example: 
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter11/11.2.parallax_objects/index.html 11.2 Parallax Objects}
+     * 
      * @constructor
      * @extends TiledGameObject
      * @param {Renderable} renderableObj - the Renderable associated with this ParallaxGameObject

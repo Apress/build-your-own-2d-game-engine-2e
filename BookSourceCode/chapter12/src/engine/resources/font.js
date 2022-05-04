@@ -13,9 +13,10 @@ import * as xml from "./xml.js";
 
 /**
  * Logics for loading font into the resource_map,
- * note that "font" consists of two files
- *    => the bitmap font image
- *    => the associated xml descriptor file
+ * note that "font" consists of two files: the bitmap font image and the associated xml descriptor file
+ * <p>Found in Chapter 5, page 245 of the textbook</p> 
+ * Example:
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter5/5.4.font_support/index.html 5.4 Font Support}
  * @module font 
  */
 
@@ -28,9 +29,8 @@ let kDescExt = ".fnt";   // extension for the bitmap font description
 // all size returned are in normalize unit (range between 0 to 1)
 class CharacterInfo {
     /**
-     * Object for convenient communication of per-character information,
+     * @classdesc Object for convenient communication of per-character information,
      * all size returned are in normalize unit (range between 0 to 1)
-     * @export font
      * @returns {CharacterInfo} a new CharacterInfo instance
      */
     constructor() {
@@ -53,14 +53,14 @@ class CharacterInfo {
 
 /**
  * Returns the fontName with ".png" appened
- * @export font
+ * @static
  * @param {string} fontName - the path to the font files
  * @returns {string} fontName with file extension
  */
 function imageName(fontName) { return fontName+kImageExt;}
 /**
  * Returns the path of the font description file with ".fnt" appened
- * @export font
+ * @static
  * @param {string} fontName - the path to the font files
  * @returns {string} path to font description file
  */
@@ -68,7 +68,7 @@ function descName(fontName) { return fontName+kDescExt;}
 
 /**
  * Load the font image as a texture and the font description as an XMLDocument
- * @export font
+ * @static
  * @param {string} fontName - path to the font image and description files
  */
 function load(fontName) {
@@ -80,7 +80,7 @@ function load(fontName) {
 // be available for subsequent garbage collection
 /**
  * Unload the font to allow for garbage collection
- * @export font
+ * @static
  * @param {string} fontName - path to the font image and description files
  */
 function unload(fontName) {
@@ -90,7 +90,7 @@ function unload(fontName) {
 
 /**
  * Returns whether the font is already in the resource map
- * @export font
+ * @static
  * @param {string} fontName - path to the font image and description files
  * @returns {boolean} true if the font image and font description are loaded
  */
@@ -100,9 +100,9 @@ function has(fontName) {
 
 /**
  * Returns a CharacterInfo object with the size and texel information for the character texture
- * @export font
+ * @static
  * @param {string} fontName - path to the font image and description files
- * @param {string/int} aChar - the single character (code) to get information for
+ * @param {string} aChar - the single character (code) to get information for
  * @returns {CharacterInfo} a new instance of CharacterInfo, null if unsuccessful
  */
 function getCharInfo(fontName, aChar) {

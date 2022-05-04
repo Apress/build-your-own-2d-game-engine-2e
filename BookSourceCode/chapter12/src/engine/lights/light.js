@@ -22,7 +22,12 @@ const eLightType = Object.freeze({
 
 class Light {
     /**
-     * Defines a simple light source, defaults to a point light
+     * @classdesc Defines a simple light source that can be a point light, directional light, or spot light
+     * <p>Found in Chapter 8, page 410 of the textbook </p>
+     * Examples:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.2.simple_light_shader/index.html 8.2 Simple Light Shader},
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.6.directional_and_spotlights/index.html 8.6 Directional and Spot Lights}, 
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.7.shadow_shaders/index.html 8.7 Shadow Shaders}
      * @constructor
      * @returns {Light} a new Light instance
      */

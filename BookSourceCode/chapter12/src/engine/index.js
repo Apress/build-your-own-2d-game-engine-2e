@@ -81,7 +81,23 @@ import * as vertexBuffer from "./core/vertex_buffer.js";
 import * as shaderResources from "./core/shader_resources.js";
 import * as loop from "./core/loop.js";
 
+/**
+ * Serves as central export of the entire engine,
+ * client programs can simply import this file 
+ * for all symbols defined in the engine
+ * 
+ * <p>Found in Chapter 3, page 69 of the textbook </p>
+ * Example:
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter3/3.1.renderable_objects/index.html 3.1 Renderable Objects}
+ * @module index
+ */
+
 // general engine utilities
+/**
+ * Initializes all the parts of the engine
+ * @static
+ * @param {string} htmlCanvasID - name of the html canvas element
+ */
 function init(htmlCanvasID) {
     glSys.init(htmlCanvasID);
     vertexBuffer.init();
@@ -92,6 +108,10 @@ function init(htmlCanvasID) {
     layer.init();
 }
 
+/**
+ * Calls clean up functions for all parts of the engine
+ * @static
+ */
 function cleanUp() {
     layer.cleanUp();
     loop.cleanUp();
@@ -103,6 +123,11 @@ function cleanUp() {
     glSys.cleanUp();
 }
 
+/**
+ * Clears the canvas and set it to a single color
+ * @static
+ * @param {vec4} color - [R,G,B,A] color array
+ */
 function clearCanvas(color) {
     let gl = glSys.get();
     gl.clearColor(color[0], color[1], color[2], color[3]);  // set the color to be cleared

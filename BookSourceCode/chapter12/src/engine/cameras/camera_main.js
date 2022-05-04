@@ -12,7 +12,7 @@ import { eBoundCollideStatus } from "../utils/bounding_box.js";
 import CameraState from "./camera_state.js";
 
 /**
- * Enum for viewport properties
+ * Enum for viewport properties index
  * @memberof Camera
  * @enum
  */
@@ -47,7 +47,11 @@ class Camera {
     //
 
     /**
-     * Default constructor for Camera object
+     * @classdesc Class that encapsulates the scaling and translation of the portions of the game world that are visible.
+     * <p>Found in Chapter 3, page 102 of the textbook</p>
+     * Examples:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter3/3.5.camera_objects/index.html 3.5 Camera Objects}, 
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter7/7.4.multiple_cameras/index.html 7.4 Multiple Cameras}
      * @constructor
      * @param {vec2} wcCenter - center position of Camera in world coordinates
      * @param {float} wcWidth - width of the world, implicitly defines the world height

@@ -10,7 +10,12 @@ import LerpVec2 from "../utils/lerp_vec2.js";
 class CameraState {
     //
     /**
-     * Defines the state of a camera to facilitate the manipulation of this state
+     * @classdesc Defines the state of a camera to facilitate the manipulation of it
+     * <p>Found in Chapter 7, page 353 of the textbook </p>
+     * Examples:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter7/7.2.camera_interpolations/index.html 7.2 Camera Interpolations}, 
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter7/7.3.camera_shake_and_object_oscillate/index.html 7.3 Camera Shake and Object Oscillation}
+     * 
      * @constructor
      * @param {vec2} center - the center world coordinates of the Camera
      * @param {float} width - the width of the Camera

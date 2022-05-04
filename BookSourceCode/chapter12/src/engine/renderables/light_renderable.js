@@ -12,7 +12,7 @@ import * as defaultShaders from "../core/shader_resources.js";
 
 class LightRenderable extends SpriteAnimateRenderable {
     /**
-     * Defines a SpriteAnimatedRenderable with illumination and a list of lights
+     * Defines a SpriteAnimatedRenderable with a list of lights
      * @extends SpriteAnimateRenderable
      * @constructor
      * @param {string} myTexture - path to the image file to use as texture

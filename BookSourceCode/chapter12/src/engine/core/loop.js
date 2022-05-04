@@ -8,9 +8,17 @@
 
 import * as map from "./resource_map.js";
 import * as input from "../components/input.js";
-
 import * as debugDraw from "./debug_draw.js";
 import * as particleSystem from "../components/particle_system.js";
+
+/**
+ * Interface with HTML5 to implement looping functionality
+ * <p>Found in Chapter 4, page  112 of the textbook</p>
+ * 
+ * Example:
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter4/4.1.game_loop/index.html 4.1 Game Loop}
+ * @module loop
+ */
 
 const kUPS = 60; // Updates per second
 const kMPF = 1000 / kUPS; // Milliseconds per update.
@@ -53,6 +61,11 @@ function loopOnce() {
     } 
 }
 
+/**
+ * Returns how many seconds pass between updates, normally a small fraction
+ * @export loop
+ * @returns {float} kSPU - seconds per update
+ */
 function getUpdateIntervalInSeconds() { return kSPU; }
 
 async function start(scene) {
@@ -78,12 +91,20 @@ async function start(scene) {
     mFrameID = requestAnimationFrame(loopOnce);
 }
 
+/**
+ * Stop the game loop
+ * @export loop
+ */
 function stop() {
     mLoopRunning = false;
     // make sure no more animation frames
     cancelAnimationFrame(mFrameID);
 }
 
+/**
+ * Stop the game loop and unload the current scene
+ * @export loop
+ */
 function cleanUp() {
     if (mLoopRunning) {
         stop();

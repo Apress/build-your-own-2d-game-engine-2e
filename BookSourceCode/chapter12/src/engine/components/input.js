@@ -10,6 +10,11 @@
 
 /**
  * Mapping and functions for live user input
+ * <p>Found in Chapter 4, page 125 of the textbook </p>
+ * 
+ * Examples:
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter4/4.2.keyboard_support/index.html 4.2 Keyboard Support}, 
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter7/7.5.mouse_input/index.html 7.5 Mouse Input}
  * @module input
  */
 // Key code constants

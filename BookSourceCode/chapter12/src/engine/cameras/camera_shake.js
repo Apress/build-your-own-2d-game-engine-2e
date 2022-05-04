@@ -10,7 +10,12 @@ import ShakeVec2 from "../utils/shake_vec2.js";
 class CameraShake {
     // state is the CameraState to be shaken
     /**
-     * Defines a damped simple harmonic motion to simulate camera shake
+     * @classdesc Defines a damped simple harmonic motion to shake a Camera
+     * <p>Found in Chapter 7, page 365 of the textbook</p>
+     * Example:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter7/7.3.camera_shake_and_object_oscillate/index.html 7.3 Camera Shake and Object Oscillation}
+     * 
+     * @constructor
      * @param {CameraState} state - the CameraState to be shaken
      * @param {vec2} deltas - the [x,y] magnitudes of the shake
      * @param {float} freqs - the frequency of the shaking in revolutions per cycle

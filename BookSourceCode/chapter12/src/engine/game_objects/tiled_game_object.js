@@ -9,8 +9,11 @@ import GameObject from "./game_object.js";
 
 class TiledGameObject extends GameObject {
     /**
-     * Support for repeating renderable tiles, infinitely tileable.
-     * Assume X/Y alignments
+     * @classdesc Support for repeating renderable tiles, infinitely tileable.
+     * Assumes X/Y alignments
+     * <p>Found in Chapter 11, page 674 of the textbook  </p>
+     * 
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter11/11.1.tiled_objects/index.html 11.1 Tiled Objects}
      * @constructor
      * @extends GameObject
      * @param {Renderable} renderableObj - the Renderable associated with this TiledGameObject

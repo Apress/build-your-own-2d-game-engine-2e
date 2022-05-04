@@ -12,6 +12,12 @@ import CollisionInfo from "../rigid_shapes/collision_info.js";
 
 /**
  * Core of the physics component supporting motion and collision resolution
+ * <p>Found in Chapter 9, page 558 of the textbook </p>
+ * Examples:
+ * 
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.5.rigid_shape_movements/index.html 9.5 Rigid Shape Movements}, 
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.8.collision_angular_resolution/index.html 9.8 Collision Angular Resolution},
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.9.physics_presets/index.html 9.9 Physics Presets}
  * @module physics
  */
 

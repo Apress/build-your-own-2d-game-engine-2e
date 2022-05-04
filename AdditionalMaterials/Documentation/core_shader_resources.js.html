@@ -46,6 +46,10 @@ import * as map from "./resource_map.js";
 
 /**
  * Resource bank for all shaders
+ * 
+ * &lt;p>Found in Chapter 3, page 68 of the textbook &lt;/p>
+ * Example:
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter3/3.1.renderable_objects/index.html 3.1 Renderable Objects}
  * @module shader_resources
  */
  
@@ -83,7 +87,7 @@ let kParticleFS = "src/glsl_shaders/particle_fs.glsl";
 let mParticleShader = null;
 
 /**
- * Create new instances of the shaders for renderables to use
+ * Creates new instances of the shaders for renderables to use
  * @export shader_resources
  */
 function createShaders() {
@@ -99,7 +103,7 @@ function createShaders() {
 }
 
 /**
- * Clean up each shader and unload their vertex and fragment shaders
+ * Cleans up each shader and unload their vertex and fragment shaders
  * @export shader_resources
  */
 function cleanUp() {
@@ -126,7 +130,7 @@ function cleanUp() {
 }
 
 /**
- * Initialize all the shaders, promising them to the resource map
+ * Initializes all the shaders, promising them to the resource map
  * @export shader_resources
  */
 function init() {
@@ -151,14 +155,66 @@ function init() {
     map.pushPromise(loadPromise);
 }
 
+/**
+ * Returns the shader object used for constant colored shapes
+ * @export shader_resources
+ * @returns {SimpleShader} instance of SimpleShader for Renderables to use
+ */
 function getConstColorShader() { return mConstColorShader; }
+
+/**
+ * Returns the shader object used for textures
+ * @export shader_resources
+ * @returns {TextureShader} instance of TextureShader for TextureRenderables to use
+ */
 function getTextureShader() { return mTextureShader; }
+
+/**
+ * Returns the shader object used for rendering sprites
+ * @export shader_resources
+ * @returns {SpriteShader} instance of SpriteShader for SpriteRenderables to use
+ */
 function getSpriteShader() { return mSpriteShader; }
+
+/**
+ * Returns the shader object used for rendering lines
+ * @export shader_resources
+ * @returns {LineShader} instance of LineShader for LineRenderables to use
+ */
 function getLineShader() { return mLineShader; }
+
+/**
+ * Returns the shader object used for rendering lights
+ * @export shader_resources
+ * @returns {LightShader} instance of LightShader for LightRenderables to use
+ */
 function getLightShader() { return mLightShader; }
+
+/**
+ * Returns the shader object used for rendering Phong-illuminated objects
+ * @export shader_resources
+ * @returns {IllumShader} instance of IllumShader for IllumRenderables to use
+ */
 function getIllumShader() { return mIllumShader; }
+
+/**
+ * Returns the shader object used for rendering shadow receiving objects
+ * @export shader_resources
+ * @returns {SpriteShader} instance of SpriteShader for ShadowReceivers to use
+ */
 function getShadowReceiverShader() { return mShadowReceiverShader; }
+/**
+ * Returns the shader object used for rendering objects that cast shadows
+ * @export shader_resources
+ * @returns {ShadowCasterShader} instance of ShadowCasterShader for ShadowCasters to use
+ */
 function getShadowCasterShader() { return mShadowCasterShader; }
+
+/**
+ * Returns the shader object used for rendering particles
+ * @export shader_resources
+ * @returns {TextureShader} instance of TextureShader for Particles to use
+ */
 function getParticleShader() { return mParticleShader }
 
 export {init, cleanUp, 
@@ -174,13 +230,13 @@ export {init, cleanUp,
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-input.html">input</a></li><li><a href="module-layer.html">layer</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-shader_resources.html">shader_resources</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-vertex_buffer.html">vertex_buffer</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="IllumRenderable.html">IllumRenderable</a></li><li><a href="IllumShader.html">IllumShader</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightRenderable.html">LightRenderable</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LightShader.html">LightShader</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="LineShader.html">LineShader</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="module-texture-TextureInfo.html">TextureInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Particle.html">Particle</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="ShaderLightAt.html">ShaderLightAt</a></li><li><a href="ShaderMaterial.html">ShaderMaterial</a></li><li><a href="ShadowCaster.html">ShadowCaster</a></li><li><a href="ShadowCasterShader.html">ShadowCasterShader</a></li><li><a href="ShadowReceiver.html">ShadowReceiver</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SimpleShader.html">SimpleShader</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="SpriteShader.html">SpriteShader</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TextureShader.html">TextureShader</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-index.html">index</a></li><li><a href="module-input.html">input</a></li><li><a href="module-layer.html">layer</a></li><li><a href="module-loop.html">loop</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-shader_resources.html">shader_resources</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-vertex_buffer.html">vertex_buffer</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="IllumRenderable.html">IllumRenderable</a></li><li><a href="IllumShader.html">IllumShader</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightRenderable.html">LightRenderable</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LightShader.html">LightShader</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="LineShader.html">LineShader</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Particle.html">Particle</a></li><li><a href="ParticleEmitter.html">ParticleEmitter</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="ParticleSet.html">ParticleSet</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="ShaderLightAt.html">ShaderLightAt</a></li><li><a href="ShaderMaterial.html">ShaderMaterial</a></li><li><a href="ShadowCaster.html">ShadowCaster</a></li><li><a href="ShadowCasterShader.html">ShadowCasterShader</a></li><li><a href="ShadowReceiver.html">ShadowReceiver</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SimpleShader.html">SimpleShader</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="SpriteShader.html">SpriteShader</a></li><li><a href="texture.TextureInfo.html">TextureInfo</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TextureShader.html">TextureShader</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Apr 29 2022 18:18:20 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue May 03 2022 23:18:18 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

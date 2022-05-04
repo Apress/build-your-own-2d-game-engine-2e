@@ -13,11 +13,29 @@ import GameObjectSet from "../game_objects/game_object_set.js";
 import ParticleEmitter from "./particle_emitter.js";
 
 class ParticleSet extends GameObjectSet {
+
+    /**
+     * @classdesc Support a list of Particles and ParticleEmitters
+     * <p> Found in Chapter 10, page 652 of the textbook</p>
+     * 
+     * Examples:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter10/10.1.particles/index.html 10.1 Particles}
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter10/10.2.particle_collisions/index.html 10.2 Particle Collision}
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter10/10.3.particle_emitters/index.html 10.3 Particle Emitters}
+     * 
+     * @extends GameObjectSet
+     * @returns {ParticleSet} a new ParticleSet instance
+     */
     constructor() {
         super();
         this.mEmitterSet = [];
     }
 
+    /**
+     * Draw the Particles in this ParticleSet using additive blending
+     * @method
+     * @param {Camera} aCamera - the Camera to draw to
+     */
     draw(aCamera) {
         let gl = glSys.get();
         gl.blendFunc(gl.ONE, gl.ONE);  // for additive blending!
@@ -25,11 +43,24 @@ class ParticleSet extends GameObjectSet {
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); // restore alpha blending
     }
 
+    /**
+     * Add a new ParticleEmitter to the lsit
+     * @method
+     * @param {float} x - X world coordinate position for this Emitter
+     * @param {float} y - Y world coordinate position for this Emitter
+     * @param {int} n - number of Particles to emit
+     * @param {function} func - function for the emitter to use for Particle Generation
+     */
     addEmitterAt(x, y, n, func) {
         let e = new ParticleEmitter(x, y, n, func);
         this.mEmitterSet.push(e);
     }
 
+    /**
+     * Draw the markers of the Particles in this ParticleSet
+     * @method
+     * @param {Camera} aCamera - the Camera to draw to
+     */
     drawMarkers(aCamera) {
         let i;
         for (i = 0; i < this.mSet.length; i++) {
@@ -37,6 +68,10 @@ class ParticleSet extends GameObjectSet {
         }
     }
 
+    /**
+     * Emit Particles and prune expired objects
+     * @method
+     */
     update() {
         super.update();
         // Cleanup Particles

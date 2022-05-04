@@ -9,7 +9,10 @@ import GameObjectSet from "../game_objects/game_object_set.js";
 
 
 /**
- * Central storage for all GameObjects that are to be drawn
+ * Central storage for all GameObjects that are to be drawn. Supports HUD, Foreground, Actor, Shadow Receiver, and Background layers
+ * <p>Found in Chapter 11, page 689 of the textbook </p>
+ * Example:
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter11/11.3.layer_manager/index.html 11.3 Layer Manager}
  * @module layer
  */
 
@@ -72,31 +75,62 @@ function updateAllLayers() {
 
 // operations on the layers
 /**
- * 
- * @param {*} layerEnum 
- * @param {*} aCamera 
+ * Calls draw() on all the GameObjects in the indexed layer
+ * @export layer
+ * @param {integer} layerEnum - the layer's index
+ * @param {Camera} aCamera - the Camera to draw to
  */
 function drawLayer(layerEnum, aCamera) {
     mAllLayers[layerEnum].draw(aCamera);
 }
 
+/**
+ * Calls update() on all the GameObjects in the indexed layer
+ * @export layer
+ * @param {integer} layerEnum - the layer's index
+ */
 function updateLayer(layerEnum) {
     mAllLayers[layerEnum].update();
 }
 
+/**
+ * Add a GameObject to a layer's list
+ * @export layer
+ * @param {integer} layerEnum - index of the layer to add to
+ * @param {GameObject} obj - GameObject to add
+ */
 function addToLayer(layerEnum, obj) {
     mAllLayers[layerEnum].addToSet(obj);
 }
 
+/**
+ * Add a ShadowCaster to each ShadowReciever in the shadow receiver layer
+ * @export
+ * @param {ShadowCaster} obj - ShadowCaster to add
+ */
 function addAsShadowCaster(obj) {
     let i;
     for (i = 0; i < mAllLayers[eShadowReceiver].size(); i++) {
         mAllLayers[eShadowReceiver].getObjectAt(i).addShadowCaster(obj);
     }
 }
+
+/**
+ * Remove a GameObject from the indexed layer
+ * @export
+ * @param {integer} layerEnum - the index of the layer to access
+ * @param {GameObject} obj - GameObject to be removed
+ */
 function removeFromLayer(layerEnum, obj) {
     mAllLayers[layerEnum].removeFromSet(obj);
 }
+
+/**
+ * Move a GameObject to the last index of the layer, appending it if not alrady present
+ * @export
+ * @param {integer} layerEnum - the index of the layer to add to
+ * @param {GameObject} obj - GameObject to move to the end
+ */
 function moveToLayerFront(layerEnum, obj) {
     mAllLayers[layerEnum].moveToLast(obj);
 }

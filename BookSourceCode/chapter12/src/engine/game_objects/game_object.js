@@ -11,8 +11,12 @@ import BoundingBox from "../utils/bounding_box.js";
 class GameObject {
 
     /**
-     * Template for elements of the game that interact with others
-     * @constructor GameObject
+     * @classdec Template for the behavior and appearance of a game object, intened to be extended for game specific use. Has support for pixel-perfect collision and physics
+     * <p>Found in Chapter 6, page 268 of the textbook</p>
+     * Example:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter6/6.1.game_objects/index.html 6.1 Game Objects}
+     * 
+     * @constructor
      * @param {Renderable} renderable - the renderable to be associated with this GameObject
      * @returns {GameObject} a new instance of GameObject
      */
@@ -26,7 +30,7 @@ class GameObject {
     }
     /**
      * Returns the Transform of the Renderable associated with this GameObject
-     * @method
+     * @instance
      * @returns {Transform} the Transform of this GameObject
      */
     getXform() { return this.mRenderComponent.getXform(); }
@@ -34,7 +38,7 @@ class GameObject {
     /**
      * Returns the BoundingBox for this gameObject
      * @method
-     * @returns {BoundingBox} b - a new copy of the bounding box of this GameObject
+     * @returns {BoundingBox} a new copy of the bounding box of this GameObject
      */
     getBBox() {
         let xform = this.getXform();
@@ -130,7 +134,7 @@ class GameObject {
      * @method
      * @param {GameObject} otherObj  - the other GameObject
      * @param {vec2} wcTouchPos  - vector to store the first world coordinates where the pixels touch
-     * @returns {boolean} pixelTouch - whether this GameOjbect has a pixel overlapping otherObj
+     * @returns {boolean} whether this GameObject has a pixel overlapping otherObj
      */
     pixelTouches(otherObj, wcTouchPos) {
         // only continue if both objects have getColorArray defined 

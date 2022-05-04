@@ -8,7 +8,10 @@
 
 class GameObjectSet {
     /**
-     * Utility class for a collection of GameObjects
+     * @classdesc Utility class for a collection of GameObjects
+     * <p>Found in Chapter 6, page 272 in the textbook</p>
+     * Example:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter6/6.1.game_objects/index.html 6.1 Game Objects}
      * @constructor
      */
     constructor() {
@@ -60,6 +63,7 @@ class GameObjectSet {
         this.removeFromSet(obj);
         this.addToSet(obj);
     }
+    
     /**
      * Calls update on each GameObject in this set
      * @method

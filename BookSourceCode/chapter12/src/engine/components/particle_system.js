@@ -9,7 +9,14 @@ import CollisionInfo from "../rigid_shapes/collision_info.js";
 
   // Operate in Strict mode such that variables must be declared before used!
   /**
-   * Particle System support
+   * Particle physics support for velocity, acceleration, and collision of particles with RigidShapes
+   * <p>Found in Chapter 10, page 648 of the textbook </p>
+   * Examples:
+   * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter10/10.1.particles/index.html 10.1 Particles}, 
+   * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter10/10.2.particle_collisions/index.html 10.2 Particles Colliding with Rigid Shapes},
+   * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter10/10.3.particle_emitters/index.html 10.3 Particle Emitters}
+   * 
+   * 
    * @module particle_system
    */
 

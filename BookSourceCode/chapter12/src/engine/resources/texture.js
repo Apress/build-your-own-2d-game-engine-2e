@@ -15,14 +15,21 @@ let get = map.get;
 
 /**
  * Defines the logic for loading and interacting with file texture resources
+ * 
+ * <p><strong>Exports the has() and get() functions from </strong> 
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/AdditionalMaterials/Documentation/module-resource_map.html resource map}</p>
+ * 
+ * <p>Found in Chapter 5, page 204 of the textbook</p>
+ * Example:
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter5/5.1.texture_shaders/index.html 5.1 Texture Shaders}
  * @module texture
  */
 
 
 class TextureInfo {
     /**
-     * Object for convenient communication of a texture's properties
-     * @export texture
+     * @classdesc Object for convenient communication of a texture's properties
+     * @memberof texture
      * @param {integer} w - the pixel width of the texture 
      * @param {integer} h - the pixel height of the texture
      * @param {gl.TEXTUREI} id - webGL id for the texture
@@ -81,7 +88,7 @@ function processLoadedImage(path, image) {
 // 
 /**
  * Loads a texture into the resource map so that it can be drawn
- * @export texture
+ * @static
  * @param {string} textureName - the path to the image file
  * @returns {Promise} promise to process the texture
  */
@@ -110,7 +117,7 @@ function load(textureName) {
 // be available for subsequent garbage collection
 /**
  * Remove the reference to the texture allow for garbage collection
- * @export texture
+ * @static
  * @param {string} textureName - the path to the image file
  */
 function unload(textureName) {
@@ -123,7 +130,7 @@ function unload(textureName) {
 
 /**
  * Activate a texture file within the webGL system
- * @export texture
+ * @static
  * @param {string} textureName - the path to the image file
  * @param {gl.TEXTUREI} textureUnit - the texture unit to be activated, defaults to TEXTURE0
  */
@@ -149,7 +156,7 @@ function activate(textureName, textureUnit = glSys.get().TEXTURE0) {
 }
 /**
  * Deactivate the webGL texture system
- * @export texture
+ * @static
  */
 function deactivate() {
     let gl = glSys.get();
@@ -158,7 +165,7 @@ function deactivate() {
 
 /**
  * Returns the one dimensional array with color information for all pixels
- * @export texture
+ * @static
  * @param {string} textureName - the path to the image file
  * @returns {Uint8Array} array with color information for all pixels
  */

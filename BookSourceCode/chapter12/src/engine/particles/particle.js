@@ -65,6 +65,10 @@ class Particle {
         this.mRenderComponent.draw(aCamera);
     }
 
+    /**
+     * Update the position, velocity, size, and color of this Particle
+     * @method
+     */
     update() {
         this.mCyclesToLive--;
 
@@ -88,41 +92,133 @@ class Particle {
         xf.setSize(s, s);
     }
 
+    /**
+     * Set the final color for this Particle by changing the delta color accordingly
+     * @method
+     * @param {vec4} f - final target [R,G,B,A] color array 
+     */
     setFinalColor = function(f) {    
         vec4.sub(this.mDeltaColor, f, this.getColor());
         if (this.mCyclesToLive !== 0) {
             vec4.scale(this.mDeltaColor, this.mDeltaColor, 1/this.mCyclesToLive);
         }
     }
+
+    /**
+     * Set the current color of this Particle
+     * @method
+     * @param {vec4} c - [R,G,B,A] color array
+     */
     setColor(c) { this.mRenderComponent.setColor(c); }
+
+    /**
+     * Returns the current color of this particle
+     * @method
+     * @returns {vec4} [R,G,B,A] color array
+     */
     getColor() { return this.mRenderComponent.getColor(); }
 
+    /**
+     * Returns whether the bounds are set to be drawn
+     * @method
+     * @returns {boolean} mDrawBounds - true if bounds are being drawn
+     */
     getDrawBounds() { return this.mDrawBounds; }
+
+    /**
+     * Set whether the bounds of this Particle are drawn
+     * @method
+     * @param {boolean} d - true to draw bounds
+     */
     setDrawBounds(d) { this.mDrawBounds = d; }
 
+    /**
+     * Returns the X,Y world coordinate position of this Particle
+     * @method
+     * @returns {vec2} current position vector
+     */
     getPosition() { return this.mRenderComponent.getXform().getPosition(); }
+
+    /**
+     * Set the X,Y world coordinate position of this Particle
+     * @method
+     * @param {float} xPos - the new X position
+     * @param {float} yPos - the new Y position
+     */
     setPosition(xPos, yPos) { 
         this.mRenderComponent.getXform().setXPos(xPos); 
         this.mRenderComponent.getXform().setYPos(yPos); 
     }
 
+    /**
+     * Returns the current world coordinate size of this Particle
+     * @method
+     * @returns {float} the Particle's size
+     */
     getSize() { return this.mRenderComponent.getXform().getSize(); }
+
+    /**
+     * Set the X and Y world coordinate size of this Particle
+     * @method
+     * @param {float} x - horizontal size
+     * @param {float} y - vertical size
+     */
     setSize(x, y) { this.mRenderComponent.getXform().setSize(x, y); }
 
+    /**
+     * Returns the X,Y world coordinate velocity vector of this Particle
+     * @method
+     * @returns {vec} mVelocity - velocity vector
+     */
     getVelocity() { return this.mVelocity; }
+
+    /**
+     * Set the X,Y world coordinate velocity vector of this Particle
+     * @method
+     * @param {float} x - horizontal velocity 
+     * @param {float} y - vertical velocity
+     */
     setVelocity(x, y) { 
         this.mVelocity[0] = x;
         this.mVelocity[1] = y;
     }
+    /**
+     * Returns the X,Y world coordinate acceleration vector of this Particle
+     * @method
+     * @returns {vec2} mAcceleration - acceleration vector
+     */
     getAcceleration() { return this.mAcceleration; }
+    /**
+     * Set the X,Y world coordinate acceleration vector of this Particle
+     * @method
+     * @param {float} x - horizontal acceleration
+     * @param {float} y - vertical acceleration
+     */
     setAcceleration(x, y) { 
         this.mAcceleration[0] = x;
         this.mAcceleration[1] = y;
     }
 
+    /**
+     * Set the velocity drag multiplier of this Particle
+     * <p> On update calls the velocity is multiplied by this value</p>
+     * @method
+     * @param {float} d - drag multiplier value
+     */
     setDrag(d) { this.mDrag = d; }
+    /**
+     * Returns the drag value of this Particle
+     * @method
+     * @returns {float} mDrag - drag value
+     */
     getDrag() { return this.mDrag; }
 
+    /**
+     * Set the size changing factor
+     * <p> On update calls the size is multiplied by this value</p>
+     * @method
+     * @param {float} d - multipier applied on every update
+     */
     setSizeDelta(d) { this.mSizeDelta = d; }
 
     /**
