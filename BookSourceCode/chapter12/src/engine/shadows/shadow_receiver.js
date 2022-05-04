@@ -17,8 +17,11 @@ import * as glSys from "../core/gl.js";
 
 class ShadowReceiver {
     /**
-     * Support class for a GameObject having shadows cast on it.
+     * @classdesc Support class for a GameObject having shadows cast on it.
      * Has only one target object, but supports several casters
+     * <p>Found in Chapter 8, page 507 of the textbook</p>
+     * Example:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.7.shadow_shaders/index.html 8.7 Shadow Shaders}
      * @constructor
      * @param {GameObject} theReceiverObject - the GameObject that will have shadows cast onto it
      * @returns {ShadowReceiver} a new ShadowReceiver instance

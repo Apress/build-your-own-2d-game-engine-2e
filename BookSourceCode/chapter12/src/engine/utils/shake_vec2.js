@@ -10,7 +10,12 @@ import Shake from "./shake.js";
 // duration is a float
 class ShakeVec2 extends Shake {
     /**
-     * Class to model shaking in x and y directions
+     * @classdesc Class to model shaking in x and y directions
+     * <p>Found in Chapter 7, page 364 of the textbook</p>
+     * 
+     * Example:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter7/7.3.camera_shake_and_object_oscillate/index.html 7.3 Came Shake and Object Oscillation}
+     * 
      * @constructor
      * @extends Shake
      * @param {vec2} deltas - the maximum magnitude of the oscillation

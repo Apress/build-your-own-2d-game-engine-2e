@@ -12,8 +12,13 @@ let kInfoColor = [1, 0, 1, 1]; // draw the info in magenta
 
 class CollisionInfo {
     /**
-     * Encapsulates collision resolution information
-     * All properties are zeroed until set
+     * @classdesc Encapsulates collision resolution information,
+     * all properties are zeroed until set
+     * <p>Found in Chapter 9, page 550 of the textbook</p>
+     * Examples:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.2.circle_collisions_and_collision_info/index.html 9.2 Circle Collision Info}
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.8.collision_angular_resolution/index.html 9.8 Collision Angular Resolution}
+     * 
      * @constructor
      * @returns {CollisionInfo} a new CollisionInfo instance
      */

@@ -10,7 +10,16 @@ import * as debugDraw from "../core/debug_draw.js";
 
 class RigidRectangle extends RigidShape {
     /**
-     * Defines a rigid rectangle shape supported by the physics systems
+     * @classdesc Defines a rigid rectangle shape supported by the physics systems
+     * <p>Found in Chapter 9, page 537 of the textbook</p>
+     *
+     * Examples:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.1.rigid_shapes_and_bounds/index.html 9.1 Rigid Shape and Bounds},
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.3.rectangle_collisions/index.html 9.3 Rectangle Collisions},
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.6.collision_position_correction/index.html 9.6 Collision Position Correction},
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.9.physics_presets/index.html 9.9 Physics Presets}
+     * 
+     * 
      * @extends RigidShape
      * @constructor
      * @param {Transform} xf - the Transform for this RigidRectangle

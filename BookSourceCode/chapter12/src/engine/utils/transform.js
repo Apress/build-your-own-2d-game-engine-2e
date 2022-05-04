@@ -8,7 +8,10 @@
 
 class Transform {
     /**
-     * Encapsulates the matrix transformation functionality, meant to work with Renderable
+     * @classdesc Encapsulates the matrix transformation functionality, meant to work with Renderables
+     * <p>Found in Chapter 3, page 84 of the textbook</p>
+     * Example:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter3/3.3.transform_objects/index.html 3.3 Transform Objects}
      * @constructor
      * @returns {Transform} a new Transform instance
      */
@@ -145,8 +148,16 @@ class Transform {
      */
     getWidth() { return this.mScale[0]; }
 
-
+    /**
+     * Set the width of this Transform
+     * @param {float} width - new width
+     */
     setWidth(width) { this.mScale[0] = width; }
+
+    /**
+     * Adds a delta to the width
+     * @param {float} delta - the value to add
+     */
     incWidthBy(delta) { this.mScale[0] += delta; }
 
     /**
