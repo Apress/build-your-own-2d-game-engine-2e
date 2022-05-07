@@ -14,7 +14,12 @@ import * as defaultShaders from "../core/shader_resources.js";
 
 class IllumRenderable extends LightRenderable {
     /**
-     * Defines a LightRenerable with a normal map for Phong illumination
+     * @classdesc Defines a LightRenerable with a normal map for Phong illumination
+     * <p>Found in Chapter 8, page 452 of the textbook</p>
+     * Examples:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.4.normal_map_and_illumination_shaders/index.html 8.4 Normal Maps and Illumination Shader},
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.5.material_and_specularity/index.html 8.5 Materials and Specularity}
+     
      * @extends LightRenderable
      * @constructor
      * @param {string} myTexture - path to the image file to use as texture

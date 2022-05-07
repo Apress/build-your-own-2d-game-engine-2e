@@ -10,7 +10,12 @@ import ShaderLightAt from "./shader_light_at.js";
 
 class LightShader extends SpriteShader {
     /**
-     * Supports light illumination of sprites
+     * @classdesc Supports light illumination of sprites
+     * <p>Found in Chapter 8, page 417 of the textbook</p>
+     * Examples:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.2.simple_light_shader/index.html 8.2 Simple Light Shader},
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.3.multiple_lights/index.html 8.3 Multiple Lights},
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.6.directional_and_spotlights/index.html 8.6 Directional and Spot Lights}
      * @extends SpriteShader
      * @constructor
      * @param {string} vertexShaderPath -  path to the vertex shader file

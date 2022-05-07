@@ -6,7 +6,11 @@
 
 class Material {
     /**
-     * Simple Phong illumination model material: Ka, Kd, KS, and Shininess
+     * @classdesc Simple Phong illumination model material: Ka, Kd, Ks, and Shininess
+     * <p>Found in Chapter 8, page 465 of the textbook</p>
+     * Example:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.5.material_and_specularity/index.html 8.5 Materials and Specularity}
+     * 
      * @constructor
      * @returns {Material} a new Material instance
      */

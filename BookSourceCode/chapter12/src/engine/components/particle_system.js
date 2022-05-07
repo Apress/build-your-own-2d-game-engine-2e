@@ -100,7 +100,7 @@ function resolveRectPos(rectShape, particle) {
  * @returns {boolean} true if a collision occured for 
  */
 function resolveRigidShapeCollision(obj, pSet) {
-    let j=0;
+    let j;
     let collision = false;
 
     let rigidShape = obj.getRigidBody();

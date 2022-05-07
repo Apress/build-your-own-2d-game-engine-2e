@@ -11,7 +11,11 @@ import SimpleShader from "./simple_shader.js";
 class LineShader extends SimpleShader {
     // constructor of LineShader object
     /**
-     * Shader that creates straight lines with vertices to support debugging physics engine
+     * @classdesc Shader that creates straight lines with vertices to support debugging physics engine
+     * <p>Not discussed in the textbook</p>
+     * 
+     * Example:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter7/7.6.not_used_line_support/index.html 7.6 Line Support}
      * @extends SimpleShader
      * @constructor
      * @param {string} vertexShaderPath - path to the vertex shader file

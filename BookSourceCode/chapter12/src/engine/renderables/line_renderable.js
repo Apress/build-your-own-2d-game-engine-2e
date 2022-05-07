@@ -12,7 +12,12 @@ import * as shaderResources from "../core/shader_resources.js";
 class LineRenderable extends Renderable {
     // p1, p2: either both there, or none
     /**
-     * Renderable class for lines
+     * @classdesc Renderable class for line segments
+     * <p>Not discussed in the textbook</p>
+     * 
+     * Example:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter7/7.6.not_used_line_support/index.html 7.6 Line Support}
+     * 
      * @extends Renderable
      * @constructor
      * @param {float} x1 - X world coordinate of first vertext
