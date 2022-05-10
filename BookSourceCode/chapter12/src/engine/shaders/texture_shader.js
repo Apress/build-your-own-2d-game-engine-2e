@@ -12,7 +12,10 @@ import  SimpleShader from "./simple_shader.js";
 
 class TextureShader extends SimpleShader {
     /**
-     * Wrapps over GLSL texture shader, suppors working with the entire file texture
+     * @classdesc Wraps over GLSL texture shader, suppors working with the entire file texture
+     * <p> Found in Chapter 5, page 197 of the textbook</p>
+     * Example:
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter5/5.1.texture_shaders/index.html 5.1 Texture Shader}
      * @extends SimpleShader
      * @constructor
      * @param {string} vertexShaderPath - path to the vertex shader file

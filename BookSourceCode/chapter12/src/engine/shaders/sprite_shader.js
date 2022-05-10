@@ -12,8 +12,12 @@ import TextureShader from "./texture_shader.js";
 
 class SpriteShader extends TextureShader {
     /**
-     * Wrapps over GLSL texture shader, supporting the defintion of one sprite element
+     * @classdesc Wrapps over GLSL texture shader, supporting the defintion of one sprite element
      * from a texture file
+     * <p>Found in Chapter 5, page 222 of the textbook </p>
+     * Examples:
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter5/5.2.sprite_shaders/index.html 5.2 Sprite Shaders},
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter5/5.3.sprite_animate_shaders/index.html 5.3 Sprite Animation}
      * @extends TextureShader
      * @constructor
      * @param {string} vertexShaderPath - path to the vertex shader file

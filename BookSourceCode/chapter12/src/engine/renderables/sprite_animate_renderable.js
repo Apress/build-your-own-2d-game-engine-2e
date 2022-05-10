@@ -24,9 +24,12 @@ const eAnimationType = Object.freeze({
 
 class SpriteAnimateRenderable extends SpriteRenderable {
     /**
-     * Supports the drawing and controlling of sprite animation sequence.
-     * 
-     * Default animation type is from left to right
+     * @classdesc Supports the drawing and controlling of sprite animation sequence.
+     * Default animation type is from left to right.
+     * <p>Found in Chapter 5, page 236 of the textbook </p>
+     * Examples:
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter5/5.2.sprite_shaders/index.html 5.2 Sprite Shaders},
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter5/5.3.sprite_animate_shaders/index.html 5.3 Sprite Animation}
      * @extends SpriteRenderable
      * @constructor
      * @param {string} myTexture - path to the sprite sheet image file for this SpriteAnimateRenderable

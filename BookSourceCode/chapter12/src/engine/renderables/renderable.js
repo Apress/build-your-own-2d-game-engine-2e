@@ -12,9 +12,13 @@ import * as shaderResources from "../core/shader_resources.js";
 
 class Renderable {
     /**
-     * Defualt constructor creates a renderable instance of a white square.
+     * @classdesc Defualt constructor creates a renderable instance of a white square.
      * Encapsulate the Shader and vertexBuffer into the same object (and will include
      * other attributes later) to represent a Renderable object on the game screen.
+     * <p>Found in Chapter 3, page 71 of the textbook</p>
+     * Example:
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter3/3.1.renderable_objects/index.html 3.1 Renderable Objects}
+     * 
      * @constructor Renderable
      * @returns {Renderable} a new instance of Renderable
      */

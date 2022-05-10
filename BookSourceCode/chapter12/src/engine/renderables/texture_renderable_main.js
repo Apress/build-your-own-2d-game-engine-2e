@@ -13,7 +13,10 @@ import * as shaderResources from "../core/shader_resources.js";
 class TextureRenderable extends Renderable {
 
     /**
-     * Supports the drawing an entire file texture mapped onto an entire Renderable
+     * @classdesc Supports the drawing of an entire file texture mapped onto an entire Renderable
+     * <p>Found in Chapter 5, page 201 of the textbook</p>
+     * Example:
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter5/5.1.texture_shaders/index.html 5.1 Texture Shader}
      * @extends Renerable
      * @constructor
      * @param {string} myTexture - the path to the image file to use as texture

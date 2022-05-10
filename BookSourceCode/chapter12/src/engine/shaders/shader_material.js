@@ -9,7 +9,10 @@ import * as glSys from "../core/gl.js";
 
 class ShaderMaterial {
     /**
-     * Support object for loading properties of a Material into GLSL
+     * @classdesc Support object for loading properties of a Material into GLSL
+     * <p>Found in Chapter 8, page 466 of the textbook</p>
+     * Example:
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter8/8.7.shadow_shaders/index.html 8.7 Shadow Shaders}
      * @constructor
      * @param {WebGLProgram} aIllumShader - compiled IllumShader program this ShaderMaterial belongs to
      */

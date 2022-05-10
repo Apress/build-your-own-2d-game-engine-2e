@@ -14,7 +14,10 @@ import * as font from "../resources/font.js";
 
 class FontRenderable {
     /**
-     * Supports the drawing of a string based on a selected Font
+     * @classdesc Supports the drawing of a string based on a selected Font
+     * <p>Found in Chapter 5, page 253 of the textbook</p>
+     * Example:
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter5/5.4.font_support/index.html 5.4 Font Support}
      * @constructor
      * @param {string} aString -  the text to render 
      * @returns {FontRenderable} a new FontRenderable instance

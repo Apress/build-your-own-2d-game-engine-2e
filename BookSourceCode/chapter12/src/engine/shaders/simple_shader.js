@@ -15,7 +15,11 @@ class SimpleShader {
 
     // constructor of SimpleShader object
     /**
-     * Shader for rendering simple shapes
+     * @classdesc Shader for rendering simple, single-color shapes
+     * <p>Found in Chapter 3, page 44 of the textbook</p>
+     * Example:
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter3/3.1.renderable_objects/index.html 3.1 Renderable Objects}
+     * 
      * @constructor
      * @param {string} vertexShaderPath - path to the vertex shader file
      * @param {string} fragmentShaderPath - path to the fragment shader file

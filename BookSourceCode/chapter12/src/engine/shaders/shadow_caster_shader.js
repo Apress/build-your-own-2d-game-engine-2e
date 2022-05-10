@@ -12,7 +12,10 @@ import ShaderLightAt from "./shader_light_at.js";
 class ShadowCasterShader extends SpriteShader {
     // constructor 
     /**
-     * Defines a single light shader that casts a shadow
+     * @classdesc Defines a single light shader that casts a shadow
+     * <p>Found in Chapter 8, page 497 of the textbook</p>
+     * Example:
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter8/8.7.shadow_shaders/index.html 8.7 Shadow Shaders}
      * @extends SpriteShader
      * @constructor
      * @param {string} vertexShaderPath - path to the vertex shader file

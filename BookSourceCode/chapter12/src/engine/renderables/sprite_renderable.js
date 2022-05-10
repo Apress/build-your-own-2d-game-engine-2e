@@ -30,8 +30,11 @@ const eTexCoordArrayIndex = Object.freeze({
 class SpriteRenderable extends TextureRenderable {
 
     /**
-     * Supports the drawing of one sprite element mapped onto entire renderable.
-     * Default size is the entire sprite sheet
+     * @classdesc Supports the drawing of one sprite element mapped onto entire renderable.
+     * Default size is the entire sprite sheet.
+     * <p>Found in Chapter 5, page 224 of the textbook </p>
+     * Example:
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter5/5.2.sprite_shaders/index.html 5.2 Sprite Shaders}
      * @constructor
      * @param {string} myTexture - the path to the sprite sheet image file
      * @returns {SpriteRenderable} a new SpriteRenderable
