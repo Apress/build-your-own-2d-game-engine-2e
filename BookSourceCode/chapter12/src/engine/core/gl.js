@@ -9,9 +9,26 @@
 
 let mCanvas = null;
 let mGL = null;
+/**
+ * Handles the WebGL2 context for the engine
+ * <p>Found in Chapter 3, page 67 of the textbook</p>
+ * Example:
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter3/3.1.renderable_objects/index.html 3.1 Renderable Objects}
+ * 
+ * @module
+ */
 
+/**
+ * Returns the WebGL2 context for the canvas
+ * @static
+ * @returns {WebGL2RenderingContext} rendering context
+ */
 function get() { return mGL; }
 
+/**
+ * Closes the canvas and the rendering context with a shut down message
+ * @static 
+ */
 function cleanUp() {
     if ((mGL == null) || (mCanvas == null))
         throw new Error("Engine cleanup: system is not initialized.");
@@ -26,7 +43,12 @@ function cleanUp() {
     document.body.innerHTML += "<br><br><h1>End of Game</h1><h1>GL System Shut Down</h1>";
 
 }
-
+/**
+ * Initializes the canvas and rendering context
+ * @static
+ * @param {string} htmlCanvasID - the id of the canvas element
+ * @returns {void} returns early if the WebGL2 context is null
+ */
 function init(htmlCanvasID) {
     mCanvas = document.getElementById(htmlCanvasID);
     if (mCanvas == null)
@@ -54,6 +76,12 @@ function init(htmlCanvasID) {
     mGL.depthFunc(mGL.LEQUAL);
 }
 
+/**
+ * Begins drawing using a stencil
+ * @static
+ * @param {int} bit - reference value for the stencil test
+ * @param {GLuint} mask - bit-wise mask that is used in comparison
+ */
 function beginDrawToStencil(bit, mask)
 {
     mGL.clear(mGL.STENCIL_BUFFER_BIT);
@@ -65,6 +93,12 @@ function beginDrawToStencil(bit, mask)
     mGL.stencilMask(mask);
 }
 
+/**
+ * Sets the rendering context to use normal drawing method
+ * @static
+ * @param {int} bit - reference value for the stencil test
+ * @param {GLuint} mask - bit-wise mask that is used in comparison
+ */
 function endDrawToStencil(bit, mask)
 {
     mGL.depthMask(mGL.TRUE);
@@ -73,6 +107,10 @@ function endDrawToStencil(bit, mask)
     mGL.colorMask(true, true, true, true);
 }
 
+/**
+ * Disables stencil rendering
+ * @static
+ */
 function disableDrawToStencil() {
     mGL.disable(mGL.STENCIL_TEST);
 }

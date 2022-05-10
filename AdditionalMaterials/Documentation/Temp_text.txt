@@ -1,90 +1,101 @@
-<p>FILES:</p>
+  <img src="https://Apress.github.io/build-your-own-2d-game-engine-2e/978-1-4842-7376-0.jpg" ALIGN="left" width="250"/>
+    
+    <h1>GTCS Game Engine API Documentation </h1>
+    <p>&nbsp Copyright University of Washington 2022</p>
+    <p>&nbsp @author Myles Dalton 2022, mylesACD@uw.edu</p>
+    <h3>&nbsp Useful Links</h3>
+    <p>&nbsp  <a href="https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/index.html">Homepage for the engine and examples</a></p>
+    <p>&nbsp <a href="https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/AdditionalMaterials/Tutorials/index.html">Indepth tutorials for the engine</a></p>
+    <br>
+    <p>&nbsp FILES:</p>
     <pre class="prettyprint source"><code>
     Cameras
         Camera
         CameraShake
         CameraState
        
+    Components
+        input
+        layer
+        particle_system
+        physics
+
     Core
-        Resources
-            Engine_audioclip
-            Engine_defaultresources
-            Engine_fonts
-            Engine_resourcemap
-            Engine_textfileloader
-            Engine_textures
-        Engine_core
-        Engine_gameloop
-        Engine_input
-        Engine_layermanager
-        Engine_particle                
-        Engine_particlesystem        
-        Engine_physics
-        Engine_vertexbuffer
+        debug_draw
+        gl
+        loop
+        resource_map    
+        shader_resources
+        vertex_buffer
     
     GameObjects
-        Gameobject
-        Gameobjectset
-        Gameobject_pixelCollision
-        parallaxgameobject
+        GameObject
+        GameObjectSet
+        ParallaxGameObject
         TiledGameObject
     
     Lights
         Light
-        lightset
+        LightSet
     
     Particles
         Particle
-        Particleemitter
-        Particlegameobject
-        particlegameobjectset
-    
-    Physics
-        Rigidcircle
-        Rigidcircle_collision
-        Rigidrectangle
-        Rigidrectangle_collision
-        Rigidshape
-        Rigidshape_behavior
-        Rigidshape_collision
+        ParticleEmitter
+        ParticleSet
     
     Renderables
-        Font renderable
-        Illumrenderable
-        Lightrenderable
-        Linerenderable
-        Particlerenderable
+        FontRenderable
+        IllumRenderable
+        LightRenderable
+        LineRenderable
+        ParticleRenderable
         Renderable
-        Spriteanimaterenderable
-        Spriterenderable
-        Spriterenderable_pixelcollision
-        Texturerenderable
-        Texturerenderable_pixelcollision
-    
+        SpriteAnimateRenderable
+        SpriteRenderable
+        TextureRenderable
+
+    Resources
+        audio
+        default_resources
+        font
+        text
+        texture
+        xml
+
+    Rigid_shapes
+        CollisionInfo
+        RigidCircle
+        RigidRectangle
+        RigidShape
+
     Shaders
-        Illumshader
-        Lightshader
-        Lineshader
-        Shaderlightaltindex        
-        Shadermaterial
-        Shadowcastshader 
-        Simpleshader
-        Spriteshader 
-        textureshader
+        IllumShader
+        LightShader
+        LineShader
+        ShaderLightAt    
+        ShaderMaterial
+        ShadowCasterShader 
+        SimpleShader
+        SpriteShader 
+        TextureShader
     
     Shadows
-        Shadowcaster
-        Shadowreceiver
-        Shadowreceiver_stencil
+        ShadowCaster
+        ShadowReceiver
+
     
     Utils
-        Boundingbox
-        Collisioninfo
-        Interpolate
-        interpolateVec2
-        shakeposition
-        transform
+        BoundingBox
+        CollisionInfo
+        LerpVec2
+        Lerp
+        Oscillate
+        ShakeVec2
+        Shake
+        Transform
     
-    material
+    index
+    Material
+    Scene
     
-    scene</code></pre>
+    scene
