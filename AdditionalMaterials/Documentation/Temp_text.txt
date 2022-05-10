@@ -1,11 +1,11 @@
-  <img src="https://Apress.github.io/build-your-own-2d-game-engine-2e/978-1-4842-7376-0.jpg" ALIGN="left" width="250"/>
+<img src="https://Apress.github.io/build-your-own-2d-game-engine-2e/978-1-4842-7376-0.jpg" ALIGN="left" width="250"/>
     
     <h1>GTCS Game Engine API Documentation </h1>
     <p>&nbsp Copyright University of Washington 2022</p>
     <p>&nbsp @author Myles Dalton 2022, mylesACD@uw.edu</p>
     <h3>&nbsp Useful Links</h3>
-    <p>&nbsp  <a href="https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/index.html">Homepage for the engine and examples</a></p>
-    <p>&nbsp <a href="https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/AdditionalMaterials/Tutorials/index.html">Indepth tutorials for the engine</a></p>
+    <p>&nbsp  <a href="../../index.html">Homepage for the engine and examples</a></p>
+    <p>&nbsp <a href="../Tutorials/index.html">Indepth tutorials for the engine</a></p>
     <br>
     <p>&nbsp FILES:</p>
     <pre class="prettyprint source"><code>
