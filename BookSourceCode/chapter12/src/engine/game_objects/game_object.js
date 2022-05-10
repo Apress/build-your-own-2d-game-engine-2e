@@ -9,7 +9,6 @@ import BoundingBox from "../utils/bounding_box.js";
 
 
 class GameObject {
-
     /**
      * @classdec Template for the behavior and appearance of a game object, intened to be extended for game specific use. Has support for pixel-perfect collision and physics
      * <p>Found in Chapter 6, page 268 of the textbook</p>
