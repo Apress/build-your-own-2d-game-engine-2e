@@ -1,0 +1,228 @@
+
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link type="text/css" rel="stylesheet" href="../styles/prettify-tomorrow.css">
+        <link type="text/css" rel="stylesheet" href="../styles/jsdoc-default.css">
+        <style>p,h1,h2,h3,h4,td,ul,figure,pre,hr{
+            margin: 5px 50px;
+        } </style>
+        <style> mark{
+            background-color: aquamarine;
+        }</style>
+        <style> figure{
+            background-color: beige;
+            border: 1px darkslategrey dashed;
+        }
+        </style>
+		<title>Tutorial 1</title>
+	</head>
+	<body>
+    	<div id="main-content">
+		<h1> GTCS Game Engine: <br>
+			Tutorial 1: Basic Application Structure</h1>
+            
+		<p ALIGN="center"><a href="../tutorial0/tutorial0.html">Tutorial 0</a> &lt;-- Tutorial 1 --&gt; <a href="../tutorial2/tutorial2.html">Tutorial 2</a><br>
+		  <a href="../index.html">Main tutorial guide page</a></p>
+		
+		
+		<hr>
+		<h2>Introduction</h2>
+		<p>In this tutorial, we will look at the basic building blocks and programming structure to build games. We look at the different types of objects we use and their respective roles with games. We will also gain an understanding of the operation of our game loop.</p>
+        
+		<p><strong>Covered Topics</strong>: <a href="#object_types">Object Types</a> • <a href="#scene_object">Scene Object</a> • <a href="#initialization">Initialization</a> • <a href="#game_loop">Game Loop</a></p>
+        <p><strong>Demonstrations</strong>: <a href="../Tutorial-Source/index1a.html" target="_blank">Drawing a Renderable</a> • <a href="../Tutorial-Source/index1b.html" target="_blank">Renderable with Motion</a>        </p>
+        <p>Complete source code for all tutorials can be downloaded from <a href="../assets/tutorials.zip">here</a>.</p>
+        
+        
+		<hr>
+		<h2><a id="object_types"></a>Object Types</h2>
+		<p> In the GTCS Game Engine, we are concerned with four types of objects: Scene, Camera, Renderables and GameObjects.  Each object type encapsulate different functionality.</p>
+		<ul>
+		  <li><strong>Scene</strong>: Encapsulates the logic of our game. It is the link that the game engine uses to execute the logic of our code in the form of a runloop. We covered the instantiation in <a href="../tutorial0/tutorial0.html">tutorial 0</a>. In this tutorial, we will cover the implementation.</li>
+			<li><strong>Camera</strong>: This object controls the specifics behind how the rendering engine does its job. Aspect ratio, clipping, view panning and perspective are among the things we can control with the camera.</li>
+			<li><strong>Renderable</strong>: These are the elements that get drawn on the screen. These elements include not only game sprites but backgrounds and text. These objects only control how an object &quot;looks&quot; on the screen. To control behavior and interactivity, the renderable needs to be associated with a game object.</li>
+			<li><strong>GameObject</strong>: Dictates how elements in our scene behave and how they interact with each other. The game object will have a renderable embedded within them. Without the renderable, nothing draws on the screen.  In the same respect, a renderable without an encapsulating game object would not detect collisions with other objects or allow physics elements to be applied (such as gravity effects and elasticity).</li>
+		</ul>
+		<p>We will look at each element by building a simple game scene to create a simple rectangle on our viewport as shown <a href="../Tutorial-Source/index1a.html">here</a>.</p>
+		
+		
+		<hr>
+		<h2><a id="scene_object"></a>Scene Object Structure</h2>
+		<p>The scene is where game loop logic will reside. By overriding the engine's Scene class wth the functionality you want, you will have a runloop. By convention, this class will be defined in a folder located at the <em>./src</em> level, in tutorial 0 this folder was refered to as <b>your_game_folder</b>. </p>
+		<p>The HTML5 engine implements a runloop. When you setup a scene object, you must adhere to a certain structure to make sure the runloop executes as expected. 
+            The structure of a scene currently consists of four parts: initialization, drawing, updating, and moving to the next scene. A skeleton of the functions in a scene object are shown in the following code...</p>
+        <figure>
+            <pre>
+
+class <mark>your_game_scene_type</mark> extends engine.Scene {
+        constructor() {
+            super();
+            this.mCamera = null;
+        }
+
+    init() {
+        this.mCamera = new engine.Camera(
+            vec2.fromValues(<mark>50, 50</mark>),  // position of the camera
+            <mark>100</mark>,                       // width of camera
+            [<mark>0, 0, 600, 600</mark>],         // viewport (orgX, orgY, width, height)
+            <mark>2</mark>                        // viewport boundary
+        );
+    }
+
+    draw() {
+        engine.clearCanvas([<mark>0.9, 0.9, 0.9, 1.0</mark>]); // canvas color
+        this.mCamera.setViewAndCameraMatrix();
+    }
+
+    update() {}
+
+    next() {
+        super.next();
+    }
+}
+window.onload = function () {
+    engine.init("GLCanvas");
+    let game = new <mark>your_game_scene_type</mark>();
+    game.start();
+}</pre>
+		<figcaption class="codecaption">Code snippet 1-1: Scene subclass skeleton</figcaption>
+        </figure>
+        <p class="note">Note: The highlighted portions are specific to your game implementation.</p>
+		<p>
+		<ul>
+			<li>The <strong>constructor</strong>, <strong>window.onload</strong> and <strong>init()</strong> are where initialization takes place.  These functions run only one time each and are where you define your variables and allocate resources.</li>
+			<li>You update the status of your objects in the <strong>update()</strong> function.  Update is part of the runloop and executes 60 times per second.</li>
+			<li>Drawing occurs in the <strong>draw()</strong> function and occurs 60 times per second and always occurs after at least one update call has been made.</li>
+			<li>Changing scenes occurs in the<strong>next()</strong> function.  It is called one time, when you want the game to end or move to a different scene. In either case the resources of this Scene are unloaded.</li>
+		</ul>
+		<p>Your scene subclass needs to inherit from the existing Scene object type. You must make sure that the name of this JavaScript file matches the path indicated by your index.html file from <a href="../tutorial0/tutorial0.html">Tutorial 0</a>.</p>
+		
+		
+		<hr>
+		<h2><a id="initialization"></a>Initialization</h2>
+        
+		
+		<h3>onload & Constructor</h3>
+		<p>Before any game logic or rendering occurs, initialization occurs in three phases. First the window's onload() function is called, 
+            creating a new instance of your_game_scene_type. Then, in the constructor instance variables of objects are declared, but set to null. In the skeleton snippet above an instance variable for
+            the scene's camera is declared. Once resources are introduced in <a href="../tutorial2/tutorial2.html">Tutorial 2</a> the paths to resource files are declared in the constructor as well.
+            </p>
+        
+		
+        
+	
+		<h3>init()</h3>
+		<p>The <code>init()</code> function is called by the engine to setup your various objects. In this example, we create our remaining core objects with simple values to aide in comprehension.</p>
+        <figure><pre>
+    init(){        
+        this.mCamera = new engine.Camera(
+                vec2.fromValues(<mark>50, 50</mark>),  // position of the camera
+                <mark>100</mark>,                       // width of camera
+                [<mark>0, 0, 600, 600</mark>],         // viewport (orgX, orgY, width, height)
+                <mark>2</mark>                        // viewport boundary
+        );   
+        this.mRenderableBox = new engine.Renderable();
+        this.mRenderableBox.setColor([<mark>1.0,0,0,1.0</mark>]);
+            
+        this.mGameObj = new engine.GameObject(this.mRenderableBox);
+        this.mGameObj.getXform().setSize(<mark>10,10</mark>);
+        this.mGameObj.getXform().setPosition(<mark>70,70</mark>);
+    }</pre>
+		<figcaption class="codecaption">Code snippet 1-2: Scene init()</figcaption>
+        </figure>
+		<p></p>
+		<h4>Camera and Viewport</h4>
+		<p>The <strong>Camera</strong> object defines the viewport and is setup with 3 parameters.  The position, the width and the location/size of the viewport.<br>
+		<ul>
+			<li>The position is identifed with a (X,Y) vector representing the point where the camera is centered. This is in world coordinate space (WC).</li>
+			<li>The camera width (also in WC) is the second parameter. The viewport is identified relative to the drawing canvas created in <a href="../tutorial0">Tutorial&nbsp;0</a>.</li>
+			<li>The orgX, orgY, width and height give the dimensions and location in pixel coordinate space for the area on the canvas that the viewport will draw to. It is not required that a viewport cover the entire canvas and you could have multiple viewports (cameras) draw to the same canvas.
+				<ul>
+					<li>orgX and orgY are the lower-left coordinates on the canvas where you want the lower-left coordinates of the viewport to be.</li>
+					<li>The width and height are how much of the canvas the viewport will occupy. </li>
+				</ul
+			></li>
+		</ul>
+		<p class="note">[Note: The camera height is not provided. The engine infers the height based on the width and the aspect ratio of the viewport.]		</p>
+		<br>
+		<h4>Renderable</h4>
+		<p>The <strong>Renderable</strong> controls the "look" of objects in our game.  The basic one we create in the above example renders only a solid square. We set its color to red using RGB + Alpha values. We cannot make interesting games if our renderables are limited to making solid rectangles. In future tutorials, we will look at more advanced renderables that can draw textures, animate and respond to lighting effects. The key take away in this tutorial is that a renderable is just for defining the appearance of the object.</p>
+		<p><code>this.mRenderable = new Renderable();<br>
+	this.mRenderable.setColor([1.0, 0.0, 0.0, 1.0]);</code></p>
+		<p>These lines will allocate a new renderable object and set it's look (in this case, color). The parameters for <strong>setColor()</strong> is a vector with RGB+Alpha values ranging from 0.0 to 1.0.</p>
+		<br>
+		<h4>GameObject</h4>
+		<p>The <strong>GameObject</strong> is created with a reference to our renderable. We give the GameObject it's size and location in the viewport. Once the renderable is fully configured and incorporated into our GameObject, we will keep the reference in case we need to access it directly to change the appearance. Often, you will subclass GameObject to  encapsulate it's renderable upon allocation.</p>
+		<p><code>this.mGameObj = new GameObject(this.mRenderableBox);</code></p>
+		<p> The size and position are in WC space with the position being the center of the object. In this example, 
+            since our size is 20x20 and position is (70,70), this will set our red rectangle from (60,60) at the lower-left corner to (80,80) at the upper-right corner.</p>
+		<p><code>this.mGameObj.getXform().setSize(20, 20);<br>
+		  this.mGameObj.getXform().setPosition(70, 70);</code></p>
+        
+		<p class="note">[Note: understanding different coordinate spaces is beyond the scope of these tutorials]</p>
+			
+		<hr>
+		<h2><a id="game_loop"></a>Game Loop</h2>
+		
+		<h3>Updating</h3>
+		<p>The <b>update()</b> function is called by the engine 60 times a second. This is where you will check for user interaction 
+            (ie: keyboard presses and mouse clicks), check for collisions among GameObjects, update object locations etc. 
+            If another process or calculation delays execution, the game engine will compensate for the delay by looking at the 
+            current time and executing the update routine multiple times until updates have caught up with current time.</p>
+
+		<figure><pre>
+    update() {
+        let xform = this.mGameObj.getXform();
+        if(xform.getXPos()<10){
+            xform.setXPos(70);
+        }else{
+            xform.incXPosBy(-0.5);
+        }
+    }</pre>
+		<figcaption class="codecaption">Code snippet 1-3: Update</figcaption>
+        </figure>
+
+		<p>In this example, we want our GameObject to move left across our game screen and then jump back to its starting position. 
+            We have an if statements that determine when the GameObject hits the left edge. Note that we directly manlipulate the transformation of the GameObject, decreasing its X position each update.
+		<h3>Drawing</h3>
+		<p>The <b>draw()</b> function is called after the update cycle is complete.  On an unencumbered system, this should be 60 times a second.  
+            If there are delays, multiple updates can occur before the draw routine is called.</p>
+		
+		<figure><pre>
+    draw() {    
+        engine.clearCanvas([0.9, 0.9, 0.9, 1.0]); 
+        this.mCamera.setViewAndCameraMatrix();
+        this.mGameObj.draw(this.mCamera)
+    }</pre>
+		<figcaption class="codecaption">Code snippet 1-4: Draw</figcaption>
+        </figure>
+
+		<p>In our draw function, we clear the screen, activate our camera for rendering and draw all of our objects (which is only one at this stage).
+             We send a reference to our camera into the game object which will pull out the information it needs for behavior and send the camera to the 
+             enclosed renderable so that it can extract what it needs for drawing. Click <a href="../Tutorial-Source/index1b.html" target="_blank">here</a> to see the results
+             of drawing and updating the GameObject.</p> 
+		<p>When viewing this in a web browser, you should see the following...</p>
+        <figure>
+			<img src="./tutorial1a-capture.png" width="518" height="420" alt=""/>
+        	<figcaption>figure 1-1: GameObject with Renderable</figcaption>
+        </figure>
+		<p> You will also notice that the coloring is darker than you were probably expecting. Our renderable object responds to a "virtual light source".  
+            By default, our only light source is ambient lighting and it is very dim so as not to interfere with other light sources you may define. 
+            We will look at adjusting ambient lighting in the next tutorial.</p>
+        
+        
+		<hr>
+		<h2>Conclusion</h2>
+		<p> We have learned about the structure of the scene object and create a very basic scene with a single renderable.</p>
+		<p>In <a href="../tutorial2/tutorial2.html">tutorial 2</a>,  we will look at accepting user input and utilizing game resources such as 
+            bitmap images and audio. We will build on the renderable concept and look at new types of renderable objects that support bitmap textures.</p>
+        
+        <hr>
+		<p ALIGN="center"><a href="../tutorial0/tutorial0.html">Tutorial 0</a> &lt;-- Tutorial 1 --&gt; <a href="../tutorial2/tutorial2.html">Tutorial 2</a></p>
+        
+	</div>
+    <h4><i>5/13/2022</i> - Updated by Myles Dalton, based on David Watson's 1st edition</h4>
+	</body>
+</html>

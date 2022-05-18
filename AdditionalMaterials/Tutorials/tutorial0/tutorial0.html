@@ -8,7 +8,10 @@
         <style>p,h1,h2,h3,h4,td,ul,figure,pre,hr{
             margin: 5px 50px;
         } </style>
-
+        <style> mark{
+            background-color: aquamarine;
+        }
+        </style>
         <style> figure{
             background-color: beige;
             border: 1px darkslategrey dashed;
@@ -61,19 +64,19 @@
 		</ul>
         <br>
 		<h4>Head tag</h4>
-		<p>The entry point for your code will be an object you design that is a subclass of the engine's "Scene" object.</p>
+		<p>The entry point for your code will be an object you design that is a subclass of the engine's "Scene" object. For now, we include what will be the path to that Scene object in this HTML file.</p>
 
-		<figure><pre><xmp>
-            <!-- external library -->
-            <script type="text/javascript" src="./src/lib/gl-matrix.js"></script>
+		<figure><pre>
+            &lt;!-- external library --&gt; 
+            &lt;script type="text/javascript" src="./src/lib/gl-matrix.js"&gt;&lt;/script&gt;
     
-            <!-- our game -->
-            <script type="module" src="./src/your_game_folder/your_game_scene.js"></script>
-        </xmp></pre>
+            &lt;!-- our game --&gt;
+            &lt;script type="module" src="./src/<mark>your_game_folder</mark>/<mark>your_game_scene</mark>.js"&gt;&lt;/script&gt;
+        </pre>
         
 		<figcaption class="codecaption">Code snippet 0-1: Head tag</figcaption>
         </figure>
-		<p class="note">Note: The portions in bold are the sections that are specific to your game implementation.</p>
+		<p class="note">Note: The highlighted portions are specific to your game implementation.</p>
 
 		
 		
@@ -82,13 +85,13 @@
         
 		<h4>Body tag</h4>
 		<p>Within the body tag we create a canvas. The canvas is where the rendering of your game will occur. You need to define the pixel width and height. The engine will look for the DOM object called &quot;GLCanvas&quot; and handle the rest.</p>
-           <figure><pre><xmp>
+           <figure><pre>
         <!-- GLCanvas is the area we will draw in -->
-        <canvas id="GLCanvas" width="1280" height="720">
+        &lt;canvas id="GLCanvas" width="<mark>600</mark>" height="<mark>600</mark>"&gt;
             <!-- this message will show only if WebGL clearing failed -->
             Your browser does not support the HTML5 canvas.
-        </canvas>
-           </xmp></pre>
+        &lt;/canvas&gt;
+          </pre>
 		<figcaption class="codecaption">Code snippet 0-2: Canvas</figcaption>
         </figure>
 
@@ -101,6 +104,6 @@
         <hr>
         <p ALIGN="center">Tutorial 0 --&gt; <a href="../tutorial1/tutorial1.html">Tutorial 1</a></p>
     	</div>
-        <h4><i>5/10/2022</i> - Updated by Myles Dalton</h4>
+        <h4><i>5/10/2022</i> - Updated by Myles Dalton, based on David Watson's 1st edition</h4>
 	</body>
 </html>
