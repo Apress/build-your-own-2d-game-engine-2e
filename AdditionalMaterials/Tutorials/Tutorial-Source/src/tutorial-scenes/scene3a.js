@@ -17,7 +17,7 @@ class Scene3a extends engine.Scene {
 
         this.kTexture = "assets/minion_spritesheet.png"
         this.kGameBGSong = "assets/BGClip.mp3";
-        this.kGameCueSound = "assets/BlueLevel_Cue.WAV";
+        this.kGameCueSound = "assets/BlueLevel_cue.wav";
     }
 
     load() {
