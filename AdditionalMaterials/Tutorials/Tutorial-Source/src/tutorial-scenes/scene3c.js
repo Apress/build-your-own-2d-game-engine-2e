@@ -20,7 +20,7 @@ class Scene3c extends engine.Scene {
 
         this.kTexture = "assets/minion_spritesheet.png"
         this.kGameBGSong = "assets/BGClip.mp3";
-        this.kGameCueSound = "assets/BlueLevel_Cue.wav";
+        this.kGameCueSound = "assets/BlueLevel_Cue.WAV";
     }
 
     load() {
