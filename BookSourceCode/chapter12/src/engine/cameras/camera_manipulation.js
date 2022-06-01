@@ -64,10 +64,10 @@ Camera.prototype.reShake = function () {
 // pan the camera to ensure aXform is within camera bounds
 // this is complementary to the ClampAtBound: instead of clamping aXform, now, move the camera
 /**
- * Pan this Camera to follow the Transform argument
+ * Pan this Camera to follow the Transform argument when it moves outside the zone
  * @memberof Camera
  * @param {Transform} aXform - Transform to follow
- * @param {float} zone - world coordinate distance from the border of this Camera
+ * @param {float} zone - percentage from the center of this Camera
  */
 Camera.prototype.panWith = function (aXform, zone) {
     let status = this.collideWCBound(aXform, zone);
