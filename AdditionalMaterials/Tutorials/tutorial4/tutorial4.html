@@ -24,7 +24,7 @@
 		<h1> GTCS Game Engine: <br>
 		Tutorial 4: Rigid&nbsp;Bodies &amp; Particle&nbsp;Systems</h1>
 		<p ALIGN="center"><a href="../tutorial3/tutorial3.html">Tutorial 3</a> &lt;-- Tutorial 4 --&gt; <a href="../tutorial5/tutorial5.html">Tutorial 5</a><br>
-		  <a href="../index.html">Main tutorial guide page</a><br></p>
+		  <a href="../index.html">Tutorial Homepage</a><br></p>
 		
 		
 		<hr>
@@ -39,7 +39,7 @@
 
 	<hr>
 		<h2><a id="resolution"></a>Collision Resolution</h2>
-		<p>In tutorial 3, we looked at detecting collisions between game elements. With per-pixel collision detection, we checked to determine 
+		<p>In Tutorial 3, we looked at detecting collisions between game elements. With per-pixel collision detection, we checked to determine 
             if one element overlaps another. While this is very useful, for most games we need more than to just detect collisions. We need to 
             look at collision resolution where the engine will detect a collision through overlap and "undo" the overlap before it is drawn to the screen.</p>
 		<p> To do this, we will apply an &quot;invisible shape&quot; over our GameObject where physics calculations will occur to simulate objects 
@@ -88,7 +88,7 @@
         <b>engine.texture.unload(this.kPlatform);</b>
     }
     </pre>
-    <figcaption>Code snippet 4-1: Loading Assets</figcaption>
+    <figcaption>Code Snippet 4-1: Loading Assets</figcaption>
     </figure>
     <p>In the initialization function, we create our camera as we have done before. We create a minion GameObject and platform GameObject in a similar way as we have done before, this time 
         we don't keep track of the renderables seperate from the GameObjects.
@@ -115,7 +115,7 @@
     
 	<em>// ... Continued in next snippet ... </em></pre>
 		<figcaption class="codecaption">
-		  Code snippet 4-2: Creating GameObjects
+		  Code Snippet 4-2: Creating GameObjects
 		</figcaption>
         </figure>
         <p>We continue our initialization by creating our rigid bodies. We create a rigid rectangle with the GameObject's transform and a size for the rigid body, 
@@ -137,7 +137,7 @@
         engine.defaultResources.setGlobalAmbientIntensity(4);
     }</pre>
 		<figcaption class="codecaption">
-		  Code snippet 4-3: Creating Rigid Bodies
+		  Code Snippet 4-3: Creating Rigid Bodies
 		</figcaption>
         </figure>
         <p>Our draw function is straightforward. We clear the canvas, setup our camera, then all of our GameObjects.</p>
@@ -151,7 +151,7 @@
         this.mPlatformObj.draw(this.mCamera);
     }</pre>
 		<figcaption class="codecaption">
-		  Code snippet 4-4: Draw Function
+		  Code Snippet 4-4: Draw Function
 		</figcaption>
         </figure>
         <p>In the update function, we move our minion around based on the WASD keys. 
@@ -194,7 +194,7 @@
         this.mPlatformObj.update();</b>
     }</pre>
 		<figcaption class="codecaption">
-		  Code snippet 4-5: Update Function
+		  Code Snippet 4-5: Update Function
 		</figcaption>
         </figure>
 	<p>A call to <code>engine.physics.collideShape()</code> checks if collision occurs with the two RigidShape bounds and will resolve collisions between them. 
@@ -244,10 +244,9 @@
         engine.texture.unload(this.kTexture);
         engine.texture.unload(this.kPlatform);
         <b>engine.texture.unload(this.kParticle);</b>
-    }
-      </pre>
+    }</pre>
 		<figcaption class="codecaption">
-		  Code snippet 4-6: Particle constructor, Load and Unload
+		  Code Snippet 4-6: Particle constructor, Load and Unload
 		</figcaption>
         </figure>
 		<p>Our initialization does not need any special code for handling particles. Unlike other renderables, particle renderables will be created and destroyed on the fly during the running of the game.</p>
@@ -263,7 +262,7 @@
         <b>this.mAllParticles.draw(this.mCamera);</b>
     }</pre>
 		<figcaption class="codecaption">
-		  Code snippet 4-7: Drawing Particles
+		  Code Snippet 4-7: Drawing Particles
 		</figcaption>
         </figure>
 		<p>In our update function, we update all particles and check to see if the Z key is pressed. When pressed, 
@@ -298,12 +297,9 @@
         
         this.mMinionObj.update();
         this.mPlatformObj.update();
-    }
-
-
-  </pre>
+    }</pre>
 		<figcaption class="codecaption">
-		  Code snippet 4-8: Updating Particles
+		  Code Snippet 4-8: Updating Particles
 		</figcaption>
         </figure>
 		<p>This is our <code>_createParticle()</code> function that takes in an X and Y location for where to spawn the new particle. We do these tasks...</p>
@@ -341,24 +337,21 @@
 	p.setSizeDelta(0.98);
     
 	return p;
-    }
-
-
-  </strong></pre>
+    }</strong></pre>
 		<figcaption class="codecaption">
-		  Code snippet 4-9: Creating Particles
+		  Code Snippet 4-9: Creating Particles
 		</figcaption>
         </figure>
         <p class = note >Note: 1) _createParticle() is a member function of our Scene subclass. 2) we can not use this.kParticle because this function will be called from a class that does not have that property, but it must have been loaded to work.
 <hr>
     <h2>Conclusion</h2>
         <p>Rigid shapes have a many uses in games. They can be used to simulate floor and walls so that GameObjects can be constrained in their movement. They can also be used to make interactions between GameObjects more realistic. Particles give us impressive visual affects. Aside from explosions, we could simulate smoke or weather affects with particles.</p>
-        <p>In <a href="tutorial5.html">tutorial 5</a>, we will take a look at more visual affects by illuminating renderables with custom lighting.</p>
+        <p>In <a href="tutorial5.html">Tutorial 5</a>, we will take a look at more visual affects by illuminating renderables with custom lighting.</p>
         
         
         <hr>
         <p ALIGN="center"><a href="../tutorial3/tutorial3.html">Tutorial 3</a> &lt;-- Tutorial 4 --&gt; <a href="../tutorial5/tutorial5.html">Tutorial 5</a><br>
-		  <a href="../index.html">Main tutorial guide page</a><br></p>
+		  <a href="../index.html">Tutorial Homepage</a><br></p>
 	</div>
     <h4><i>5/22/2022</i> - By Myles Dalton</h4>
     </body>

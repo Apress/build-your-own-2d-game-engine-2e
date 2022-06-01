@@ -24,7 +24,7 @@
 		<h1> GTCS Game Engine: <br>
 		Tutorial 3: Sprites, Animation &amp; Collision&nbsp;Detection</h1>
 		<p ALIGN="center"><a href="../tutorial2/tutorial2.html">Tutorial 2</a> &lt;-- Tutorial 3 --&gt; <a href="../tutorial4/tutorial4.html">Tutorial 4</a><br>
-		  <a href="../index.html">Main tutorial guide page</a><br></p>
+		  <a href="../index.html">Tutorial Homepage</a><br></p>
 		
 		
 		<hr>
@@ -50,15 +50,15 @@
             </figure>
         </p>
         <p>With this, we can store many if not all of our graphics in a single resource. 
-            In figure 3-1, we see a sample spritesheet. You will notice that the top two rows have 
-            variations of the same image and in the bottom row (second from the left), we have the same image we used in tutorial 2 and a 
+            In Figure 3-1, we see a sample spritesheet. You will notice that the top two rows have 
+            variations of the same image and in the bottom row (second from the left), we have the same image we used in Tutorial 2 and a 
             reverse facing copy in the far right. We can use these types of images to simulate motion and infer direction. Figure 3-2 provides more details about our spritesheet.</p>
         <p>        
         <figure><img src="./labeled_sprite_sheet.png" width="470" height="275" alt=""/>
         <figcaption>Figure 3-2: Spritesheet in detail</figcaption>
             </figure>
         </p>
-		<p> With coordinate location (0,0) being the bottom left of the entire sprite page, the bottom left coordinate of our texture from tutorial 
+		<p> With coordinate location (0,0) being the bottom left of the entire sprite page, the bottom left coordinate of our texture from Tutorial 
             2 is at (130,0). The size of this sub-image is 180 pixels wide by 180 pixels tall. Using the call 
             <code>setElementPixelPositions(<em>left-x, right-x, lower-y, upper-y</em>);</code> we can define the specific portion of 
             the sheet we want to render without worrying about the dimensions being powers of 2.</p>
@@ -102,7 +102,7 @@
         engine.defaultResources.setGlobalAmbientIntensity(4);
     }
 </pre>
-		<figcaption class="codecaption">Code snippet 3-1: Adding a SpriteRenderable</figcaption>
+		<figcaption class="codecaption">Code Snippet 3-1: Adding a SpriteRenderable</figcaption>
         </figure>
         <p class="note">Note: bold lines indicate changes introduced by this tutorial.</p>
         <p>If you make the above changes to your code, you will notice that the scene looks exactly the same (besides the text). So far, this doesn't seem very useful until we consider that we can consolidate all of our textures onto a single spritesheet and that our renderable textures can be of arbitrary dimensions.</p>
@@ -125,7 +125,7 @@
     }
 	
 </pre>
-		<figcaption class="codecaption">Code snippet 3-2: Updating sprite</figcaption>
+		<figcaption class="codecaption">Code Snippet 3-2: Updating sprite</figcaption>
         </figure>
        <p>You can see the scene <a href="../Tutorial-Source/index3a.html" target="_blank">here</a>.</p>
 
@@ -152,7 +152,7 @@
     
 	this.kTexture = "assets/minion_spritesheet.png"
     }</pre>
-		<figcaption class="codecaption">Code snippet 3-4: Adding a second GameObject</figcaption>
+		<figcaption class="codecaption">Code Snippet 3-4: Adding a second GameObject</figcaption>
         </figure>
         
         <p>During initialization, we will use a new renderable object type, <strong>SpriteAnimateRenderable</strong>. 
@@ -200,7 +200,7 @@
     }
 
 
-</pre>		<figcaption class="codecaption">Code snippet 3-5: Initialize with Animated Renderables</figcaption>
+</pre>		<figcaption class="codecaption">Code Snippet 3-5: Initialize with Animated Renderables</figcaption>
         </figure>
         
         <p>In the <b>update</b> function, we are going to control the motion of the second renderable using the mouse location. 
@@ -230,7 +230,7 @@
         this.mGameObj.update();
     }
 </pre>
-		<figcaption class="codecaption">Code snippet 3-6: Updating Animation</figcaption>
+		<figcaption class="codecaption">Code Snippet 3-6: Updating Animation</figcaption>
         </figure>
         
         <p>In the draw routine, of course, we draw our second renderable.</p>
@@ -244,7 +244,7 @@
         <b>this.mAnimatedObj.draw(this.mCamera);</b>
     }
         </pre>
-		<figcaption class="codecaption">Code snippet 3-7: Drawing Two Renderables</figcaption>
+		<figcaption class="codecaption">Code Snippet 3-7: Drawing Two Renderables</figcaption>
         </figure>
         <p>As long as the mouse is within the canvas area and the browser is in the foreground, the canvas will draw the the second GameObject at the mouse location.</p>
                 
@@ -282,7 +282,7 @@
         this.mAnimatedObj.getRenderable().updateAnimation();
         this.mGameObj.update();
     } </pre>
-		<figcaption class="codecaption">Code snippet 3-8: Update with Collision Detection</figcaption>
+		<figcaption class="codecaption">Code Snippet 3-8: Update with Collision Detection</figcaption>
         </figure>
         
         <p>As we can see <a href="../Tutorial-Source/index3c.html" target="_blank">here</a>, we check to see if there is overlap between the two GameObjects and cause rotation of the animated renderable when overlapping. Notice that our renderable continues to animate while it is rotating.</p>
@@ -290,12 +290,12 @@
     <hr>
     <h2>Conclusion</h2>
         <p>With the spritesheet and SpriteAnimateRenderable, there is a great deal of potential in customizing the look of our game elements. Collision detection gives us a tool for working with behavior.</p>
-        <p>In <a href="tutorial4.html">tutorial 4</a>, we will take a further look at behavior using rigid bodies to resolve GameObject overlap after collisions. This will simulate GameObjects acting as solid objects when interacting with eachother. We will also look at creating particle affects.</p>
+        <p>In <a href="tutorial4.html">Tutorial 4</a>, we will take a further look at behavior using rigid bodies to resolve GameObject overlap after collisions. This will simulate GameObjects acting as solid objects when interacting with eachother. We will also look at creating particle affects.</p>
         
         
         <hr>
         <p ALIGN="center"><a href="../tutorial2/tutorial2.html">Tutorial 2</a> &lt;-- Tutorial 3 --&gt; <a href="../tutorial4/tutorial4.html">Tutorial 4</a><br>
-		  <a href="../index.html">Main tutorial guide page</a><br></p>
+		  <a href="../index.html">Tutorial Homepage</a><br></p>
 	</div>
     <h4><i>5/19/2022</i> - By Myles Dalton</h4>
     </body>
