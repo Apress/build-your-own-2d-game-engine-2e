@@ -33,7 +33,7 @@
 		
 		<p><strong>Covered Topics</strong>: <a href="#shadows">Shadows</a> • <a href="#parallax">Parallax</a> • <a href="#moreparallax">Panning &amp; Parallax</a></p>
 	  <p><strong>Demonstrations</strong>: <a href="../Tutorial-Source/index6a.html " target="_blank">Casting Shadows</a>• <a href="../Tutorial-Source/index6b.html" target="_blank">
-		  Parallax Effect</a> • <a href="../Tutorial-Source/index6c.html" target="_blank">Camera Panning</a></p>
+		  Parallax Effect</a></p>
 	  <p>Complete source code for all tutorials can be downloaded from <a href="../assets/tutorials.zip">here</a>.</p>
 		
 
@@ -146,18 +146,18 @@
         this.mPointLight.setColor([1,1,1,1]);
         this.mPointLight.setXPos(50);
         this.mPointLight.setYPos(50);
-        <b>this.mPointLight.setZPos(4);</b>
-        this.mPointLight.setNear(10);
-        this.mPointLight.setFar(14);
+        <b>this.mPointLight.setZPos(5);</b>
+        this.mPointLight.setNear(15);
+        this.mPointLight.setFar(20);
         this.mPointLight.setIntensity(1);
-        <b>this.mPointLight.isLightCastShadow(true);</b>
+        <b>this.mPointLight.setLightCastShadowTo(true);</b>
 
         this.mSpotLight = new Light();
         this.mSpotLight.setLightType(eLightType.eSpotLight);
         this.mSpotLight.setColor([1,1,1,1]);
         this.mSpotLight.setXPos(10);
         this.mSpotLight.setYPos(20);
-        <b>this.mSpotLight.setZPos(4);</b>
+        <b>this.mSpotLight.setZPos(5);</b>
         this.mSpotLight.setDirection([30,70,-1]);
         this.mSpotLight.setInner(0.5);
         this.mSpotLight.setOuter(1);
@@ -165,7 +165,7 @@
         this.mSpotLight.setFar(80);
         this.mSpotLight.setDropOff(1);
         this.mSpotLight.setIntensity(2);
-        <b>this.mSpotLight.isLightCastShadow(true);</b>
+        <b>this.mSpotLight.setLightCastShadowTo(true);</b>
 
         this.mDirectionLight = new Light();
         this.mDirectionLight.setLightType(eLightType.eDirectionalLight);

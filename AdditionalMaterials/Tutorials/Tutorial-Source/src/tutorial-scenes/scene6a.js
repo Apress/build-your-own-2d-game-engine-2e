@@ -76,18 +76,18 @@ class Scene6a extends engine.Scene {
         this.mPointLight.setColor([1,1,1,1]);
         this.mPointLight.setXPos(50);
         this.mPointLight.setYPos(50);
-        this.mPointLight.setZPos(4);
-        this.mPointLight.setNear(10);
-        this.mPointLight.setFar(14);
+        this.mPointLight.setZPos(5);
+        this.mPointLight.setNear(15);
+        this.mPointLight.setFar(20);
         this.mPointLight.setIntensity(1);
-        this.mPointLight.isLightCastShadow(true);
+        this.mPointLight.setLightCastShadowTo(true);
 
         this.mSpotLight = new Light();
         this.mSpotLight.setLightType(eLightType.eSpotLight);
         this.mSpotLight.setColor([1,1,1,1]);
         this.mSpotLight.setXPos(10);
         this.mSpotLight.setYPos(20);
-        this.mSpotLight.setZPos(4);
+        this.mSpotLight.setZPos(5);
         this.mSpotLight.setDirection([30,70,-1]);
         this.mSpotLight.setInner(0.5);
         this.mSpotLight.setOuter(1);
@@ -95,7 +95,7 @@ class Scene6a extends engine.Scene {
         this.mSpotLight.setFar(80);
         this.mSpotLight.setDropOff(1);
         this.mSpotLight.setIntensity(2);
-        this.mSpotLight.isLightCastShadow(true);
+        this.mSpotLight.setLightCastShadowTo(true);
 
         this.mDirectionLight = new Light();
         this.mDirectionLight.setLightType(eLightType.eDirectionalLight);
@@ -111,8 +111,9 @@ class Scene6a extends engine.Scene {
         this.mBgObj.getRenderable().addLight(this.mDirectionLight);
         this.mRockObj.getRenderable().addLight(this.mPointLight);
         this.mRockObj.getRenderable().addLight(this.mSpotLight);
+      
        
-
+       
         // setup the shadow relationships
         this.mShadow = new ShadowReceiver(this.mBgObj);
         this.mShadow.addShadowCaster(this.mMinionObj);
