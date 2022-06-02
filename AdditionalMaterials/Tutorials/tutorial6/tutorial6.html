@@ -58,7 +58,7 @@
 			need to make sure that we draw the ShadowReceivers before other GameObjects and to not redundantly call draw() on the shadow receiving GameObject.</li>
 	  </ol>
 		<p>We can view our next example <a href="../Tutorial-Source/index6a.html" target="_blank">here</a>. The WASD keys control the position of the minion and arrow keys control the point light. 
-			Though we do not define direction for a point light, the light is emanating from a single point 4 units up the Z-axis. The virtual radial &quot;light rays&quot; 
+			Though we do not define direction for a point light, the light is emanating from a single point five units up the Z-axis. The virtual radial &quot;light rays&quot; 
 			provide direction that causes the shadow to move opposing the light source.</p>
 		<figure><img src="./tutorial6a-capture.PNG" width="400" height="400" alt=""/><figcaption>Figure 6-1: Minion Casting a Shadow TODO</figcaption></figure>
 		<p>Declare variables and load resources.</p>
@@ -68,7 +68,7 @@
 	super();
 	this.mCamera = null;
 	this.mMinionObj = null;
-	this.mBgObj = null;
+	<b>this.mBgObj = null;</b>
 	this.mPointLight = null;
 	this.mRockObj = null;
 	this.mSpotLight = null;
@@ -100,7 +100,8 @@
 </pre>
 		<figcaption class="codecaption">Code Snippet 6-1: Constructor, Load, Unload</figcaption>
 	  </figure>
-	  <p>The only change in these three functions from the end of Tutorial 5 is adding a declaration for the ShadowReceiver.</p>
+	  <p>The changes we make from the end of Tutorial 5 for the above functions are, adding a declaration for the ShadowReceiver and changing the background's variable name to match our naming
+		  convention for GameObjects, as the background now has to be a GameObject to receive shadows.</p>
 	  <p>We set the rock and minion GameObjects to be in the foreground compared to the background, using the Z-axis.</p>
 <figure>
 		<pre> 
@@ -110,11 +111,11 @@
         	100,                        // width of camera
         	[0, 0, 600, 600],         // viewport (orgX, orgY, width, height)
         	2
-    	);
+    	);<b>
     	this.mBgObj = new GameObject(new IllumRenderable(this.kBackground,this.kBackgroundNormal));
     	this.mBgObj.getXform().setSize(100,100);
     	this.mBgObj.getXform().setPosition(50,50);
-    	<b>this.mBgObj.getXform().setZPos(0);</b>
+    	this.mBgObj.getXform().setZPos(0);</b>
 
     	this.mMinionObj = new GameObject(new LightRenderable(this.kTexture));
     	this.mMinionObj.getRenderable().setElementPixelPositions(130,310,0,180);
@@ -146,9 +147,9 @@
         this.mPointLight.setColor([1,1,1,1]);
         this.mPointLight.setXPos(50);
         this.mPointLight.setYPos(50);
-        <b>this.mPointLight.setZPos(5);</b>
+        <b>this.mPointLight.setZPos(5);
         this.mPointLight.setNear(15);
-        this.mPointLight.setFar(20);
+        this.mPointLight.setFar(20);</b>
         this.mPointLight.setIntensity(1);
         <b>this.mPointLight.setLightCastShadowTo(true);</b>
 
@@ -176,9 +177,9 @@
         // associate the lights with the renderables
         this.mMinionObj.getRenderable().addLight(this.mPointLight);
         this.mMinionObj.getRenderable().addLight(this.mSpotLight);
-        this.mBgObj.getRenderable().addLight(this.mPointLight);
+        <b>this.mBgObj.getRenderable().addLight(this.mPointLight);
         this.mBgObj.getRenderable().addLight(this.mSpotLight);
-        this.mBgObj.getRenderable().addLight(this.mDirectionLight);
+        this.mBgObj.getRenderable().addLight(this.mDirectionLight);</b>
         this.mRockObj.getRenderable().addLight(this.mPointLight);
         this.mRockObj.getRenderable().addLight(this.mSpotLight);
        
