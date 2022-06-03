@@ -17,7 +17,7 @@ class ShadowCaster {
      * @classdesc Renders a colored image representing the shadowCaster on the reciever
      * <p>Found in Chapter 8, page 501 of the textbook </p>
      * Example:
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.7.shadow_shaders/index.html 8.7 Shadow Shaders}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter8/8.7.shadow_shaders/index.html 8.7 Shadow Shaders}
      * @constructor
      * @param {GameObject} shadowCaster - the object casting the shadow, must contain at least a LightRenderable
      * @param {GameObject} shadowReceiver - object receiving the shadow, must contain at least a SpriteRenderable 

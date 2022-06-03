@@ -17,11 +17,11 @@ let get = map.get;
  * Defines the logic for loading and interacting with file texture resources
  * 
  * <p><strong>Exports the has() and get() functions from </strong> 
- * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/AdditionalMaterials/Documentation/module-resource_map.html resource map}</p>
+ * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/AdditionalMaterials/Documentation/module-resource_map.html resource map}</p>
  * 
  * <p>Found in Chapter 5, page 204 of the textbook</p>
  * Example:
- * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter5/5.1.texture_shaders/index.html 5.1 Texture Shaders}
+ * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter5/5.1.texture_shaders/index.html 5.1 Texture Shaders}
  * @module texture
  */
 

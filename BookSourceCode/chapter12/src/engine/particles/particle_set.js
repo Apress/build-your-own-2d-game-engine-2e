@@ -19,9 +19,9 @@ class ParticleSet extends GameObjectSet {
      * <p> Found in Chapter 10, page 652 of the textbook</p>
      * 
      * Examples:
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter10/10.1.particles/index.html 10.1 Particles}
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter10/10.2.particle_collisions/index.html 10.2 Particle Collision}
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter10/10.3.particle_emitters/index.html 10.3 Particle Emitters}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter10/10.1.particles/index.html 10.1 Particles}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter10/10.2.particle_collisions/index.html 10.2 Particle Collision}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter10/10.3.particle_emitters/index.html 10.3 Particle Emitters}
      * 
      * @extends GameObjectSet
      * @returns {ParticleSet} a new ParticleSet instance

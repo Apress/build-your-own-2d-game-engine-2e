@@ -15,7 +15,7 @@ class ShaderLightAt {
      * <p>Found in Chapter 8, page 435 of the textbook</p>
      * 
      * Example:
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.3.multiple_lights/index.html 8.3 Multiple Lights}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter8/8.3.multiple_lights/index.html 8.3 Multiple Lights}
      * 
      * @constructor
      * @param {WebGLProgram} shader - the compiled light shader this ShaderLightAt belongs to

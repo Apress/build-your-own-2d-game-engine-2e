@@ -15,7 +15,7 @@ class LineShader extends SimpleShader {
      * <p>Not discussed in the textbook</p>
      * 
      * Example:
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter7/7.6.not_used_line_support/index.html 7.6 Line Support}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter7/7.6.not_used_line_support/index.html 7.6 Line Support}
      * @extends SimpleShader
      * @constructor
      * @param {string} vertexShaderPath - path to the vertex shader file

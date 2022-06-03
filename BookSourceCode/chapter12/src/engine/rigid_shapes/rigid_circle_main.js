@@ -15,10 +15,10 @@ class RigidCircle extends RigidShape {
      * <>Found in Chapter 9, page 542 of the textbook</p>
      * 
      * Examples:
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.1.rigid_shapes_and_bounds/index.html 9.1 Rigid Shape and Bounds},
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.2.circle_collisions_and_collision_info/index.html 9.2 Circle Collisions and Collision Info},
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.6.collision_position_correction/index.html 9.6 Collision Position Correction},
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.9.physics_presets/index.html 9.9 Physics Presets}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter9/9.1.rigid_shapes_and_bounds/index.html 9.1 Rigid Shape and Bounds},
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter9/9.2.circle_collisions_and_collision_info/index.html 9.2 Circle Collisions and Collision Info},
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter9/9.6.collision_position_correction/index.html 9.6 Collision Position Correction},
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter9/9.9.physics_presets/index.html 9.9 Physics Presets}
      * 
      * @extends RigidShape
      * @constructor

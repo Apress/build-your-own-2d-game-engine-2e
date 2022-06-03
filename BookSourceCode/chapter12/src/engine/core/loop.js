@@ -16,7 +16,7 @@ import * as particleSystem from "../components/particle_system.js";
  * <p>Found in Chapter 4, page  112 of the textbook</p>
  * 
  * Example:
- * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter4/4.1.game_loop/index.html 4.1 Game Loop}
+ * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter4/4.1.game_loop/index.html 4.1 Game Loop}
  * @module loop
  */
 

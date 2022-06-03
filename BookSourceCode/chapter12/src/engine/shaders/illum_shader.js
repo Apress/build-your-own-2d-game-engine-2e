@@ -14,8 +14,8 @@ class IllumShader extends LightShader {
      * @classdesc Shader that supports lighting and Phong-illumination
      * <p>Found in Chapter 8, page 450 of the textbook</p>
      * Examples:
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.4.normal_map_and_illumination_shaders/index.html 8.4 Normal Maps and Illumination Shader},
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.5.material_and_specularity/index.html 8.5 Materials and Specularity}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter8/8.4.normal_map_and_illumination_shaders/index.html 8.4 Normal Maps and Illumination Shader},
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter8/8.5.material_and_specularity/index.html 8.5 Materials and Specularity}
      * @extends LightShader
      * @constructor
      * @param {string} vertexShaderPath - path to the vertex shader file

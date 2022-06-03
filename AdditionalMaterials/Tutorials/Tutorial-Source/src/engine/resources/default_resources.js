@@ -13,7 +13,7 @@ import * as map from "../core/resource_map.js";
  * Central storage of engine-wide shared resources and variables
  * <p>Found in Chapter 5, page 251 of the textbook </p>
  * Example: 
- * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter5/5.4.font_support/index.html 5.4 Font Support}
+ * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter5/5.4.font_support/index.html 5.4 Font Support}
  * @module default_resources
  */
 

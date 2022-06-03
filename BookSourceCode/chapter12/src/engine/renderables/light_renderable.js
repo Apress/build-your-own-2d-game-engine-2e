@@ -15,9 +15,9 @@ class LightRenderable extends SpriteAnimateRenderable {
      * @classdesc Defines a SpriteAnimatedRenderable with a list of lights
      * <p>Found in Chapter 8, page 419 of the textbook</p>
      * Examples:
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.2.simple_light_shader/index.html 8.2 Simple Light Shader},
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.3.multiple_lights/index.html 8.3 Multiple Lights},
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter8/8.6.directional_and_spotlights/index.html 8.6 Directional and Spot Lights}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter8/8.2.simple_light_shader/index.html 8.2 Simple Light Shader},
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter8/8.3.multiple_lights/index.html 8.3 Multiple Lights},
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter8/8.6.directional_and_spotlights/index.html 8.6 Directional and Spot Lights}
      * @extends SpriteAnimateRenderable
      * @constructor
      * @param {string} myTexture - path to the image file to use as texture

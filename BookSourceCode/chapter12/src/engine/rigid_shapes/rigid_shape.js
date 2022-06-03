@@ -23,9 +23,9 @@ class RigidShape {
      * Used to control the Transform of another object
      * <p>Found in Chapter 9, page 534 of the textbook</p>
      * Examples:
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.1.rigid_shapes_and_bounds/index.html 9.1 Rigid Shape and Bounds},
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.6.collision_position_correction/index.html 9.6 Collision Position Correction},
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.9.physics_presets/index.html 9.9 Physics Presets}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter9/9.1.rigid_shapes_and_bounds/index.html 9.1 Rigid Shape and Bounds},
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter9/9.6.collision_position_correction/index.html 9.6 Collision Position Correction},
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter9/9.9.physics_presets/index.html 9.9 Physics Presets}
      * 
      * @constructor
      * @param {Transform} xf - the Transform for this RigidShape

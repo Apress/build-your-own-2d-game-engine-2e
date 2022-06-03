@@ -24,7 +24,7 @@ class MapEntry {
  * Base module for managing storage and synchronization of all resources
  * <p>Found in Chapter 4, page 134 of the textbook </p>
  * Example:
- * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter4/4.3.resource_map_and_shader_loader/index.html 4.3 Resource Map and Shader Loader}
+ * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter4/4.3.resource_map_and_shader_loader/index.html 4.3 Resource Map and Shader Loader}
  * @module resource_map
  */
 

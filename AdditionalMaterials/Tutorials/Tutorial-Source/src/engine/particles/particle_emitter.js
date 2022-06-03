@@ -12,7 +12,7 @@ class ParticleEmitter {
      * <p> Found in Chapter 10, page 665 of the textbook</p>
      * 
      * Example: 
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter10/10.3.particle_emitters/index.html 10.3 Particle Emitters}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter10/10.3.particle_emitters/index.html 10.3 Particle Emitters}
      * 
      * @param {float} px - X world coordinate position for this emitter
      * @param {float} py - Y world coordinate position for this emitter

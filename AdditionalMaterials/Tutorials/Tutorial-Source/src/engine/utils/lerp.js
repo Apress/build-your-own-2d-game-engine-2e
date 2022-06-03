@@ -13,7 +13,7 @@ class Lerp {
      * @classdesc Encapsulates the linear interpolation functionality 
      * <p>Found in Chapter 7, page 347 of the textbook</p>
      * Example:
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter7/7.2.camera_interpolations/index.html 7.2 Camera Interpolations}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter7/7.2.camera_interpolations/index.html 7.2 Camera Interpolations}
      * 
      * @constructor
      * @param {float} value  - starting value of interpolation

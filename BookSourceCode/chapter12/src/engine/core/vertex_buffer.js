@@ -15,7 +15,7 @@ import * as glSys from "./gl.js";
  * 
  * <p>Found in Chapter 2, page 31 of the textbook</p>
  * Example:
- * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter2/2.3.draw_one_square/index.html 2.3 Elementary Drawing}
+ * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter2/2.3.draw_one_square/index.html 2.3 Elementary Drawing}
  * 
  * @module vertex_buffer
  */

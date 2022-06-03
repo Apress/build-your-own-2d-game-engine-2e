@@ -11,7 +11,7 @@ class GameObjectSet {
      * @classdesc Utility class for a collection of GameObjects
      * <p>Found in Chapter 6, page 272 in the textbook</p>
      * Example:
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter6/6.1.game_objects/index.html 6.1 Game Objects}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter6/6.1.game_objects/index.html 6.1 Game Objects}
      * @constructor
      */
     constructor() {

@@ -11,7 +11,7 @@ class Transform {
      * @classdesc Encapsulates the matrix transformation functionality, meant to work with Renderables
      * <p>Found in Chapter 3, page 84 of the textbook</p>
      * Example:
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter3/3.3.transform_objects/index.html 3.3 Transform Objects}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter3/3.3.transform_objects/index.html 3.3 Transform Objects}
      * @constructor
      * @returns {Transform} a new Transform instance
      */

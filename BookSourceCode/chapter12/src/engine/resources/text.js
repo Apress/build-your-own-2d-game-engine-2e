@@ -10,12 +10,12 @@ import * as map from "../core/resource_map.js";
 /**
  * Logics for loading a text file into the resource_map
  * <p><strong>Exports the unload(), has(), and get() functions from </strong> 
- * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/AdditionalMaterials/Documentation/module-resource_map.html resource map}</p>
+ * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/AdditionalMaterials/Documentation/module-resource_map.html resource map}</p>
  * 
  * <p>Found in Chapter, page 138 of the textbook </p>
  * 
  * Example:
- * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter4/4.3.resource_map_and_shader_loader/index.html 4.3 Resource Map and Shader Loader}
+ * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter4/4.3.resource_map_and_shader_loader/index.html 4.3 Resource Map and Shader Loader}
  * @module text
  */
 

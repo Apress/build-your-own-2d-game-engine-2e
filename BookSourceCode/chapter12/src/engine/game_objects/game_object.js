@@ -13,7 +13,7 @@ class GameObject {
      * @classdesc Template for the behavior and appearance of a game object, intened to be extended for game specific use. Has support for pixel-perfect collision and physics
      * <p>Found in Chapter 6, page 268 of the textbook</p>
      * Example:
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter6/6.1.game_objects/index.html 6.1 Game Objects}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter6/6.1.game_objects/index.html 6.1 Game Objects}
      * 
      * @constructor
      * @param {Renderable} renderable - the renderable to be associated with this GameObject

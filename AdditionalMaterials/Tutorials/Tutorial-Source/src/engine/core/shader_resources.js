@@ -21,7 +21,7 @@ import * as map from "./resource_map.js";
  * 
  * <p>Found in Chapter 3, page 68 of the textbook </p>
  * Example:
- * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter3/3.1.renderable_objects/index.html 3.1 Renderable Objects}
+ * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter3/3.1.renderable_objects/index.html 3.1 Renderable Objects}
  * @module shader_resources
  */
  

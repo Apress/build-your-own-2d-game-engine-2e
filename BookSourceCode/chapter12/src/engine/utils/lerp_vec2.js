@@ -12,7 +12,7 @@ class LerpVec2 extends Lerp {
      * @classdesc Encapsulates linear interpolation of vec2, calls gl-matrixjs::lerp
      * <p>Found in Chapter 7, page 353 of the textbook</p>
      * Example: 
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter7/7.2.camera_interpolations/index.html 7.2 Camera Interpolations }
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter7/7.2.camera_interpolations/index.html 7.2 Camera Interpolations }
      * 
      * @constructor
      * @extends Lerp

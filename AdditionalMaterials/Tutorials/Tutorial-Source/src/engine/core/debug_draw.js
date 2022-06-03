@@ -11,8 +11,8 @@ import LineRenderable from "../renderables/line_renderable.js";
  * Support drawing of basic shapes for debugging the physics and particle systems
  * <p>Found in Chapter 9, page 532 of the textbook</p>
  * Examples:
- * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter9/9.1.rigid_shapes_and_bounds/index.html 9.1 Rigid Shapes and Bounds},
- * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter10/10.1.particles/index.html 10.1 Particles}
+ * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter9/9.1.rigid_shapes_and_bounds/index.html 9.1 Rigid Shapes and Bounds},
+ * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter10/10.1.particles/index.html 10.1 Particles}
  * @module debug_draw
  */
 

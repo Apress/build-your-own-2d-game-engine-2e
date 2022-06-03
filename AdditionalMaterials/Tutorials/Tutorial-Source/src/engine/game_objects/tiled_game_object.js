@@ -13,7 +13,7 @@ class TiledGameObject extends GameObject {
      * Assumes X/Y alignments.
      * <p>Found in Chapter 11, page 674 of the textbook  </p>
      * Example:
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter11/11.1.tiled_objects/index.html 11.1 Tiled Objects}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter11/11.1.tiled_objects/index.html 11.1 Tiled Objects}
      * @constructor
      * @extends GameObject
      * @param {Renderable} renderableObj - the Renderable associated with this TiledGameObject

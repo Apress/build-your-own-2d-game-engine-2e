@@ -12,7 +12,7 @@ import GameObjectSet from "../game_objects/game_object_set.js";
  * Central storage for all GameObjects that are to be drawn. Supports HUD, Foreground, Actor, Shadow Receiver, and Background layers
  * <p>Found in Chapter 11, page 689 of the textbook </p>
  * Example:
- * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter11/11.3.layer_manager/index.html 11.3 Layer Manager}
+ * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter11/11.3.layer_manager/index.html 11.3 Layer Manager}
  * @module layer
  */
 

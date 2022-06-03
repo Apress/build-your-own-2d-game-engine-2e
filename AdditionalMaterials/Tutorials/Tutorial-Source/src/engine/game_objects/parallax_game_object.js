@@ -20,7 +20,7 @@ class ParallaxGameObject extends TiledGameObject {
      * resulting in slower movements
      * <p>Found in Chapter 11, page 681 of the textbook</p>
      * Example: 
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter11/11.2.parallax_objects/index.html 11.2 Parallax Objects}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter11/11.2.parallax_objects/index.html 11.2 Parallax Objects}
      * 
      * @constructor
      * @extends TiledGameObject

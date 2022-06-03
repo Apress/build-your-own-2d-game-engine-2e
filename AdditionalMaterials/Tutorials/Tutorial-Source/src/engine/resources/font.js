@@ -16,7 +16,7 @@ import * as xml from "./xml.js";
  * note that "font" consists of two files: the bitmap font image and the associated xml descriptor file
  * <p>Found in Chapter 5, page 245 of the textbook</p> 
  * Example:
- * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter5/5.4.font_support/index.html 5.4 Font Support}
+ * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter5/5.4.font_support/index.html 5.4 Font Support}
  * @module font 
  */
 

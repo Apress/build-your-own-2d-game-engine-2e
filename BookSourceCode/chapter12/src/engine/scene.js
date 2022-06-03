@@ -17,7 +17,7 @@ class Scene {
      * @classdesc Template for a scene, must be overriden by user extened scenes
      * <p>Found in Chapter 4, page 157 of the textbook </p>
      * Example:
-     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter4/4.5.scene_objects/index.html 4.5 Scene Objects}
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter4/4.5.scene_objects/index.html 4.5 Scene Objects}
      * @constructor
      * @returns {Scene} a new Scene instance
      */
