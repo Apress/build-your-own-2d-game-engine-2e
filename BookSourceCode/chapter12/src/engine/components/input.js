@@ -206,7 +206,8 @@ function isKeyPressed(keyCode) {
 }
 
 /**
- * Returns if a specific key is clicked
+ * Returns if a specific key is clicked.
+ * For a key to be clicked it must have been pressed then released
  * @export input
  * @param {keys} keyCode - key to check for clicked state
  * @returns {boolean} true if the key is clicked
@@ -227,7 +228,7 @@ function isButtonPressed(button) {
 }
 
 /**
- * Returns if a specific mouse button is clicked
+ * Returns if a specific mouse button is clicked.
  * For a button to be clicked it must have been pressed then released
  * @export input
  * @param {eMouseButton} button - button to check for ckicked state

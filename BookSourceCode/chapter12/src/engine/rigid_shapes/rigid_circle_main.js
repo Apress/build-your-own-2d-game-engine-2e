@@ -12,7 +12,7 @@ class RigidCircle extends RigidShape {
 
     /**
      * @classdesc Defines a rigid circle shape supported by the physics systems
-     * <>Found in Chapter 9, page 542 of the textbook</p>
+     * <p>Found in Chapter 9, page 542 of the textbook</p>
      * 
      * Examples:
      * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter9/9.1.rigid_shapes_and_bounds/index.html 9.1 Rigid Shape and Bounds},

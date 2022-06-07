@@ -20,7 +20,7 @@ class ShadowCaster {
      * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter8/8.7.shadow_shaders/index.html 8.7 Shadow Shaders}
      * @constructor
      * @param {GameObject} shadowCaster - the object casting the shadow, must contain at least a LightRenderable
-     * @param {GameObject} shadowReceiver - object receiving the shadow, must contain at least a SpriteRenderable 
+     * @param {GameObject} shadowReceiver - the object receiving the shadow, must contain at least a SpriteRenderable 
      * @returns {ShadowCaster} a new ShadowCaster instance
      */
     constructor(shadowCaster, shadowReceiver) {
