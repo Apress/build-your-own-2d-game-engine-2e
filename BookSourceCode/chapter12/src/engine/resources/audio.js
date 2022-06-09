@@ -99,7 +99,7 @@ function load(path) {
  * Play an audio cue
  * @static
  * @param {string} path - the path to the audio file 
- * @param {float} volume - the volume to play the audio at
+ * @param {float} volume - the volume at which to play the audio
  */
 function playCue(path, volume) {
     let source = mAudioContext.createBufferSource();

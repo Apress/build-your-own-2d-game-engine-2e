@@ -182,7 +182,7 @@ class Light {
      * Set how quickly does light intensity drops off between inner/outer, Near/Far. 
      * A larger Drop off number results in “softer/smoother” transition from full illumination to no illumination
      * @method
-     * @param {flaot} d - the new drop off value 
+     * @param {float} d - the new drop off value 
      */
     setDropOff(d) { this.mDropOff = d; }
     /**

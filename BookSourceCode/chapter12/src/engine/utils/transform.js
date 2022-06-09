@@ -49,7 +49,7 @@ class Transform {
     getPosition() { return this.mPosition; }
 
     /**
-     * Returns the three dimensional world coordinate positionof this Transform
+     * Returns the three dimensional world coordinate position of this Transform
      * @method
      * @returns {vec3} the x,y,z position of this Transform
      */

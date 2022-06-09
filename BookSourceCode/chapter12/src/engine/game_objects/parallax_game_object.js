@@ -13,7 +13,7 @@
 
 import TiledGameObject from "./tiled_game_object.js";
 
-
+--
 class ParallaxGameObject extends TiledGameObject {
     /**
      * @classdesc Represent a GameObject located at some distance D away, thus 
@@ -29,7 +29,7 @@ class ParallaxGameObject extends TiledGameObject {
      *     ==1: means same as actors
      *     > 1: farther away, slows down inversely (scale==2 slows down twice)
      *     < 1: closer, speeds up inversely (scale==0.5 speeds up twice)
-     * @param {Camera} aCamera - the Camera this ParallaxGameOjbect will be drawn to
+     * @param {Camera} aCamera - the Camera this ParallaxGameObject will be drawn to
      */
     constructor(renderableObj, scale, aCamera) {
         super(renderableObj);

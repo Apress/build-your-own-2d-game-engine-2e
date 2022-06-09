@@ -43,7 +43,7 @@ class TiledGameObject extends GameObject {
     }
 
     /**
-     * Draws a grid of tiles filling every availble space within the Camera
+     * Draws a grid of tiles filling every available space within the Camera
      * @method
      * @param {Camera} aCamera - the Camera to draw to 
      */

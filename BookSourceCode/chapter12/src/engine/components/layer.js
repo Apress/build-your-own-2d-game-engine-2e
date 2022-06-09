@@ -126,7 +126,7 @@ function removeFromLayer(layerEnum, obj) {
 }
 
 /**
- * Move a GameObject to the last index of the layer, appending it if not alrady present
+ * Move a GameObject to the last index of the layer, appending it if not already present
  * @export
  * @param {integer} layerEnum - the index of the layer to add to
  * @param {GameObject} obj - GameObject to move to the end

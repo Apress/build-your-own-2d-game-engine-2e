@@ -40,7 +40,7 @@ function getSystemAcceleration() { return vec2.clone(mSystemAcceleration); }
  * Sets the acceleration of the sytsem in world coordinates
  * @export physics
  * @param {float} x - the acceleration in the X direction
- * @param {flaot} y - the acceleration in the Y direction
+ * @param {float} y - the acceleration in the Y direction
  */
 function setSystemAcceleration(x, y) {
     mSystemAcceleration[0] = x;

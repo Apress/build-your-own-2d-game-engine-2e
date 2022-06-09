@@ -49,7 +49,7 @@ class Oscillate {
     }
 
     /**
-     * Returns the next amplitude for this OScillation
+     * Returns the next amplitude for this Oscillation
      * @method
      * @returns {float} the next amplitude for this Oscillation
      */

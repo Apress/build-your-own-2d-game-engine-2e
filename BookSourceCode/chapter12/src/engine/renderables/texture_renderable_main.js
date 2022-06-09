@@ -17,7 +17,7 @@ class TextureRenderable extends Renderable {
      * <p>Found in Chapter 5, page 201 of the textbook</p>
      * Example:
      * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter5/5.1.texture_shaders/index.html 5.1 Texture Shader}
-     * @extends Renerable
+     * @extends Renderable
      * @constructor
      * @param {string} myTexture - the path to the image file to use as texture
      * @returns {TextureRenderable} a new TextureRenderable instance

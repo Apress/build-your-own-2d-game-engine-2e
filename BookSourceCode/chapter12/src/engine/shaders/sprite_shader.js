@@ -12,7 +12,7 @@ import TextureShader from "./texture_shader.js";
 
 class SpriteShader extends TextureShader {
     /**
-     * @classdesc Wrapps over GLSL texture shader, supporting the defintion of one sprite element
+     * @classdesc Wraps over GLSL texture shader, supporting the defintion of one sprite element
      * from a texture file
      * <p>Found in Chapter 5, page 222 of the textbook </p>
      * Examples:
