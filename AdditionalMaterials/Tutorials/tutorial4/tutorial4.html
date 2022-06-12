@@ -33,7 +33,7 @@
         
 		<p><strong>Covered Topics</strong>: <a href="#resolution">Collision Resolution</a> • <a href="#particles">Particles</a></p>
         <p><strong>Demonstrations</strong>: <a href="../Tutorial-Source/index4a.html" target="_blank">Rigid Bodies</a> • <a href="../Tutorial-Source/index4b.html" target="_blank">Particle System</a></p>
-        <p>Complete source code for all tutorials can be downloaded from <a href="../assets/tutorials.zip">here</a>.</p>
+        <p>Complete source code for all tutorials can be downloaded from <a href="../Tutorial-Source.zip">here</a>.</p>
         
 
 
@@ -62,7 +62,7 @@
       	</figure>
         
         <p>First, we declare our instance variables and constants. Next, we load in our assets. 
-            In this example, we load in graphics for the minion (as part of our minion spritesheet from previous examples) and the 
+            In this example, we load in graphics for the minion (as part of our minion sprite sheet from previous examples) and the 
             platform. We also write our parallel unload calls.</p>
         <p>Though rigid bodies are an abstract representation for behavior, there is an area of effect 
             associated with them called the bounding region. For demonstration purposes, we create a variable, <code>this.mShowBounds</code>, 
@@ -91,7 +91,7 @@
     <figcaption>Code Snippet 4-1: Loading Assets</figcaption>
     </figure>
     <p>In the initialization function, we create our camera as we have done before. We create a minion GameObject and platform GameObject in a similar way as we have done before, this time 
-        we don't keep track of the renderables seperate from the GameObjects.
+        we don't keep track of the renderables separate from the GameObjects.
     </p>
 	<figure>
 	<pre>
@@ -119,7 +119,7 @@
 		</figcaption>
         </figure>
         <p>We continue our initialization by creating our rigid bodies. We create a rigid rectangle with the GameObject's transform and a size for the rigid body, 
-            by passing in the transform when the physics module acts on the RigidShape it also acts on the GameObject. We make the rigid bodies slighty smaller than their 
+            by passing in the transform when the physics module acts on the RigidShape it also acts on the GameObject. We make the rigid bodies slightly smaller than their 
             GameObject because of the empty space around the texture.
              Notice, for the platform, we set a mass of zero. This makes it so that collision with other bodies will not transfer motion (momentum) to this body.</p>
 		<figure>
@@ -199,7 +199,7 @@
         </figure>
 	<p>A call to <code>engine.physics.collideShape()</code> checks if collision occurs with the two RigidShape bounds and will resolve collisions between them. 
         If we were dealing with more than two objects that can possible cross-collide (like balls on a billiard table) that need to be resolved 
-        simulataneously with respect to eachother, we need to have a means of handling collisions on a bigger scale. For this, we create a set or sets 
+        simultaneously with respect to each other, we need to have a means of handling collisions on a bigger scale. For this, we create a set or sets 
         of game objects and use <code>engine.physics.processObjToSet()</code> or <code>engine.physics.processSetToSet()</code> to resolve collisions with one call. 
         The <em>ObjToSet</em> call would handle a single object against a set of objects while <em>SetToSet</em> would check the objects in a set against the objects in another set.</p>
 		

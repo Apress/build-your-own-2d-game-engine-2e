@@ -33,12 +33,12 @@
         
 		<p><strong>Covered Topics</strong>: <a href="#object_types">Object Types</a> • <a href="#scene_object">Scene Object</a> • <a href="#initialization">Initialization</a> • <a href="#game_loop">Game Loop</a></p>
         <p><strong>Demonstrations</strong>: <a href="../Tutorial-Source/index1a.html" target="_blank">Drawing a Renderable</a> • <a href="../Tutorial-Source/index1b.html" target="_blank">Renderable with Motion</a>        </p>
-        <p>Complete source code for all tutorials can be downloaded from <a href="../assets/tutorials.zip">here</a>.</p>
+        <p>Complete source code for all tutorials can be downloaded from <a href="../Tutorial-Source.zip">here</a>.</p>
         
         
 		<hr>
 		<h2><a id="object_types"></a>Object Types</h2>
-		<p> In the GTCS Game Engine, we are concerned with four types of objects: Scene, Camera, Renderables and GameObjects.  Each object type encapsulate different functionality.</p>
+		<p> To begin with the GTCS Game Engine, we are concerned with four types of objects: Scene, Camera, Renderables and GameObjects.  Each object type encapsulate different functionality.</p>
 		<ul>
 		  <li><strong>Scene</strong>: Encapsulates the logic of our game. It is the link that the game engine uses to execute the logic of our code in the form of a runloop. We covered the instantiation in <a href="../tutorial0/tutorial0.html">tutorial 0</a>. In this tutorial, we will cover the implementation.</li>
 			<li><strong>Camera</strong>: This object controls the specifics behind how the rendering engine does its job. Aspect ratio, clipping, view panning and perspective are among the things we can control with the camera.</li>
@@ -50,9 +50,9 @@
 		
 		<hr>
 		<h2><a id="scene_object"></a>Scene Object Structure</h2>
-		<p>The scene is where game loop logic will reside. By overriding the engine's Scene class wth the functionality you want, you will have a runloop. By convention, this class will be defined in a folder located at the <em>./src</em> level, in Tutorial 0 this folder was refered to as <b>your_game_folder</b>. </p>
+		<p>The scene is where you define what happens in your game. By overriding the engine's Scene class with the functionality you want, you will be able to add your game elements to the existing framework and create multiple game levels that . By convention, this class will be defined in a folder located within the <em>src</em> level, in Tutorial 0 this folder was referred to as <b>your_game_folder</b>. </p>
 		<p>The HTML5 engine implements a runloop. When you setup a scene object, you must adhere to a certain structure to make sure the runloop executes as expected. 
-            The structure of a scene currently consists of four parts: initialization, drawing, updating, and moving to the next scene. A skeleton of the functions in a scene object are shown in the following code...</p>
+            The structure of a scene currently consists of five parts: loading, initialization, drawing, updating, and moving to the next scene. A skeleton of the functions in a scene object are shown in the following code...</p>
         <figure>
             <pre>
 
@@ -95,7 +95,7 @@ window.onload = function () {
 			<li>The <strong>constructor</strong>, <strong>window.onload</strong> and <strong>init()</strong> are where initialization takes place.  These functions run only one time each and are where you define your variables and allocate resources.</li>
 			<li>You update the status of your objects in the <strong>update()</strong> function.  Update is part of the runloop and executes 60 times per second.</li>
 			<li>Drawing occurs in the <strong>draw()</strong> function and occurs 60 times per second and always occurs after at least one update call has been made.</li>
-			<li>Changing scenes occurs in the<strong>next()</strong> function.  It is called one time, when you want the game to end or move to a different scene. In either case the resources of this Scene are unloaded.</li>
+			<li>Changing scenes occurs in the <strong>next()</strong> function.  It is called one time, when you want the game to end or move to a different scene. In either case the resources of this Scene are unloaded.</li>
 		</ul>
 		<p>Your scene subclass needs to inherit from the existing Scene object type. You must make sure that the name of this JavaScript file matches the path indicated by your index.html file from <a href="../tutorial0/tutorial0.html">Tutorial 0</a>.</p>
 		
@@ -136,7 +136,7 @@ window.onload = function () {
 		<h4>Camera and Viewport</h4>
 		<p>The <strong>Camera</strong> object defines the viewport and is setup with 3 parameters.  The position, the width and the location/size of the viewport.<br>
 		<ul>
-			<li>The position is identifed with a (X,Y) vector representing the point where the camera is centered. This is in world coordinate space (WC).</li>
+			<li>The position is identified with a (X,Y) vector representing the point where the camera is centered. This is in world coordinate space (WC).</li>
 			<li>The camera width (also in WC) is the second parameter. The viewport is identified relative to the drawing canvas created in <a href="../tutorial0">Tutorial&nbsp;0</a>.</li>
 			<li>The orgX, orgY, width and height give the dimensions and location in pixel coordinate space for the area on the canvas that the viewport will draw to. It is not required that a viewport cover the entire canvas and you could have multiple viewports (cameras) draw to the same canvas.
 				<ul>
@@ -148,10 +148,13 @@ window.onload = function () {
 		<p class="note">[Note: The camera height is not provided. The engine infers the height based on the width and the aspect ratio of the viewport.]		</p>
 		<br>
 		<h4>Renderable</h4>
-		<p>The <strong>Renderable</strong> controls the "look" of objects in our game.  The basic one we create in the above example renders only a solid square. We set its color to red using RGB + Alpha values. We cannot make interesting games if our renderables are limited to making solid rectangles. In future tutorials, we will look at more advanced renderables that can draw textures, animate and respond to lighting effects. The key take away in this tutorial is that a renderable is just for defining the appearance of the object.</p>
+		<p>The <strong>Renderable</strong> controls the "look" of objects in our game.  The basic one we create in the above example renders only a solid square.
+			 We set its color to red using a "color" which is defined by a RGB+Alpha array. We cannot make interesting games if our renderables are limited to making solid rectangles. 
+			 In future tutorials, we will look at more advanced renderables that can draw textures, animate and respond to lighting effects. 
+			 The key take away in this tutorial is that a renderable is just for defining the appearance of the object.</p>
 		<p><code>this.mRenderable = new Renderable();<br>
 	this.mRenderable.setColor([1.0, 0.0, 0.0, 1.0]);</code></p>
-		<p>These lines will allocate a new renderable object and set it's look (in this case, color). The parameters for <strong>setColor()</strong> is a vector with RGB+Alpha values ranging from 0.0 to 1.0.</p>
+		<p>These lines will allocate a new renderable object and set it's look (in this case, color). The parameters for <strong>setColor()</strong> is a vector with R,G,B,Alpha values ranging from 0.0 to 1.0.</p>
 		<br>
 		<h4>GameObject</h4>
 		<p>The <strong>GameObject</strong> is created with a reference to our renderable. We give the GameObject it's size and location in the viewport. Once the renderable is fully configured and incorporated into our GameObject, we will keep the reference in case we need to access it directly to change the appearance. Often, you will subclass GameObject to  encapsulate it's renderable upon allocation.</p>
@@ -168,7 +171,7 @@ window.onload = function () {
 		
 		<h3>Updating</h3>
 		<p>The <b>update()</b> function is called by the engine 60 times a second. This is where you will check for user interaction 
-            (ie: keyboard presses and mouse clicks), check for collisions among GameObjects, update object locations etc. 
+            (i.e. keyboard presses and mouse clicks), check for collisions among GameObjects, update object locations etc. 
             If another process or calculation delays execution, the game engine will compensate for the delay by looking at the 
             current time and executing the update routine multiple times until updates have caught up with current time.</p>
 
@@ -185,7 +188,7 @@ window.onload = function () {
         </figure>
 
 		<p>In this example, we want our GameObject to move left across our game screen and then jump back to its starting position. 
-            We have an if statements that determine when the GameObject hits the left edge. Note that we directly manlipulate the transformation of the GameObject, decreasing its X position each update.
+            We have an if statements that determine when the GameObject hits the left edge. Note that we directly manipulate the transformation of the GameObject, decreasing its X position each update.
 		<h3>Drawing</h3>
 		<p>The <b>draw()</b> function is called after the update cycle is complete.  On an unencumbered system, this should be 60 times a second.  
             If there are delays, multiple updates can occur before the draw routine is called.</p>

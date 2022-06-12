@@ -32,7 +32,7 @@
 		<p>In this tutorial, we are going to look at how to enhance the look of our game scene using lighting effects. We are going to see how to create different types of light sources and create renderables that react to the lights. We will also look at a renderable that can react to lighting in a way that gives more depth to 2D graphics.</p>
 		<p><strong>Covered Topics</strong>: <a href="#illumination">Illumination</a> • <a href="#lightrenderable">Light Renderable Object</a> • <a href="#normal">Normal Maps</a></p>
         <p><strong>Demonstrations</strong>: <a href="../Tutorial-Source/index5a.html" target="_blank">Light Renderables</a> • <a href="../Tutorial-Source/index5b.html" target="_blank">Using Normal Maps</a></p>
-        <p>Complete source code for all tutorials can be downloaded from <a href="../assets/tutorials.zip">here</a>.</p>
+        <p>Complete source code for all tutorials can be downloaded from <a href="../Tutorial-Source.zip">here</a>.</p>
         
 		<p>
 		  </p>
@@ -43,7 +43,7 @@
 		<h2><a id="illumination"></a>Illumination</h2>
 		<p>In Tutorial 2, we have seen the use of ambient lighting to illuminate our renderables. The ambient lighting sources is controlled with the
              <b>setGlobalAmbientIntensity()</b> function. This source is always active and it adjusts the lighting on all renderables in our scene.
-              If we want to disable the light, we set the intensity to 0. The lighting affect is analagous to increasing the backlight intensity on your cell phone or laptop.
+              If we want to disable the light, we set the intensity to 0. The lighting affect is analogous to increasing the backlight intensity on your cell phone or laptop.
                Everything gets &quot;brightened&quot; by the same amount.</p>
 		<p>The game engine supports 3 other types of light sources.</p>
 		<ul>
@@ -186,7 +186,7 @@
     <p>In Code Snippet 5-2, we first create a new LightRenderable for the background and set it fill the camera, we don't pass this LightRenderable to a GameObject because the background 
 		does not need to interact with other objects. The next new segment is instantiating the Light and setting the properties relevant to a point light.
 		Then we add our Light to the two LightRenderables. Notice in the last line, we set the 
-		ambient light to 0.5 intesnsity. Ambient light affects all game objects regardless of what type of renderable. 
+		ambient light to 0.5 intensity. Ambient light affects all game objects regardless of what type of renderable. 
         We set this low value to dim our scene and to make the point light stand out. </p>
     <p>Next, we draw.</p>
     
