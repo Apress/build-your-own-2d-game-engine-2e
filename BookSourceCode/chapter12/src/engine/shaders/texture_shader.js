@@ -11,6 +11,17 @@ import * as vertexBuffer from "../core/vertex_buffer.js";
 import  SimpleShader from "./simple_shader.js";
 
 class TextureShader extends SimpleShader {
+    /**
+     * @classdesc Wraps over GLSL texture shader, supports working with the entire file texture
+     * <p> Found in Chapter 5, page 197 of the textbook</p>
+     * Example:
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter5/5.1.texture_shaders/index.html 5.1 Texture Shader}
+     * @extends SimpleShader
+     * @constructor
+     * @param {string} vertexShaderPath - path to the vertex shader file
+     * @param {string} fragmentShaderPath - path to the fragment shader path
+     * @returns {TextureShader} a new TextureShader instance
+     */
     constructor(vertexShaderPath, fragmentShaderPath) {
         // Call super class constructor
         super(vertexShaderPath, fragmentShaderPath);  // call SimpleShader constructor
@@ -25,6 +36,14 @@ class TextureShader extends SimpleShader {
     }
 
     // Overriding the activation of the shader for rendering
+
+    /**
+     * Overrides the activation of this shader for rending
+     * @method
+     * @param {vec4} pixelColor - [R,G,B,A] color array for the pixels
+     * @param {mat4} trsMatrix - translation, rotation, and scaling matrix for the object being rendered
+     * @param {mat4} cameraMatrix - translation, rotation, and scaling matrix for the Camera
+     */
     activate(pixelColor, trsMatrix, cameraMatrix) {
         // first call the super class' activate
         super.activate(pixelColor, trsMatrix, cameraMatrix);
@@ -38,6 +57,7 @@ class TextureShader extends SimpleShader {
         // bind uSampler to texture 0
         gl.uniform1i(this.mSamplerRef, 0);  // texture.activateTexture() binds to Texture0
     }
+
 
     _getTexCoordBuffer() {
         return vertexBuffer.getTexCoord();

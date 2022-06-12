@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: game_objects/tiled_game_object.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: game_objects/tiled_game_object.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* File: tiled_game_objects.js 
+ *
+ * Infinitely tiled, assume X/Y alignments
+ */
+
+"use strict";  // Operate in Strict mode such that variables must be declared before used!
+
+import GameObject from "./game_object.js";
+
+class TiledGameObject extends GameObject {
+    /**
+     * @classdesc Support for repeating renderable tiles, infinitely tileable.
+     * Assumes X/Y alignments.
+     * &lt;p>Found in Chapter 11, page 674 of the textbook  &lt;/p>
+     * Example:
+     * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter11/11.1.tiled_objects/index.html 11.1 Tiled Objects}
+     * @constructor
+     * @extends GameObject
+     * @param {Renderable} renderableObj - the Renderable associated with this TiledGameObject
+     * @returns {TiledGameObject} a new TileGameObject instance
+     */
+    constructor(renderableObj) {
+        super(renderableObj);
+
+        this.mShouldTile = true; // can switch this off if desired
+    }
+
+    /**
+     * Set the tiling property to true or false
+     * @method
+     * @param {boolean} t - the tiling state
+     */
+    setIsTiled(t) {
+        this.mShouldTile = t;
+    }
+    /**
+     * Returns whether or not tiling is active for this TiledGameObject
+     * @method
+     * @returns {boolean} mShouldTile - true if tiling is active
+     */
+    shouldTile() {
+        return this.mShouldTile;
+    }
+
+    /**
+     * Draws a grid of tiles filling every availble space within the Camera
+     * @method
+     * @param {Camera} aCamera - the Camera to draw to 
+     */
+    _drawTile(aCamera) {
+        // Step A: Compute the positions and dimensions of tiling object.
+        let xf = this.getXform();
+        let w = xf.getWidth();
+        let h = xf.getHeight();
+        let pos = xf.getPosition();
+        let left = pos[0] - (w / 2);
+        let right = left + w;
+        let top = pos[1] + (h / 2);
+        let bottom = top - h;
+
+        // Step B: Get the world positions and dimensions of the drawing camera.
+        let wcPos = aCamera.getWCCenter();
+        let wcLeft = wcPos[0] - (aCamera.getWCWidth() / 2);
+        let wcRight = wcLeft + aCamera.getWCWidth();
+        let wcBottom = wcPos[1] - (aCamera.getWCHeight() / 2);
+        let wcTop = wcBottom + aCamera.getWCHeight();
+
+        // Step C: Determine the offset to the camera window's lower left corner.
+        let dx = 0, dy = 0; // offset to the lower left corner
+        // left/right boundary?
+        if (right &lt; wcLeft) { // left of WC left
+            dx = Math.ceil((wcLeft - right) / w) * w;
+        } else {
+            if (left > wcLeft) { // not touching the left side
+                dx = -Math.ceil((left - wcLeft) / w) * w;
+            }
+        }
+        // top/bottom boundary
+        if (top &lt; wcBottom) { // Lower than the WC bottom
+            dy = Math.ceil((wcBottom - top) / h) * h;
+        } else {
+            if (bottom > wcBottom) {  // not touching the bottom
+                dy = -Math.ceil((bottom - wcBottom) / h) * h;
+            }
+        }
+
+        // Step D: Save the original position of the tiling object.
+        let sX = pos[0];
+        let sY = pos[1];
+
+        // Step E: Offset tiling object and modify the related position variables.
+        xf.incXPosBy(dx);
+        xf.incYPosBy(dy);
+        right = pos[0] + (w / 2);
+        top = pos[1] + (h / 2);
+
+        // Step F: Determine the number of times to tile in the x and y directions.
+        let nx = 1, ny = 1; // number of times to draw in the x and y directions
+        nx = Math.ceil((wcRight - right) / w);
+        ny = Math.ceil((wcTop - top) / h);
+
+        // Step G: Loop through each location to draw a tile
+        let cx = nx;
+        let xPos = pos[0];
+        while (ny >= 0) {
+            cx = nx;
+            pos[0] = xPos;
+            while (cx >= 0) {
+                this.mRenderComponent.draw(aCamera);
+                xf.incXPosBy(w);
+                --cx;
+            }
+            xf.incYPosBy(h);
+            --ny;
+        }
+
+        // Step H: Reset the tiling object to its original position.
+        pos[0] = sX;
+        pos[1] = sY;
+    }
+
+    /**
+     * Draws this TiledGameObject if visible and executes tiling if it should tile
+     * @method
+     * @param {Camera} aCamera - the Camera to draw to
+     */
+    draw(aCamera) {
+        if (this.isVisible() &amp;&amp; (this.mDrawRenderable)) {
+            if (this.shouldTile()) {
+                // find out where we should be drawing   
+                this._drawTile(aCamera);
+            } else {
+                this.mRenderComponent.draw(aCamera);
+            }
+        }
+    }
+}
+
+export default TiledGameObject;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-gl.html">gl</a></li><li><a href="module-index.html">index</a></li><li><a href="module-input.html">input</a></li><li><a href="module-layer.html">layer</a></li><li><a href="module-loop.html">loop</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-shader_resources.html">shader_resources</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-vertex_buffer.html">vertex_buffer</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="IllumRenderable.html">IllumRenderable</a></li><li><a href="IllumShader.html">IllumShader</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightRenderable.html">LightRenderable</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LightShader.html">LightShader</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="LineShader.html">LineShader</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Particle.html">Particle</a></li><li><a href="ParticleEmitter.html">ParticleEmitter</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="ParticleSet.html">ParticleSet</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="ShaderLightAt.html">ShaderLightAt</a></li><li><a href="ShaderMaterial.html">ShaderMaterial</a></li><li><a href="ShadowCaster.html">ShadowCaster</a></li><li><a href="ShadowCasterShader.html">ShadowCasterShader</a></li><li><a href="ShadowReceiver.html">ShadowReceiver</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SimpleShader.html">SimpleShader</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="SpriteShader.html">SpriteShader</a></li><li><a href="texture.TextureInfo.html">TextureInfo</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TextureShader.html">TextureShader</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu Jun 02 2022 16:09:01 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

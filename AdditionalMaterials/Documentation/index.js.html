@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: index.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: index.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * File: index.js
+ *  
+ * serves as central export of the entire engine
+ * client programs can simply import this file 
+ * for all symbols defined in the engine
+ * 
+ */
+"use strict";
+
+// resources
+import * as audio from "./resources/audio.js";
+import * as text from "./resources/text.js";
+import * as xml from "./resources/xml.js";
+import * as texture from "./resources/texture.js";
+import * as font from "./resources/font.js";
+import * as defaultResources from "./resources/default_resources.js";
+
+// components
+import * as input from "./components/input.js";
+import * as physics from "./components/physics.js";
+import * as particleSystem from "./components/particle_system.js";
+import * as layer from "./components/layer.js";
+
+// general utilities
+import Scene from "./scene.js";
+import Transform from "./utils/transform.js";
+import BoundingBox from "./utils/bounding_box.js";
+import { eBoundCollideStatus } from "./utils/bounding_box.js";
+import Lerp from "./utils/lerp.js";
+import LerpVec2 from "./utils/lerp_vec2.js";
+import Oscillate from "./utils/oscillate.js";
+import Shake from "./utils/shake.js";
+import ShakeVec2 from "./utils/shake_vec2.js";
+import Material from "./material.js";
+
+// camera and related supports
+import Camera from "./cameras/camera.js";
+
+// renderables 
+import Renderable from "./renderables/renderable.js";
+import TextureRenderable from "./renderables/texture_renderable.js";
+import SpriteRenderable from "./renderables/sprite_renderable.js";
+import SpriteAnimateRenderable from "./renderables/sprite_animate_renderable.js";
+import FontRenderable from "./renderables/font_renderable.js";
+import LineRenderable from "./renderables/line_renderable.js";
+import LightRenderable from "./renderables/light_renderable.js";
+import IllumRenderable from "./renderables/illum_renderable.js";
+import { eTexCoordArrayIndex } from "./renderables/sprite_renderable.js";
+import { eAnimationType } from "./renderables/sprite_animate_renderable.js";
+
+// game objects
+import GameObject from "./game_objects/game_object.js";
+import GameObjectSet from "./game_objects/game_object_set.js";
+import TiledGameObject from "./game_objects/tiled_game_object.js";
+import ParallaxGameObject from "./game_objects/parallax_game_object.js";
+
+// light and lightSet
+import Light from "./lights/light.js";
+import LightSet from "./lights/light_set.js";
+import { eLightType } from "./lights/light.js";
+
+// Shadow support
+import ShadowCaster from "./shadows/shadow_caster.js";
+import ShadowReceiver from "./shadows/shadow_receiver.js";
+
+// Rigid Shapes and Collision Info
+import RigidShape from "./rigid_shapes/rigid_shape.js";
+import RigidCircle from "./rigid_shapes/rigid_circle.js";
+import RigidRectangle from "./rigid_shapes/rigid_rectangle.js";
+import CollisionInfo from "./rigid_shapes/collision_info.js";
+
+// particles
+import Particle from "./particles/particle.js";
+import ParticleSet from "./particles/particle_set.js";
+import ParticleEmitter from "./particles/particle_emitter.js";
+
+// local to this file only
+import * as glSys from "./core/gl.js";
+import * as vertexBuffer from "./core/vertex_buffer.js";
+import * as shaderResources from "./core/shader_resources.js";
+import * as loop from "./core/loop.js";
+
+/**
+ * Serves as central export of the entire engine,
+ * client programs can simply import this file 
+ * for all symbols defined in the engine
+ * 
+ * &lt;p>Found in Chapter 3, page 69 of the textbook &lt;/p>
+ * Example:
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter3/3.1.renderable_objects/index.html 3.1 Renderable Objects}
+ * @module index
+ */
+
+// general engine utilities
+/**
+ * Initializes all the parts of the engine
+ * @static
+ * @param {string} htmlCanvasID - name of the html canvas element
+ */
+function init(htmlCanvasID) {
+    glSys.init(htmlCanvasID);
+    vertexBuffer.init();
+    input.init(htmlCanvasID);
+    audio.init();
+    shaderResources.init();
+    defaultResources.init();
+    layer.init();
+}
+
+/**
+ * Calls clean up functions for all parts of the engine
+ * @static
+ */
+function cleanUp() {
+    layer.cleanUp();
+    loop.cleanUp();
+    shaderResources.cleanUp();
+    defaultResources.cleanUp();
+    audio.cleanUp();
+    input.cleanUp();
+    vertexBuffer.cleanUp();
+    glSys.cleanUp();
+}
+
+/**
+ * Clears the canvas and set it to a single color
+ * @static
+ * @param {vec4} color - [R,G,B,A] color array
+ */
+function clearCanvas(color) {
+    let gl = glSys.get();
+    gl.clearColor(color[0], color[1], color[2], color[3]);  // set the color to be cleared
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.STENCIL_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        // clear to the color, stencil bit, and depth buffer bits
+}
+
+
+export default {
+    // resource support
+    audio, text, xml, texture, font, defaultResources,
+
+    // engine components
+    input, particleSystem, layer,
+
+    // general utils 
+    Lerp, LerpVec2, Oscillate, Shake, ShakeVec2,
+
+    // Util classes
+    Camera, Scene, Transform, BoundingBox, Material,
+    
+    // Renderables
+    Renderable, TextureRenderable, SpriteRenderable, SpriteAnimateRenderable, 
+    FontRenderable, LineRenderable, LightRenderable, IllumRenderable,
+
+    // Game Objects
+    GameObject, GameObjectSet,TiledGameObject, ParallaxGameObject,
+
+    // Lights
+    Light, LightSet,
+
+    // Shadows
+    ShadowCaster, ShadowReceiver,
+
+    // Physics and RigidShapes
+    physics, RigidShape, RigidCircle, RigidRectangle, CollisionInfo,
+
+    // Particle support
+    Particle, ParticleSet, ParticleEmitter,
+
+    // constants
+    eTexCoordArrayIndex, eAnimationType, eBoundCollideStatus, eLightType,
+
+    // functions
+    init, cleanUp, clearCanvas
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-gl.html">gl</a></li><li><a href="module-index.html">index</a></li><li><a href="module-input.html">input</a></li><li><a href="module-layer.html">layer</a></li><li><a href="module-loop.html">loop</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-shader_resources.html">shader_resources</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-vertex_buffer.html">vertex_buffer</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="IllumRenderable.html">IllumRenderable</a></li><li><a href="IllumShader.html">IllumShader</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightRenderable.html">LightRenderable</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LightShader.html">LightShader</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="LineShader.html">LineShader</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Particle.html">Particle</a></li><li><a href="ParticleEmitter.html">ParticleEmitter</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="ParticleSet.html">ParticleSet</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="ShaderLightAt.html">ShaderLightAt</a></li><li><a href="ShaderMaterial.html">ShaderMaterial</a></li><li><a href="ShadowCaster.html">ShadowCaster</a></li><li><a href="ShadowCasterShader.html">ShadowCasterShader</a></li><li><a href="ShadowReceiver.html">ShadowReceiver</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SimpleShader.html">SimpleShader</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="SpriteShader.html">SpriteShader</a></li><li><a href="texture.TextureInfo.html">TextureInfo</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TextureShader.html">TextureShader</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu Jun 02 2022 16:09:01 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

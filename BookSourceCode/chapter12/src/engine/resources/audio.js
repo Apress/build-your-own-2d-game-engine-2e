@@ -25,11 +25,32 @@ let mMasterGain = null;     // overall/master volume
 
 let kDefaultInitGain = 0.1;
 
+/**
+ * logic for loading audio files into the resource_map and
+ * provides control of the loaded audio 
+ * 
+ * <p><strong>Exports the unload() and has() functions from </strong> 
+ * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/AdditionalMaterials/Documentation/module-resource_map.html resource map}</p>
+ * 
+ * <p>Found in Chapter 4, page 172 of the textbook </p>
+ * Example:
+ * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter4/4.6.audio_support/index.html 4.6 Audio Support}
+ * @module audio
+ */
+
+/**
+ * Closes the support for audio 
+ * @static
+ */
 function cleanUp() {
     mAudioContext.close();
     mAudioContext = null;
 }
 
+/**
+ * Initialize the web audio system support
+ * @static
+ */
 function init() {
     try {
         let AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -64,10 +85,22 @@ function parseResource(data) {
     return mAudioContext.decodeAudioData(data);
 }
 
+/**
+ * Load an audio file into the resource map
+ * @static
+ * @param {string} path - the path to the audio file 
+ * @returns {}
+ */
 function load(path) {
     return map.loadDecodeParse(path, decodeResource, parseResource);
 }
 
+/**
+ * Play an audio cue
+ * @static
+ * @param {string} path - the path to the audio file 
+ * @param {float} volume - the volume at which to play the audio
+ */
 function playCue(path, volume) {
     let source = mAudioContext.createBufferSource();
     source.buffer = map.get(path);
@@ -78,6 +111,12 @@ function playCue(path, volume) {
     mCueGain.gain.value = volume;
 }
 
+/**
+ * Begins playing background audio file
+ * @static
+ * @param {string} path - path to the audio file
+ * @param {float} volume - the volume 
+ */
 function playBackground(path, volume) {
     if (has(path)) {
         stopBackground();
@@ -93,11 +132,10 @@ function playBackground(path, volume) {
 }
 
 /**
-     * Set the volume of the background audio clip
-     * @memberOf engine.audio
-     * @param {float} volume
-     * @returns {void}
-     */
+ * Set the volume of the background audio clip
+ * @static
+ * @param {float} volume - the new background volume
+ */
 function setBackgroundVolume(volume) {
     if (mBackgroundGain !== null) {
         mBackgroundGain.gain.value = volume;
@@ -106,9 +144,8 @@ function setBackgroundVolume(volume) {
 
 /**
  * Increment the volume of the background audio clip
- * @memberOf engine.audio
- * @param {float} increment
- * @returns {void}
+ * @static
+ * @param {float} increment - value to add to background volume
  */
 function  incBackgroundVolume(increment) {
     if (mBackgroundGain !== null) {
@@ -123,9 +160,8 @@ function  incBackgroundVolume(increment) {
 
 /**
  * Set the Master volume
- * @memberOf engine.audio
- * @param {float} volume
- * @returns {void}
+ * @static
+ * @param {float} volume - the new master volume
  */
 function  setMasterVolume(volume) {
     if (mMasterGain !== null) {
@@ -135,9 +171,8 @@ function  setMasterVolume(volume) {
 
 /**
  * Increment the Master volume
- * @memberOf engine.audio
- * @param {float} increment
- * @returns {void}
+ * @static
+ * @param {float} increment - the value to add to the volume
  */
 function  incMasterVolume(increment) {
     if (mMasterGain !== null) {
@@ -150,6 +185,10 @@ function  incMasterVolume(increment) {
     }
 }
 
+/**
+ * Stop playing background music and clear the variable
+ * @static
+ */
 function stopBackground() {
     if (mBackgroundAudio !== null) {
         mBackgroundAudio.stop(0);
@@ -157,6 +196,11 @@ function stopBackground() {
     }
 }
 
+/**
+ * Returns if there is background audio playing
+ * @static
+ * @returns {boolean} true if there is background audio
+ */
 function isBackgroundPlaying() {
     return (mBackgroundAudio !== null);
 }

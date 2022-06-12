@@ -12,6 +12,17 @@ import { eLightType } from "../lights/light.js";
 // shadowCaster:    must be GameObject referencing at least a LightRenderable
 // shadowReceiver:  must be GameObject referencing at least a SpriteRenderable
 class ShadowCaster {
+
+    /**
+     * @classdesc Renders a colored image representing the shadowCaster on the reciever
+     * <p>Found in Chapter 8, page 501 of the textbook </p>
+     * Example:
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter8/8.7.shadow_shaders/index.html 8.7 Shadow Shaders}
+     * @constructor
+     * @param {GameObject} shadowCaster - the object casting the shadow, must contain at least a LightRenderable
+     * @param {GameObject} shadowReceiver - the object receiving the shadow, must contain at least a SpriteRenderable 
+     * @returns {ShadowCaster} a new ShadowCaster instance
+     */
     constructor(shadowCaster, shadowReceiver) {
         this.mShadowCaster = shadowCaster;
         this.mShadowReceiver = shadowReceiver;
@@ -25,6 +36,11 @@ class ShadowCaster {
         this.kReceiverDistanceFudge = 0.6; // Factor to reduce the projected caster geometry size
     }
 
+    /**
+     * Set the color of the shadow
+     * @method
+     * @param {vec4} c - [R,G,B,A] color array 
+     */
     setShadowColor(c) {
         this.mShadowColor = c;
     }
@@ -98,6 +114,12 @@ class ShadowCaster {
         return true;
     }
 
+    /**
+     * Draw this ShadowCaster to the Camera.
+     * Interacts with any overlapping Light
+     * @method
+     * @param {Camera} aCamera - the Camera to draw to 
+     */
     draw(aCamera) {
         let casterRenderable = this.mShadowCaster.getRenderable();
         // Step A: save caster xform, shader, and color. and, sets caster to shadow color

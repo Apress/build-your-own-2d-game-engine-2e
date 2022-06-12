@@ -1,0 +1,323 @@
+
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link type="text/css" rel="stylesheet" href="../styles/prettify-tomorrow.css">
+        <link type="text/css" rel="stylesheet" href="../styles/jsdoc-default.css">
+        <style>p,h1,h2,h3,h4,td,ul,figure,pre,hr,ol{
+            margin: 5px 50px;
+        } </style>
+        <style> mark{
+            background-color: aquamarine;
+        }</style>
+        <style> figure{
+            background-color: beige;
+            border: 1px darkslategrey dashed;
+        }
+        </style>
+		<title>Tutorial 2</title>
+	</head>
+
+	<body>
+    	<div id="main-content">
+		<h1> GTCS Game Engine: <br>
+		Tutorial 2: Resources &amp; User&nbsp;Input</h1>
+		<p ALIgn="center"><a href="../tutorial1/tutorial1.html">Tutorial 1</a> &lt;-- Tutorial 2 --&gt; <a href="../tutorial3/tutorial3.html">Tutorial 3</a><br>
+		  <a href="../index.html">Tutorial Homepage</a><br></p>
+		
+		
+		<hr>
+		<h2>Introduction</h2>
+		<p>In Tutorial 1, we looked at creating the basic structure for our game scene. We created a camera object and a game object with a simple renderable. 
+            In this tutorial, we will look at  resource management, a more advanced renderable type and user input.</p>
+        
+		<p><strong>Covered Topics</strong>: <a href="#assets">Loading Resources</a> • <a href="#keyboard">Keyboard input</a> • <a href="#audio_mouse">Audio & Mouse</a> • <a href="#text">Text</a></p>
+        <p><strong>Demonstrations</strong>: <a href="../Tutorial-Source/index2a.html" target="_blank">Drawing with a Texture</a> • <a href="../Tutorial-Source/index2b.html" target="_blank">Keyboard</a> • <a href="../tutorial_source/index2c.html" target="_blank">Audio & Mouse</a> • <a href="../tutorial_source/index2d.html" target="_blank">Text Renderables</a></p>
+        <p>Complete source code for all tutorials can be downloaded from <a href="../Tutorial-Source.zip">here</a>.</p>
+		
+		
+		<hr>
+		<h2><a id="assets"></a>Loading Resources</h2>
+		<p>Images, audio, and other file types are the external resources that your game will use. We will add the <b>load()</b> function to the Scene subclass in order to make requests to the engine to load files in the
+            by providing the file paths where the files can be located. The engine will asynchronously load the files into RAM and provide a means of accessing them so we can start using them. 
+            The <b>load()</b> function is always called prior to <b>init()</b> and you are guaranteed that the resources have fully loaded when <b>init()</b> is called. 
+            Once the resources are loaded, different classes of objects will retrieve resources as needed by providing the string path to the resource. 
+            These variables identify each unique resource.</p>
+		<p>As a matter of convention, the game engine has a folder in it's hierarchy called &quot;assets&quot;. 
+            While you can technically use any folder to store resources (as long as the path is properly referenced in the loading and unloading), 
+            we will use this folder to store our resource files. This will keep things consistent and organized.</p>
+		<p class="note">[Note: The assets folder is also used by the game engine for it's own assets such as default fonts. Do not delete, move or modify the existing files or hierarchy.]</p>
+
+		<h3>Constructor</h3>
+		<p>To facilitate the loading of resources, we create variables to identify the file paths for our resources and provide a 
+            consistent way for referencing the resource. By convention, we store resource files in the "assets" directory of our game engine file hierarchy. 
+            The game engine supports PNG image files, WAV audio files and text files. We are going to load a 64x64 pixel image to use as a texture for drawing our game element.</p>
+        
+		<p class="note">[Note: When creating resources for texture maps, the dimensions must be powers of 2. 
+            Examples of usable image sizes include 64x64, 512x2048 or 16x128.]</p>
+<figure><pre>    constructor() {
+        super();
+        this.mCamera = null;
+        this.mGameObj = null;
+        this.mRenderableBox = null;
+	<b>this.kTexture = "assets/minion_portal.png";</b>
+    }
+</pre>
+		<figcaption class="codecaption">Code snippet 2-1: Scene constructor</figcaption>
+        </figure>
+
+		<p>The code above declares three instance variables that will be used in our scene as well as a 
+            <code>string</code> constant that identifies the path to an image resource file.</p>
+		
+		<h3>load() and unload()</h3>
+		<p>The <b>load()</b> function will queue our texture for loading by using the <code>engine.
+            texture.load()</code> function. There is also <code>engine.audio.load()</code> function for loading audio files, <code>engine.xml.load()</code> function for loading xmls files,   and a 
+			<code>engine.font.load()</code> function for loading font files. The files we identify will load asynchronously, so we can not use a resource that is not loaded. 
+			</p>
+
+		<figure><pre>    load() {
+	<b>engine.textures.load(this.kTexture)</b>
+    }
+
+    unload() {
+	<b>engine.textures.unload(this.kTexture);</b>
+    }</pre>
+		<figcaption class="codecaption">Code snippet 2-2: Load and Unload</figcaption>
+        </figure>
+
+		<h3>initialization()</h3>
+		<p>The <b>initialization()</b> function is mostly the same as it was in the previous tutorial. Now we create a 
+            <strong>TextureRenderable</strong> instead. This new renderable has all of the same functionality as the Renderable but allows 
+            us to utilize a bitmap image instead of using a solid color.</p>
+
+<figure><pre>   init() {
+	this.mCamera = new engine.Camera(
+		vec2.fromValues(50, 50), // position of the camera
+		100,                        // width of camera
+		[0, 0, 600, 600],         // viewport (orgX, orgY, width, height)
+		2
+	);
+	this.mCamera.setBackgroundColor([0.8,0.8,0.8,1]);
+
+	<b>this.mRenderable = new TextureRenderable(this.kTexture);</b>
+
+	this.mGameObj = new GameObject(this.mRenderable);
+	this.mGameObj.getXform().setSize(20,20);
+	this.mGameObj.getXform().setPosition(70,70);
+    }</pre>
+		<figcaption class="codecaption">Code snippet 2-3: init() with texture</figcaption>
+        </figure>
+
+		<p>The GameObject is created just as before, but now, we have a reference to our new texture-based renderable. 
+            We also removed the behavior code for the GameObject. We do this so that  
+            the GameObject does not move independently. We will soon be adding code to move the GameObject with keyboard controls. 
+            Without changing anything else in our code, viewing this in a web browser will give you results that you can view 
+            <a href="../Tutorial-Source/index2a.html" target="_blank">here</a>. The image looks darker than expected because the Scene needs lighting, which we will add shortly. 
+           </p><figure><img src="./tutorial2a-capture.PNG" width="519" height="417" alt=""/>
+		<figcaption>Figure 2-1: TextureRenderable</figcaption>
+        </figure></p>
+        
+        
+    <hr>
+    <h2><a id="keyboard"></a>Keyboard Input</h2>
+        <p>Tracking user events involves polling for the status of keys and the mouse using a number of functions provided by input module. 
+            To find the state of a particular key, we use <code>engine.input.isKeyPressed()</code>. To find out if the mouse button is pressed, 
+            we use <code>engine.input.isButtonPressed()</code>. In this example, we control movement of our TextureRenderable with the keyboard.</p>
+        
+	<figure><pre>
+    update() {
+	
+	<b>if(engine.input.isKeyPressed(engine.input.keys.A)){
+		this.mGameObj.getXform().incXPosBy(-0.5);
+	}
+	if(engine.input.isKeyPressed(engine.input.keys.D)){
+		this.mGameObj.getXform().incXPosBy(0.5);
+	}
+	if(engine.input.isKeyClicked(engine.input.keys.Q)){
+		this.next();
+	}</b>
+	this.mGameObj.update();
+    }
+
+
+</pre>
+		<figcaption class="codecaption">Code snippet 2-4: Update with user input</figcaption>
+        </figure>
+        <p>Now, pressing on the 'A' key will move the GameObject to the left. Pressing the 'D' key moves the GameObject to the right. 
+            When the 'Q' key is pressed, keyboard input is no longer processed by the game and motion is stopped. After <code>this.next()</code> is called, 
+            the game loop stops and the <code>unload()</code> function is called, clearing all resources from memory.</p>
+        <p>Test the results <a href="../Tutorial-Source/index2b.html" target="_blank">here</a>.</p>
+        <p class="note">[Note: To start a new scene you can change the <b>next()</b> method so that after the call to super a new instance of a Scene subclass is started. 
+			This is how you can implement a game with multiple levels.]</p>
+        
+        
+	<hr>
+    <h2><a id="audio_mouse"></a>Audio &amp; Mouse Input</h2>
+    <p>Audio implementation is similar to images, consisting of the following four steps:</p>
+        <ol>
+        	<li>Create a string variable to refer to the resource and identify its file location</li>
+            <li>Request the engine to load the resource in load()</li>
+            <li>Use the audio</li>
+            <li>Free the resource when it is no longer needed in unload()</li>
+		</ol>
+        
+        <figure>
+		<pre>
+    constructor() {
+	super();
+	this.mCamera = null;
+	this.mGameObj = null;
+	this.mRenderable = null;
+	this.kTexture = "assets/minion_portal.png";<b>
+	this.kGameBGSong = "assets/BGClip.mp3";
+	this.kGameCueSound = "assets/BlueLevel_Cue.wav";</b>
+    }
+		
+    load() {
+	engine.texture.load(this.kTexture);<b>
+	engine.audio.load(this.kGameBGSong);
+	engine.audio.load(this.kGameCueSound);</b>
+    }
+		
+    unload() {
+	engine.texture.unload(this.kTexture);<b>
+	engine.audio.unload(this.kGameBGSong);
+	engine.audio.unload(this.kGameCueSound);</b>
+    }	</pre>
+		<figcaption class="codecaption">Code snippet 2-5: Audio Scene constructor, load & unload</figcaption>
+        </figure>
+        
+    <p>To play audio, we use two functions, <code>engine.audio.playBackground()</code> and <code>engine.audio.playCue()</code>. 
+        The <strong>playBackground()</strong> function allows you to play a sound clip and when the end of the clip is reached, it will loop back to the beginning. 
+        This continuous play option works well for background music. The <strong>playCue()</strong> function plays once and stops when the end of the clip is reached. 
+        This is used for quick sound effects like collisions or scoring achievements.</p>
+
+	<figure><pre>
+    update() {
+	if(engine.input.isKeyPressed(engine.input.keys.A)){
+		this.mGameObj.getXform().incXPosBy(-0.5);
+	}
+	if(engine.input.isKeyPressed(engine.input.keys.D)){
+		this.mGameObj.getXform().incXPosBy(0.5);
+	}
+	if(engine.input.isKeyClicked(engine.input.keys.Q)){
+		this.next();
+	}
+	this.mGameObj.update();<b>
+	
+	if(engine.input.isKeyClicked(engine.input.keys.P)){
+		if(engine.audio.isBackgroundPlaying()){
+			engine.audio.stopBackground();
+		}else{
+			engine.audio.playBackground(this.kGameBGSong,0.5);
+		}
+	}
+	if(engine.input.isButtonClicked(engine.input.eMouseButton.eLeft)){
+		engine.audio.playCue(this.kGameCueSound,0.5);
+	}</b>
+    }
+
+
+	</pre>
+		<figcaption class="codecaption">Code snippet 2-6: Update with audio controls</figcaption>
+        </figure>
+
+    <p>In this example, clicking the mouse button will trigger our cue audio to play. If the 'P' key is clicked, 
+        we use <code>isBackgroundAudioPlaying()</code> to determine which way to toggle the playing of the background audio. Test the results <a href="../Tutorial-Source/index2c.html" target="_blank">here</a>.</p>
+        <p class="note">[Note: The mouse input will only respond if the mouse is clicked while hovering over the WebGL canvas in the browser.]</p>
+        
+        
+	<hr>
+    <h2><a id="text"></a>Text</h2>
+        <p>To create text, we are going to use a special kind of TextureRenderable called a <b>FontRenderable</b>. 
+            It uses a texture that has all the characters of a font and will copy the appropriate portions of the texture to the screen based on a string value we provide. 
+            Several font textures are automatically loaded by the engine and are available to us.</p>
+		<p>First we declare our new variable for the text we will display.</p>
+        
+		<figure>
+		<pre>    constructor() {
+	super();
+	this.mCamera = null;
+	this.mRenderable = null;
+	this.mGameObject = null;
+	<b>this.mMessage = null;</b>
+    
+	this.kTexture = "assets/minion_portal.png";
+	this.kGameSong = "assets/BGClip.mp3";
+	this.kGameCueSound = &quot;assets/BlueLevel_cue.wav&quot;;
+    }</pre>
+		<figcaption class="codecaption">Code snippet 2-7: Scene constructor</figcaption>
+        </figure>
+
+		<p>We initialize the variable by allocating a new FontRenderable instance where we can set its initial text during creation.
+             The code below sets the color, size and position of the text. It uses the same functions that we have used for other renderables.
+              We can change the text after initialization using the <code>setText()</code> function.</p>
+
+	<figure><pre>
+    init() {
+	this.mCamera = new engine.Camera(
+		vec2.fromValues(50, 50), // position of the camera
+		100,                        // width of camera
+		[0, 0, 600, 600],         // viewport (orgX, orgY, width, height)
+		2
+	);
+	this.mCamera.setBackgroundColor([0.8,0.8,0.8,1]);
+	
+	this.mRenderable = new TextureRenderable(this.kTexture);
+	
+	this.mGameObj = new GameObject(this.mRenderable);
+	this.mGameObj.getXform().setSize(20,20);
+	this.mGameObj.getXform().setPosition(70,70);<b>
+	
+	this.mMessage = new FontRenderable("Sample Text");
+	this.mMessage.setColor([0,1,0.2,1]);
+	this.mMessage.getXform().setPosition(30,20);
+	this.mMessage.setTextHeight(5);
+	
+	engine.defaultResources.setGlobalAmbientIntensity(4);</b>
+    }</pre>
+		<figcaption class="codecaption">Code snippet 2-9: init() with text and lighting adjust</figcaption>
+        </figure>
+        
+		<p> 
+            Unlike the resources we request the engine to load, there are some resources that the engine provides by default. The texture that makes up the default font 
+            we use is an example of a default resource that we never need to load or unload. An ambient lighting source is another default resource. 
+            This light is always there but it is normally set very dim (we saw this in our previous examples). It is very dim so that when you do define other lighting sources, 
+            the ambient wont conflict with your design.</p>
+		<p class="note">[Note: Changing the ambient light intensity only affects renderables drawn on the canvas. 
+            You will notice that the background color neither dims nor brightens with this setting. The background is not a renderable.]</p>
+
+		<p>For the first time in a while, we need to make modifications to our <b>draw()</b> function.  We now have a second renderable.</p>
+        
+        <figure><pre>    draw() {
+	engine.clearCanvas([0.9, 0.9, 0.9, 1.0]); 
+	this.mCamera.setViewAndCameraMatrix();
+	
+	this.mGameObj.draw(this.mCamera)<b>
+	this.mMessage.draw(this.mCamera)</b>
+    }	</pre>
+		<figcaption class="codecaption">Code snippet 2-10: draw() with message and texture</figcaption>
+        </figure>
+    <p>Click <a href="../Tutorial-Source/index2d.html" target="_blank">here</a> to see the results or our sample code. 
+        Use the 'A' and 'D' keys on the keyboard to move the sprite left and right. Press the mouse button to play a sound cue and press 'P' to 
+        activate/deactivate the background music.</p>
+    <figure><img src="./tutorial2d-capture.PNG" width="509" height="410" alt=""/>
+	  <figcaption>Figure 2-2: TextureRenderable and FontRenderable with ambient lighting</figcaption>
+        </figure>
+    <p>Increasing the ambient lighting intensity has  brightened our sprite. We will keep that for future projects. </p>
+        
+        
+    <hr>
+    <h2>Conclusion</h2>
+        <p>We have learned about user input and working with resources. We have moved from using solid boxes to textures as renderables. 
+            Fundamentally, our scene is quite similar to what we've done in the previous tutorial. </p>
+        <p>In <a href="../tutorial3/tutorial3.html">Tutorial 3</a>, we will take a look at renderables that support sprite sheets and animating textures. 
+            We will also see how to detect collisions between GameObjects.</p>
+        
+        <hr>
+        <p ALIGN="center"><a href="../tutorial1/tutorial1.html">Tutorial 1</a> &lt;-- Tutorial 2 --&gt; <a href="../tutorial3/tutorial3.html">Tutorial 3</a></p>
+        </div>
+        <h4><i>5/14/2022</i> - By Myles Dalton</h4>
+	</body>
+</html>

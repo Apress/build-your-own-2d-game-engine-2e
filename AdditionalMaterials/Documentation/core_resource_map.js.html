@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: core/resource_map.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: core/resource_map.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * File: resource_map.js
+ *  
+ * base module for managing storage and synchronization of all resources
+ * 
+ */
+"use strict";
+
+class MapEntry {
+    constructor(data) {
+        this.mData = data;
+        this.mRefCount = 1;
+    }
+    decRef() { this.mRefCount--; }
+    incRef() { this. mRefCount++; }
+
+    set(data) { this.mData = data;}
+    data() { return this.mData; }
+
+    canRemove() { return (this.mRefCount == 0); }
+}
+
+/**
+ * Base module for managing storage and synchronization of all resources
+ * &lt;p>Found in Chapter 4, page 134 of the textbook &lt;/p>
+ * Example:
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter4/4.3.resource_map_and_shader_loader/index.html 4.3 Resource Map and Shader Loader}
+ * @module resource_map
+ */
+
+let mMap = new Map();
+let mOutstandingPromises = [];
+
+/**
+ * Returns if the resource is in the resource map
+ * @export resource_map
+ * @param {string} path - path to resource file
+ * @returns {boolean} true if the resource is in the resource map
+ */
+function has(path) { return mMap.has(path) }
+
+/**
+ * Sets the data of the MapEntry object for the resource key.
+ * The path must already exist in the map
+ * @export resource_map
+ * @param {string} key - path to the resource file 
+ * @param {} value - the data of the resource
+ */
+function set(key, value) { 
+    mMap.get(key).set(value);
+}
+
+/**
+ * Clears the MapEntry for the resource to be loaded
+ * @export resource_map
+ * @param {string} path - the path to resource file 
+ */
+function loadRequested(path) {
+    mMap.set(path, new MapEntry(null)); 
+}
+
+/**
+ * Increment the number of references to a resource
+ * @export resource_map
+ * @param {string} path -  the resource to increment 
+ */
+function incRef(path) {
+    mMap.get(path).incRef();
+}
+
+
+// returns the resource of path. An error to if path is not found
+/**
+ * Returns the data of the resource
+ * @export resource_map
+ * @param {string} path - the path to the resource file
+ * @returns {} the data of the resource
+ */
+function get(path) {
+    if (!has(path)) {
+        throw new Error("Error [" + path + "]: not loaded");
+    }
+    return mMap.get(path).data();
+}
+
+
+/**
+ * Generic loading function, 
+ * Step 1: fetch from server
+ * Step 2: decodeResource on the loaded package
+ * Step 3: parseResource on the decodedResource
+ * Step 4: store result into the map
+ * Push the promised operation into an array
+ * @export resource_map
+ * @param {string} path -  the path to the resource file 
+ * @param {function} decodeResource - function to decode resource, specific to the type of resource
+ * @param {function} parseResource - function to parse resource, specific to the type of resource
+ * @returns {Promise} promise to fetch the resource, null if the resource already exists in the map
+ */
+function loadDecodeParse(path, decodeResource, parseResource) {
+    let fetchPromise = null;
+    if (!has(path)) {
+        loadRequested(path);
+        fetchPromise =  fetch(path)
+            .then(res => decodeResource(res) )
+            .then(data => parseResource(data) )
+            .then(data => { return set(path, data) } )
+            .catch(err => { throw err });
+        pushPromise(fetchPromise);
+    } else {
+        incRef(path);  // increase reference count
+    }
+    return fetchPromise;
+}
+
+// returns true if unload is successful
+/**
+ * Decrements the number of references to a resource, removing it 
+ * from the resource map if there are no remaining references
+ * @export resource_map
+ * @param {string} path - the path to the resource file to be unloaded
+ * @returns {boolean} true if unloading is successful
+ */
+function unload(path) { 
+    let entry = mMap.get(path);
+    entry.decRef();
+    if (entry.canRemove())
+        mMap.delete(path) 
+    return entry.canRemove();
+}
+
+/**
+ * Add a new promise to outstanding promise list
+ * @export resource_map
+ * @param {Promise} p - the new promise  
+ */
+function pushPromise(p) { mOutstandingPromises.push(p); }
+
+// will block, wait for all outstanding promises complete
+// before continue
+
+/**
+ * Halt until all outstanding promises are fulfilled
+ * @export resource_map
+ */
+async function waitOnPromises() {
+    await Promise.all(mOutstandingPromises);
+    mOutstandingPromises = []; // remove all
+}
+
+export {has, get, set, loadRequested, incRef, loadDecodeParse, unload, pushPromise, waitOnPromises}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-gl.html">gl</a></li><li><a href="module-index.html">index</a></li><li><a href="module-input.html">input</a></li><li><a href="module-layer.html">layer</a></li><li><a href="module-loop.html">loop</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-shader_resources.html">shader_resources</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-vertex_buffer.html">vertex_buffer</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="IllumRenderable.html">IllumRenderable</a></li><li><a href="IllumShader.html">IllumShader</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightRenderable.html">LightRenderable</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LightShader.html">LightShader</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="LineShader.html">LineShader</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Particle.html">Particle</a></li><li><a href="ParticleEmitter.html">ParticleEmitter</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="ParticleSet.html">ParticleSet</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="ShaderLightAt.html">ShaderLightAt</a></li><li><a href="ShaderMaterial.html">ShaderMaterial</a></li><li><a href="ShadowCaster.html">ShadowCaster</a></li><li><a href="ShadowCasterShader.html">ShadowCasterShader</a></li><li><a href="ShadowReceiver.html">ShadowReceiver</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SimpleShader.html">SimpleShader</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="SpriteShader.html">SpriteShader</a></li><li><a href="texture.TextureInfo.html">TextureInfo</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TextureShader.html">TextureShader</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu Jun 02 2022 16:09:01 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

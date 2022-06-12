@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: core/loop.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: core/loop.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * File: loop.js
+ *  
+ * interfaces with HTML5 to implement looping functionality, supports start/end loop
+ * 
+ */
+"use strict";
+
+import * as map from "./resource_map.js";
+import * as input from "../components/input.js";
+import * as debugDraw from "./debug_draw.js";
+import * as particleSystem from "../components/particle_system.js";
+
+/**
+ * Interface with HTML5 to implement looping functionality
+ * &lt;p>Found in Chapter 4, page  112 of the textbook&lt;/p>
+ * 
+ * Example:
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter4/4.1.game_loop/index.html 4.1 Game Loop}
+ * @module loop
+ */
+
+const kUPS = 60; // Updates per second
+const kMPF = 1000 / kUPS; // Milliseconds per update.
+const kSPU = 1/kUPS; // seconds per update
+
+// Variables for timing gameloop.
+let mPrevTime;
+let mLagTime;
+
+// The current loop state (running or should stop)
+let mLoopRunning = false;
+let mCurrentScene = null;
+let mFrameID = -1;
+
+// This function loops over draw/update once
+function loopOnce() {
+    if (mLoopRunning) {
+        // Step A: set up for next call to loopOnce
+        mFrameID = requestAnimationFrame(loopOnce);
+
+        // Step B: now let's draw
+        //         draw() MUST be called before update()
+        //         as update() may stop the loop!
+        mCurrentScene.draw();    
+
+        // Step C: compute how much time has elapsed since  last loopOnce was executed
+        let currentTime = performance.now();
+        let elapsedTime = currentTime - mPrevTime;
+        mPrevTime = currentTime;
+        mLagTime += elapsedTime;
+
+        // Step D: Make sure we update the game the appropriate number of times.
+        //      Update only every kMPF (1/60 of a second)
+        //      If lag larger then update frames, update until caught up.
+        while ((mLagTime >= kMPF) &amp;&amp; mLoopRunning) {
+            input.update();
+            mCurrentScene.update();      
+            mLagTime -= kMPF;
+        }
+    } 
+}
+
+/**
+ * Returns how many seconds pass between updates, normally a small fraction
+ * @export loop
+ * @returns {float} kSPU - seconds per update
+ */
+function getUpdateIntervalInSeconds() { return kSPU; }
+
+async function start(scene) {
+    if (mLoopRunning) {
+        throw new Error("loop already running")
+    }
+    mCurrentScene = scene;
+    mCurrentScene.load();
+    
+    // Wait for any async requests before game-load
+    await map.waitOnPromises();
+        
+    // With all resources loaded, it is now possible to initialize 
+    // System internal functions that depends on resources (shaders, etc.)
+    debugDraw.init();  // drawing support for rigid shapes, etc.
+    particleSystem.init();
+    
+    // Now, initialize current scenes
+    mCurrentScene.init();    
+    mPrevTime = performance.now();
+    mLagTime = 0.0;
+    mLoopRunning = true;
+    mFrameID = requestAnimationFrame(loopOnce);
+}
+
+/**
+ * Stop the game loop
+ * @export loop
+ */
+function stop() {
+    mLoopRunning = false;
+    // make sure no more animation frames
+    cancelAnimationFrame(mFrameID);
+}
+
+/**
+ * Stop the game loop and unload the current scene
+ * @export loop
+ */
+function cleanUp() {
+    if (mLoopRunning) {
+        stop();
+
+        // unload all resources
+        mCurrentScene.unload();
+        mCurrentScene = null;
+    }
+}
+
+export {start, stop, cleanUp, getUpdateIntervalInSeconds}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-gl.html">gl</a></li><li><a href="module-index.html">index</a></li><li><a href="module-input.html">input</a></li><li><a href="module-layer.html">layer</a></li><li><a href="module-loop.html">loop</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-shader_resources.html">shader_resources</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-vertex_buffer.html">vertex_buffer</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="IllumRenderable.html">IllumRenderable</a></li><li><a href="IllumShader.html">IllumShader</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightRenderable.html">LightRenderable</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LightShader.html">LightShader</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="LineShader.html">LineShader</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Particle.html">Particle</a></li><li><a href="ParticleEmitter.html">ParticleEmitter</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="ParticleSet.html">ParticleSet</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="ShaderLightAt.html">ShaderLightAt</a></li><li><a href="ShaderMaterial.html">ShaderMaterial</a></li><li><a href="ShadowCaster.html">ShadowCaster</a></li><li><a href="ShadowCasterShader.html">ShadowCasterShader</a></li><li><a href="ShadowReceiver.html">ShadowReceiver</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SimpleShader.html">SimpleShader</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="SpriteShader.html">SpriteShader</a></li><li><a href="texture.TextureInfo.html">TextureInfo</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TextureShader.html">TextureShader</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu Jun 02 2022 16:09:01 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

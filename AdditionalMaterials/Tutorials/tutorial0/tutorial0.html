@@ -1,0 +1,111 @@
+
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+        <link type="text/css" rel="stylesheet" href="../styles/prettify-tomorrow.css">
+        <link type="text/css" rel="stylesheet" href="../styles/jsdoc-default.css">
+        <style>p,h1,h2,h3,h4,td,ul,figure,pre,hr{
+            margin: 5px 50px;
+        } </style>
+        <style> mark{
+            background-color: aquamarine;
+        }
+        </style>
+        <style> figure{
+            background-color: beige;
+            border: 1px darkslategrey dashed;
+        }
+        </style>
+		<title>Tutorial 0</title>
+	</head>
+
+	<body>
+    	<div id="main-content">
+		<h1>GTCS Game Engine<br>
+		Tutorial 0: Setting Up the Environment</h1>
+		<p ALIGN="center">Tutorial 0 --&gt; <a href="../tutorial1/tutorial1.html">Tutorial 1</a><br>
+		  <a href="../index.html">Tutorial Homepage</a></p>
+		<hr>
+        
+	<h2>Introduction</h2>
+		<p>The GTCS Game Engine consists of 73 files in a very specific file hierarchy. The details of how each of those files works is beyond the scope of these tutorials. 
+            In this tutorial, you will learn how to setup an IDE for programming and setup the link between your the browser and your game. Before continuing 
+            make sure you have the <a href = "https://github.com/Apress/build-your-own-2d-game-engine-2e"> game engine</a> downloaded.</p>
+        
+        <p>Source code for tutorials can be downloaded from <a href="./Tutorial-Source.zip">here</a>.</p>
+		<p ALIGN="center"><a href="#ide">Development Environment</a> • <a href="#components">Entry Point</a></p>
+    
+        
+	<hr>
+		<h2><a id="ide"></a>Development Environment</h2>
+        <p>To develop your game, you will want to use an integrated development environment (IDE) and a web browser that is capable of hosting the running game engine.
+             We have found that the most convenient combination is Visual Studio Code (VSC) with the Google Chrome web browser. 
+             These products are free, work across a number of OS platforms and integrate well for web development. Here is a rundown of this combination of tools...</p>
+        <ul>
+        	<li><strong>Visual Studio Code</strong>: A powerful and elegant IDE that can be used for development related to the engine and your game. You can download and install this IDE from<a href="https://code.visualstudio.com/" target="_blank"> https://code.visualstudio.com</a></li>
+        	<li><strong>Google Chrome</strong>: You will launch your game projects to the Google Chrome web browser which serves as the runtime environment. You can download and install this browser from<a href="https://www.google.com/chrome/browser/" target="_blank"> https://www.google.com/chrome/browser</a></li>
+            <li><strong>VSC Extentions</strong>: VSC has robust support for adding free extensions to its own functionality, to facilate development using the engine. Extensions can be installed from an online marketplace or directly within VSC. Here are the extensions you should add to VSC:
+                <ul>
+                    <li><strong>ESLint</strong>: detects potential JavaScriptsource code errors.<a href="https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint" target ="_blank"> Found here</a></li>
+                    <li><strong>LiveServer</strong>: Supports launching HMTL files from VSC directly to Crome runtime.<a href="https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer" target ="_blank"> Found here</a></li>
+
+                </ul>
+        </ul>
+        <p>Once you have all of these tools installed, you can use Visual Studio Code to write your game. When you select to run your game from VSC, Google Chrome will launch showing you the results. Error information will be accessible from the Google Crome console.</p>
+        
+        
+ 	<hr>       
+        <h2><a id="components"></a>Entry Point</h2>
+        <p>To run your game, you will need an HTML shell running on a web server. This HTML file must reference the javaScript file that your game will run from as well as the external matrix library. By convention, this file is named <strong>index.html</strong> and is stored at the same level as the assets folder and src folder of the engine.</p>
+		<p>The format of your HTML file can be broken down into two sections...</p>
+		<ul>
+		  <li><strong>Head tag</strong>:  This will contain the references to your game file and  the external gl-matrix library. This section can also include the webpage title and icon for your game.</li>
+			<li><strong>Body tag</strong>: This is the section of the web page where all WebGL activity will be encapsulated. It identifies the canvas' pixel width and height where the game will be rendered.</li>
+		</ul>
+        <br>
+		<h4>Head tag</h4>
+		<p>The entry point for your code will be an object you design that is a subclass of the engine's "Scene" object. For now, we include what will be the path to that Scene object in this HTML file.</p>
+
+		<figure><pre>
+            &lt;!-- external library --&gt; 
+            &lt;script type="text/javascript" src="./src/lib/gl-matrix.js"&gt;&lt;/script&gt;
+    
+            &lt;!-- our game --&gt;
+            &lt;script type="module" src="./src/<mark>your_game_folder</mark>/<mark>your_game_scene</mark>.js"&gt;&lt;/script&gt;
+        </pre>
+        
+		<figcaption class="codecaption">Code Snippet 0-1: Head tag</figcaption>
+        </figure>
+		<p class="note">Note: The highlighted portions are specific to your game implementation.</p>
+
+		
+		
+        <br>
+        
+        
+		<h4>Body tag</h4>
+		<p>Within the body tag we create a canvas. The canvas is where the rendering of your game will occur. You need to define the pixel width and height. The engine will look for the DOM object called &quot;GLCanvas&quot; and handle the rest.</p>
+           <figure><pre>
+        <!-- GLCanvas is the area we will draw in -->
+        &lt;canvas id="GLCanvas" width="<mark>600</mark>" height="<mark>600</mark>"&gt;
+            <!-- this message will show only if WebGL clearing failed -->
+            Your browser does not support the HTML5 canvas.
+        &lt;/canvas&gt;
+          </pre>
+		<figcaption class="codecaption">Code Snippet 0-2: Canvas</figcaption>
+        </figure>
+
+		
+        <hr>
+        <h2>Conclusion</h2>
+        <p>Now that we have setup our files and created our web page, we can go on to implementing code for the game. In <a href="../tutorial1/tutorial1.html">Tutorial 1</a>, we will look at the components that make up our scene and draw a simple object to our canvas.</p>
+        
+        
+        <hr>
+        <p ALIGN="center">Tutorial 0 --&gt; <a href="../tutorial1/tutorial1.html">Tutorial 1</a><p ALIGN = "center"><a href="../index.html">Tutorial Homepage</a>
+        </p>
+    	</div>
+        <h4><i>5/10/2022</i> - By Myles Dalton</h4>
+	</body>
+</html>

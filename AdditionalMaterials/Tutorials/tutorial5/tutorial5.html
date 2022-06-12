@@ -1,0 +1,458 @@
+
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link type="text/css" rel="stylesheet" href="../styles/prettify-tomorrow.css">
+        <link type="text/css" rel="stylesheet" href="../styles/jsdoc-default.css">
+        <style>p,h1,h2,h3,h4,td,ul,figure,pre,hr,ol{
+            margin: 5px 50px;
+        } </style>
+        <style> mark{
+            background-color: aquamarine;
+        }</style>
+        <style> figure{
+            background-color: beige;
+            border: 1px darkslategrey dashed;
+        }
+        </style>
+		<title>Tutorial 5</title>
+	</head>
+
+	<body>
+    	<div id="main-content">
+		<h1> GTCS Game Engine: <br>
+		Tutorial 5: Illumination</h1>
+		<p ALIGN="center"><a href="../tutorial4/tutorial4.html">Tutorial 4</a> &lt;-- Tutorial 5 --&gt; <a href="../tutorial6/tutorial6.html">Tutorial 6</a><br>
+		  <a href="../index.html">Tutorial Homepage</a><br></p>
+		
+		
+		<hr>
+		<h2>Introduction</h2>
+		<p>In this tutorial, we are going to look at how to enhance the look of our game scene using lighting effects. We are going to see how to create different types of light sources and create renderables that react to the lights. We will also look at a renderable that can react to lighting in a way that gives more depth to 2D graphics.</p>
+		<p><strong>Covered Topics</strong>: <a href="#illumination">Illumination</a> • <a href="#lightrenderable">Light Renderable Object</a> • <a href="#normal">Normal Maps</a></p>
+        <p><strong>Demonstrations</strong>: <a href="../Tutorial-Source/index5a.html" target="_blank">Light Renderables</a> • <a href="../Tutorial-Source/index5b.html" target="_blank">Using Normal Maps</a></p>
+        <p>Complete source code for all tutorials can be downloaded from <a href="../Tutorial-Source.zip">here</a>.</p>
+        
+		<p>
+		  </p>
+
+
+
+	<hr>
+		<h2><a id="illumination"></a>Illumination</h2>
+		<p>In Tutorial 2, we have seen the use of ambient lighting to illuminate our renderables. The ambient lighting sources is controlled with the
+             <b>setGlobalAmbientIntensity()</b> function. This source is always active and it adjusts the lighting on all renderables in our scene.
+              If we want to disable the light, we set the intensity to 0. The lighting affect is analogous to increasing the backlight intensity on your cell phone or laptop.
+               Everything gets &quot;brightened&quot; by the same amount.</p>
+		<p>The game engine supports 3 other types of light sources.</p>
+		<ul>
+		  <li>Point - An omnidirectional light source in space. Similar to a hovering firefly with a &quot;sphere of illumination&quot; wherever it goes.</li>
+		  <li>Spot - A cone-shaped light source directed at a location. Similar to a flashlight pointing at a wall.</li>
+		  <li>Directional - A planar light source where light is equally intense at all incident points. Similar to the screen backlight of electronics devices.</li>
+		  </ul>
+        <p>These different lighting types  are declared using a number of parameters. Proper use of lighting requires...</p>
+        <ol>
+        	<li>Declaring a light source with the type and parameters defining it's characteristics.</li>
+            <li>Notifying each applicable renderable that it should account for the light source when drawing itself.</li>
+          </ol>
+		<p class="note">[Note: This second requirement may seem odd but lighting calculations are essentially a manipulation of how 
+            pixels are drawn to the screen (how the object looks). Since we are familiar with the fact that the &quot;look&quot; of game 
+            elements is under the purview of the renderable, we treat lighting as a parameter we add to the renderable object.]</p>
+        <p>To create a light, we allocate a new <b>Light</b> object and set parameters using accessor methods. There are many settings of which 
+            certain ones will be used or ignored based on the type of light. Here is an overview of some of the settings we can set...</p>
+        <ul>
+          <li><code>setLightType()</code> - Identifies what type of light to render as. Valid choices are <strong>eLightType.ePointLight</strong>, <strong>eLightType.eSpotLight</strong> and<strong> eLightType.eDirectionalLight</strong>.</li>
+          <li><code>setColor()</code> - Color of the light using a 4-value vector identifying red, green, blue and alpha values from 0.0 to 1.0.</li>
+          <li><code>setIntensity()</code> - A value from 0.0 to 1.0 giving the strength of the light.</li>
+          <li><code>setXPos(), setYPos(), setZPos()</code> - The functions allow you to set the X, Y and Z world coordinates of 
+            where the light is positioned in 3D space. Though we are working with a 2D game scene, our light needs to exist 
+            in 3D space to allow for the calculations to illuminate the scene (used only for point and spot lights).</li>
+          <li><code>setNear(), setFar()</code> - The functions allow you to set the radii for the area of affect for light sources. 
+            From the center of the light to the near radius, the intensity will be constant. From the near radius to the far radius, 
+            the intensity will gradually drop off effectively softening the edges of the area of affect. If you set both values to be the same, 
+            the edge of the area of illumination will be very sharp (used only for point and spot lights).</li>
+          <li><code>setDropOff()</code> - Identifies how quickly the light intensity will fall as we reach the edge of the area of the lighting affect  
+            (used only for point and spot lights).</li>
+          <li><code>setDirection()</code> - Provide a vector of 3 components to identify the direction the light should point (used only for directional and spot lights).</li>
+        </ul>
+        
+    <h3>Types of Light</h3>
+    <h4>Point Lights</h4>
+    <p>A point light can be compared to a lightbulb hovering in mid-air illuminating a spherical volume around it. It has intensity, color, size and position. 
+        The amount of the game scene that will be illuminated with be determined by the size of the illumination volume (determined by the radius of affect from the
+         center point) and the location of the point. Figure 5-1 provides a visual representation of the affect. To create a point light, we allocate a new Light object 
+         and set parameters using accessor methods.</p>
+    	<figure>
+    		<img src="./tutorial5-img1.png" width="466" height="211">
+        	<figcaption>Figure 5-1: Point Light</figcaption>
+        </figure>
+        
+    <h4>Spot Lights</h4>
+    <p>Spot lights are more complex than point lights in that they utilize more parameters to give more of a directional 
+        affect than the point light. Using angles as illustrated in Figure 5-2, we can see how a spot light illuminates a surface.</p>
+    <figure>
+    		<img src="./tutorial5-img2.png" width="370" height="211">
+        	<figcaption>Figure 5-2: Spot Light</figcaption>
+        </figure>
+        <p>The cone angles in Figure 5-2 affect the intensity of the light across the area of affect. 
+            The attenuation of light over a distance will cause a diffusion on the surface particularly near the edges 
+            and these angles are meant to simplify applying this affect. To set these angles, we use the <code>setInner()</code> 
+            and <code>setOuter()</code> functions. These functions accept an angle in radians.</p>
+        <h4>Directional Lights</h4>
+		<p>A directional light is similar to ambient light in that every pixel illuminated by it receives the light with equal intensity. 
+            However, while the ambient light source allows us to set just the intensity, we can also define direction for directional light sources. 
+            Since we are dealing with two dimensional renderables, the direction of the light is not going to provide a sense of depth like it would in 
+            three dimensional space. This will change when we look at normal mapping and shadows where the directional light can be used to enhance the scene.</p>
+        
+
+	<hr>
+		<h2><a id="lightrenderable"></a>LightRenderable</h2>
+        
+    <p>To demonstrate the light, in the next example, we will create a point light. We will set the arrow keyboard controls to allow moving the 
+        light around the screen. We will set the ambient light intensity to a low level for contrast. You can see the demonstration 
+        <a href="../Tutorial-Source/index5a.html" target="_blank">here</a>. Note, all of the particle and RigidShape code has been removed for this tutorial demonstration.</p>
+    <figure><img src="./tutorial5a-capture.PNG" width="400" height="400" alt=""/>
+    <figcaption>Figure 5-3: Point Light Sample</figcaption>
+        </figure>
+    <p>We will introduce a Light object and a background renderable to show how to use a simple point light.</p>
+    <p class="note">[Note: The engine is setup to allow a LightRenderable to calculate up to eight light sources. 
+        To keep managing lights simple due to GameObject overlap, you should limit your game to no more than eight light sources in your project.]</p>
+    
+    <figure><pre>
+    constructor() {
+        super();
+        this.mCamera = null;
+        this.mMinionObj = null;
+        <b>this.mBackground = null;
+        this.mPointLight = null;</b>
+      
+        this.kTexture = "assets/minion_spritesheet.png";
+        <b>this.kBackground = "assets/bg.png"</b>
+    }
+
+    load() {
+        engine.texture.load(this.kTexture);
+        <b>engine.texture.load(this.kBackground);</b>
+    }
+
+    unload() {
+        engine.texture.unload(this.kTexture); 
+        <b>engine.texture.unload(this.kBackground);</b>
+    }</pre>
+        	<figcaption>Code Snippet 5-1: Loading Assets</figcaption>
+      	</figure>
+        
+    <p>To illuminate our Scene, we need to use a renderable that knows how to work with lights. 
+        The LightRenderable has all of the same functionality as SpriteAnimateRenderable plus the ability to process lighting affects.</p>
+    <figure><pre>
+    init() {
+	this.mCamera = new engine.Camera(
+		vec2.fromValues(50, 50), // position of the camera
+		100,                        // width of camera
+		[0, 0, 600, 600],         // viewport (orgX, orgY, width, height)
+		2
+	);
+	this.mCamera.setBackgroundColor([0.8,0.8,0.8,1]);
+		
+	<b>this.mBackground = new LightRenderable(this.kBackground);
+	this.mBackground.getXform().setSize(100,100);
+	this.mBackground.getXform().setPosition(50,50);</b>
+		
+	this.mMinionObj = new GameObject(new LightRenderable(this.kTexture));
+	this.mMinionObj.getRenderable().setElementPixelPositions(130,310,0,180);
+	this.mMinionObj.getXform().setSize(20,20);
+	this.mMinionObj.getXform().setPosition(50,50);
+		
+	<b>// create the light and set properties
+	this.mPointLight = new Light();
+	this.mPointLight.setLightType(eLightType.ePointLight);
+	this.mPointLight.setColor([1,1,1,1]);
+	this.mPointLight.setXPos(50);
+	this.mPointLight.setYPos(50);
+	this.mPointLight.setZPos(0);
+	this.mPointLight.setNear(10);
+	this.mPointLight.setFar(14);
+	this.mPointLight.setIntensity(1);
+		
+	// associate the light with the renderables
+	this.mMinionObj.getRenderable().addLight(this.mPointLight);
+	this.mBackground.addLight(this.mPointLight);
+		
+	engine.defaultResources.setGlobalAmbientIntensity(0.5);</b>
+    }</pre>
+    	<figcaption>Code Snippet 5-2: Initiating Light Source</figcaption>
+    </figure>
+    <p>In Code Snippet 5-2, we first create a new LightRenderable for the background and set it fill the camera, we don't pass this LightRenderable to a GameObject because the background 
+		does not need to interact with other objects. The next new segment is instantiating the Light and setting the properties relevant to a point light.
+		Then we add our Light to the two LightRenderables. Notice in the last line, we set the 
+		ambient light to 0.5 intensity. Ambient light affects all game objects regardless of what type of renderable. 
+        We set this low value to dim our scene and to make the point light stand out. </p>
+    <p>Next, we draw.</p>
+    
+    <figure>
+		<pre>
+    draw() {
+	engine.clearCanvas([0.9, 0.9, 0.9, 1.0]);
+	this.mCamera.setViewAndCameraMatrix();
+		
+	<b>this.mBackground.draw(this.mCamera);</b>
+	this.mMinionObj.draw(this.mCamera);
+    }
+		</pre>
+		<figcaption class="codecaption">
+		  Code Snippet 5-3: Draw Function
+		</figcaption>
+        </figure>
+    <p>For our <strong>Update()</strong> function, we set it up so that the arrow keys on the keyboard will control the location of the point light.</p>
+    <figure>
+	  	<pre>
+    update() {
+	// Move left
+	if(engine.input.isKeyPressed(engine.input.keys.A)){
+		this.mMinionObj.getXform().incXPosBy(-0.5);
+		this.mMinionObj.getRenderable().setElementPixelPositions(130,310,0,180)
+	}
+	// Move right
+	if(engine.input.isKeyPressed(engine.input.keys.D)){
+		this.mMinionObj.getXform().incXPosBy(0.5);
+		this.mMinionObj.getRenderable().setElementPixelPositions(720,900,0,180)
+	}
+	// Move down
+	if(engine.input.isKeyPressed(engine.input.keys.S)){
+		this.mMinionObj.getXform().incYPosBy(-0.5);
+	}
+	// Move Up
+	if(engine.input.isKeyPressed(engine.input.keys.W)){
+		this.mMinionObj.getXform().incYPosBy(0.5);
+	}
+		
+	<b>// Move light left
+	if(engine.input.isKeyPressed(engine.input.keys.Left)){
+		this.mPointLight.setXPos(this.mPointLight.getPosition()[0]-0.5);
+	}
+	// Move light right
+	if(engine.input.isKeyPressed(engine.input.keys.Right)){
+		this.mPointLight.setXPos(this.mPointLight.getPosition()[0]+0.5);
+	}
+	// Move light down
+	if(engine.input.isKeyPressed(engine.input.keys.Down)){
+		this.mPointLight.setYPos(this.mPointLight.getPosition()[1]-0.5);
+	}
+	// Move light Up
+	if(engine.input.isKeyPressed(engine.input.keys.Up)){
+		this.mPointLight.setYPos(this.mPointLight.getPosition()[1]+0.5);
+	}</b>
+		
+	// quit
+	if(engine.input.isKeyClicked(engine.input.keys.Q)){
+		this.next();
+	}
+    }</pre>
+    	<figcaption>Code Snippet 5-4: Controlling a Light Object</figcaption>
+    </figure>
+
+
+	<hr>
+		<h2><a id="normal"></a>Using Normal Maps</h2>
+        <p>Directional and spot lights include a directional vector component to their definition. While, for spot lights, this 
+            setting will provide for a difference in diffusion between the closer and farther edges, it will not affect directional lights at all. 
+            This is because our renderables are in 2D.</p>
+        <p>A normal map can be used to tell a renderable how to react to lighting for a given texture image. Below, we see a texture with it's normal map. 
+            We need to make sure that we have pixel-for-pixel coordination between the two images. Many 3D modeling software packages 
+            can generate and export normal images (often called bump maps). Using these two images together, 
+            the engine can simulate specularity and diffusion of different materials and enhance the lighting affect with regards to light direction.</p>
+        <figure>
+    		<img src="./tutorial5-img4-1.png" width="62" height="61">
+            <img src="./tutorial5-img4-2.png" width="62" height="61">
+        	<figcaption>Figure 5-4: Texture / Normal Map</figcaption>
+        </figure>
+        <p>To use normal maps, we need another renderable object. The <strong>IllumRenderable</strong> knows how to use 
+            normal maps and react to light accordingly. In our next example, we will demonstrate this using all three types of lights. 
+            The angle of the spotlight will accentuate the affect we are looking for in our rock texture and the entire scene will be lit by a directional light. 
+            We continue to use the WASD and arrow key control schemes as before. How the rock is illuminated is going to 
+            change with its animation frame and the position of the point light. We still have the minion texture and you will notice that by comparison, 
+            the lighting affect on the minion is flat and consistent. You can view the end result <a href="../Tutorial-Source/index5b.html" target="_blank">here</a>.</p>
+    <figure>
+	  <img src="./tutorial5b-capture.PNG">
+   	  <figcaption>Figure 5-5: Normal Illumination Sample</figcaption>
+        </figure>
+        <p>First, we setup constants, declare variables and load our resources.</p>
+        
+        <figure>
+      <pre>
+    constructor() {
+	super();
+	this.mCamera = null;
+	this.mMinionObj = null;
+	this.mBackground = null;
+	this.mPointLight = null;<b>
+	this.mRockObj = null;
+	this.mSpotLight = null;
+	this.mDirectionLight = null;</b>
+		  
+	this.kTexture = "assets/minion_spritesheet.png";
+	this.kBackground = "assets/bg.png";<b>
+	this.kBackgroundNormal = "assets/bg_normal.png";
+	this.kRockTexture = "assets/asteroids.png";
+	this.kRockNormal = "assets/asteroidsNormal.png";</b>
+    }
+	
+    load() {
+	engine.texture.load(this.kTexture);
+	engine.texture.load(this.kBackground);<b>
+	engine.texture.load(this.kBackgroundNormal);
+	engine.texture.load(this.kRockTexture);
+	engine.texture.load(this.kRockNormal);</b>
+    }
+	
+    unload() {
+	engine.texture.unload(this.kTexture); 
+	engine.texture.unload(this.kBackground);<b>
+	engine.texture.unload(this.kBackgroundNormal);
+	engine.texture.unload(this.kRockTexture);
+	engine.texture.unload(this.kRockNormal);</b>
+    }
+	  </pre>
+        	<figcaption>
+       	    Code Snippet 5-5: Loading Assets for IllumRenderable</figcaption>
+      	</figure>
+        
+        <p>With our assets loaded, we continue with initialization. We instantiate a new GameObject with an IllumRenderable using the our rock 
+			texture and normal map. Since LightRenderable and IllumRenderable inherit from SpriteAnimateRenderable we can support sprite animation and illumination,
+			 we are going to take advantage of this with mRockObj. </p>
+        <ul>
+          <li>The images we are using have 59 frames of animation.</li>
+          <li>Each frame is size at 61x64 pixels with a 2 pixel buffer between frames.</li>
+          <li> Set the animation speed to 2.</li>
+          </ul>
+        <p> We create a spotlight</p>
+        <ul>
+          <li>We set the direction to point towards the rock.</li>
+          <li>We set the position to be close to the lower left corner and above the game plane.</li>
+          <li>We set the outer and inner angles to soften the edges where light meets darkness.</li>
+		  <li>We set the near and far radii to reach the rock.</li>
+        </ul>
+        <p> We create a directional light</p>
+        <ul>
+          <li>We set the intensity low to serve as a replacement ambient light</li>
+		 
+        </ul>
+        <figure>
+	  	<pre>
+    init() {
+	this.mCamera = new engine.Camera(
+		vec2.fromValues(50, 50), // position of the camera
+		100,                        // width of camera
+		[0, 0, 600, 600],         // viewport (orgX, orgY, width, height)
+		2
+	);
+	this.mCamera.setBackgroundColor([0.8,0.8,0.8,1]);
+		
+	<b>this.mBackground = new IllumRenderable(this.kBackground,this.kBackgroundNormal);</b>
+	this.mBackground.getXform().setSize(100,100);
+	this.mBackground.getXform().setPosition(50,50);
+		
+	this.mMinionObj = new GameObject(new LightRenderable(this.kTexture));
+	this.mMinionObj.getRenderable().setElementPixelPositions(130,310,0,180);
+	this.mMinionObj.getXform().setSize(20,20);
+	this.mMinionObj.getXform().setPosition(50,50);
+		
+	<b>this.mRockObj = new GameObject(new IllumRenderable(this.kRockTexture,this.kRockNormal));
+	this.mRockObj.getRenderable().setSpriteSequence(64,0,61,64,59,2);
+	this.mRockObj.getRenderable().setAnimationSpeed(2);
+	this.mRockObj.getRenderable().setAnimationType(eAnimationType.eRight);
+	this.mRockObj.getXform().setSize(10,10);
+	this.mRockObj.getXform().setPosition(30,70);</b>
+		
+	// create the light and set properties
+	this.mPointLight = new Light();
+	this.mPointLight.setLightType(eLightType.ePointLight);
+	this.mPointLight.setColor([1,1,1,1]);
+	this.mPointLight.setXPos(50);
+	this.mPointLight.setYPos(50);
+	this.mPointLight.setZPos(1);
+	this.mPointLight.setNear(10);
+	this.mPointLight.setFar(14);
+	this.mPointLight.setIntensity(1);
+		
+	<b>this.mSpotLight = new Light();
+	this.mSpotLight.setLightType(eLightType.eSpotLight);
+	this.mSpotLight.setColor([1,1,1,1]);
+	this.mSpotLight.setXPos(10);
+	this.mSpotLight.setYPos(20);
+	this.mSpotLight.setZPos(1);
+	this.mSpotLight.setDirection([30,70,-1]);
+	this.mSpotLight.setInner(0.5);
+	this.mSpotLight.setOuter(1);
+	this.mSpotLight.setNear(70);
+	this.mSpotLight.setFar(80);
+	this.mSpotLight.setDropOff(1);
+	this.mSpotLight.setIntensity(2);
+	
+	this.mDirectionLight = new Light();
+	this.mDirectionLight.setLightType(eLightType.eDirectionalLight);
+	this.mDirectionLight.setIntensity(0.1);</b>
+		
+	// associate the light with the renderables
+	this.mMinionObj.getRenderable().addLight(this.mPointLight);<b>
+	this.mMinionObj.getRenderable().addLight(this.mSpotLight);
+	this.mMinionObj.getRenderable().addLight(this.mDirectionLight);</b>
+	this.mBackground.addLight(this.mPointLight);<b>
+	this.mBackground.addLight(this.mSpotLight);
+	this.mBackground.addLight(this.mDirectionLight);
+	this.mRockObj.getRenderable().addLight(this.mPointLight);
+	this.mRockObj.getRenderable().addLight(this.mSpotLight);
+	this.mRockObj.getRenderable().addLight(this.mDirectionLight);</b>
+	
+	engine.defaultResources.setGlobalAmbientIntensity(0.5);
+    }</pre>
+    	<figcaption>Code Snippet 5-6: Initializing Lights and IllumRenderables</figcaption>
+    </figure>
+	<p>We also changed the background's renderable type to IllumRenderable, which makes it seem like part of the game world. By default the GlobalAmbientIntensity does not affect 
+		IllumRenderables, this is why we add the directional light with a low intensity. </p>
+
+    <p>We add the second GameObject to our <strong>Draw()</strong> function.</p>
+    
+    <figure><pre>
+    draw() {
+	engine.clearCanvas([0.9, 0.9, 0.9, 1.0]);
+	this.mCamera.setViewAndCameraMatrix();
+	
+	this.mBackground.draw(this.mCamera);
+	this.mMinionObj.draw(this.mCamera);
+	<b>this.mRockObj.draw(this.mCamera);</b>
+    }</pre>
+		<figcaption class="codecaption">
+		  Code Snippet 5-7: Draw Function
+		</figcaption>
+        </figure>
+        
+        <p>Lastly, we add code to the Update() function to update the animation on our rock renderable.</p>
+        
+        <figure>
+	  	<pre>
+    update() {
+	// ... same keyboard input code as before, found in Code Snippet 5-4 ...
+	<b>this.mRockObj.getRenderable().updateAnimation();</b>
+    }
+</pre>
+    	<figcaption>Code Snippet 5-8: Updating the Animation</figcaption>
+    </figure>
+    
+        
+    <hr>
+    <h2>Conclusion</h2>
+        <p>As we have seen, adding different types of light sources and using normal maps provides depth to our 2D game. 
+            This will immerse our player in the game by providing a more interesting environment and a sense of realism.</p>
+        <p> In <a href="../tutorial6/tutorial6.html">Tutorial 6</a>, we continue to enhance the look of our scene by 
+            implementing shadow affects on our renderables to go along with lighting. We will also see how parallax works to add more depth in the scene.</p>
+        
+        
+        <hr>
+        <p ALIGN="center"><a href="../tutorial4/tutorial4.html">Tutorial 4</a> &lt;-- Tutorial 5 --&gt; <a href="../tutorial6/tutorial6.html">Tutorial 6</a><br>
+		  <a href="../index.html">Tutorial Homepage</a><br></p>
+	</div>
+    <h4><i>5/26/2022</i> - By Myles Dalton</h4>
+    </body>
+</html>

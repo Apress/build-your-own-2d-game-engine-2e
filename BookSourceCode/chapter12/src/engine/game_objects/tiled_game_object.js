@@ -8,19 +8,45 @@
 import GameObject from "./game_object.js";
 
 class TiledGameObject extends GameObject {
+    /**
+     * @classdesc Support for repeating renderable tiles, infinitely tileable.
+     * Assumes X/Y alignments.
+     * <p>Found in Chapter 11, page 674 of the textbook  </p>
+     * Example:
+     * {@link https://apress.github.io/build-your-own-2d-game-engine-2e/BookSourceCode/chapter11/11.1.tiled_objects/index.html 11.1 Tiled Objects}
+     * @constructor
+     * @extends GameObject
+     * @param {Renderable} renderableObj - the Renderable associated with this TiledGameObject
+     * @returns {TiledGameObject} a new TileGameObject instance
+     */
     constructor(renderableObj) {
         super(renderableObj);
 
         this.mShouldTile = true; // can switch this off if desired
     }
 
+    /**
+     * Set the tiling property to true or false
+     * @method
+     * @param {boolean} t - the tiling state
+     */
     setIsTiled(t) {
         this.mShouldTile = t;
     }
+    /**
+     * Returns whether or not tiling is active for this TiledGameObject
+     * @method
+     * @returns {boolean} mShouldTile - true if tiling is active
+     */
     shouldTile() {
         return this.mShouldTile;
     }
 
+    /**
+     * Draws a grid of tiles filling every available space within the Camera
+     * @method
+     * @param {Camera} aCamera - the Camera to draw to 
+     */
     _drawTile(aCamera) {
         // Step A: Compute the positions and dimensions of tiling object.
         let xf = this.getXform();
@@ -93,6 +119,11 @@ class TiledGameObject extends GameObject {
         pos[1] = sY;
     }
 
+    /**
+     * Draws this TiledGameObject if visible and executes tiling if it should tile
+     * @method
+     * @param {Camera} aCamera - the Camera to draw to
+     */
     draw(aCamera) {
         if (this.isVisible() && (this.mDrawRenderable)) {
             if (this.shouldTile()) {

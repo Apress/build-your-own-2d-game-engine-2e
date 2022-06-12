@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: core/gl.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: core/gl.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * File: gl.js
+ *  
+ * handles initialization with gl
+ * 
+ */
+"use strict";
+
+
+let mCanvas = null;
+let mGL = null;
+/**
+ * Handles the WebGL2 context for the engine and stenciling functions
+ * &lt;p>Found in Chapter 3, page 67 of the textbook&lt;/p>
+ * Example:
+ * {@link https://mylesacd.github.io/build-your-own-2d-game-engine-2e-doc/BookSourceCode/chapter3/3.1.renderable_objects/index.html 3.1 Renderable Objects}
+ * 
+ * @module gl
+ */
+
+/**
+ * Returns the WebGL2 context for the canvas
+ * @static
+ * @returns {WebGL2RenderingContext} rendering context
+ */
+function get() { return mGL; }
+
+/**
+ * Closes the canvas and the rendering context with a shut down message
+ * @static 
+ */
+function cleanUp() {
+    if ((mGL == null) || (mCanvas == null))
+        throw new Error("Engine cleanup: system is not initialized.");
+
+    mGL = null;
+
+    // let the user know
+    mCanvas.style.position = "fixed";
+    mCanvas.style.backgroundColor = "rgba(200, 200, 200, 0.5)";
+    mCanvas = null;
+    
+    document.body.innerHTML += "&lt;br>&lt;br>&lt;h1>End of Game&lt;/h1>&lt;h1>GL System Shut Down&lt;/h1>";
+
+}
+/**
+ * Initializes the canvas and rendering context
+ * @static
+ * @param {string} htmlCanvasID - the id of the canvas element
+ * @returns {void} returns early if the WebGL2 context is null
+ */
+function init(htmlCanvasID) {
+    mCanvas = document.getElementById(htmlCanvasID);
+    if (mCanvas == null)
+        throw new Error("Engine init [" + htmlCanvasID + "] HTML element id not found");
+
+    // Get the standard or experimental webgl and binds to the Canvas area
+    // store the results to the instance variable mGL
+    mGL = mCanvas.getContext("webgl2", {alpha: false, depth: true, stencil: true}) || 
+          mCanvas.getContext("experimental-webgl2", {alpha: false, depth: true, stencil: true});
+
+    if (mGL === null) {
+        document.write("&lt;br>&lt;b>WebGL 2 is not supported!&lt;/b>");
+        return;
+    }
+
+    // Allows transparency with textures.
+    mGL.blendFunc(mGL.SRC_ALPHA, mGL.ONE_MINUS_SRC_ALPHA);
+    mGL.enable(mGL.BLEND);
+    
+    // Set images to flip y axis to match the texture coordinate space.
+    mGL.pixelStorei(mGL.UNPACK_FLIP_Y_WEBGL, true);
+
+    // make sure depth testing is enabled
+    mGL.enable(mGL.DEPTH_TEST);
+    mGL.depthFunc(mGL.LEQUAL);
+}
+
+/**
+ * Begins drawing using a stencil
+ * @static
+ * @param {int} bit - reference value for the stencil test
+ * @param {GLuint} mask - bit-wise mask that is used in comparison
+ */
+function beginDrawToStencil(bit, mask)
+{
+    mGL.clear(mGL.STENCIL_BUFFER_BIT);
+    mGL.enable(mGL.STENCIL_TEST);
+    mGL.colorMask(false, false, false, false);
+    mGL.depthMask(false);
+    mGL.stencilFunc(mGL.NEVER, bit, mask);
+    mGL.stencilOp(mGL.REPLACE, mGL.KEEP, mGL.KEEP);
+    mGL.stencilMask(mask);
+}
+
+/**
+ * Sets the rendering context to use normal drawing method
+ * @static
+ * @param {int} bit - reference value for the stencil test
+ * @param {GLuint} mask - bit-wise mask that is used in comparison
+ */
+function endDrawToStencil(bit, mask)
+{
+    mGL.depthMask(mGL.TRUE);
+    mGL.stencilOp(mGL.KEEP, mGL.KEEP, mGL.KEEP);
+    mGL.stencilFunc(mGL.EQUAL, bit, mask);
+    mGL.colorMask(true, true, true, true);
+}
+
+/**
+ * Disables stencil rendering
+ * @static
+ */
+function disableDrawToStencil() {
+    mGL.disable(mGL.STENCIL_TEST);
+}
+
+export {
+    get, init, cleanUp,
+
+    // stencil support
+    disableDrawToStencil, beginDrawToStencil, endDrawToStencil
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-audio.html">audio</a></li><li><a href="module-debug_draw.html">debug_draw</a></li><li><a href="module-default_resources.html">default_resources</a></li><li><a href="module-font.html">font</a></li><li><a href="module-gl.html">gl</a></li><li><a href="module-index.html">index</a></li><li><a href="module-input.html">input</a></li><li><a href="module-layer.html">layer</a></li><li><a href="module-loop.html">loop</a></li><li><a href="module-particle_system.html">particle_system</a></li><li><a href="module-physics.html">physics</a></li><li><a href="module-resource_map.html">resource_map</a></li><li><a href="module-shader_resources.html">shader_resources</a></li><li><a href="module-text.html">text</a></li><li><a href="module-texture.html">texture</a></li><li><a href="module-vertex_buffer.html">vertex_buffer</a></li><li><a href="module-xml.html">xml</a></li></ul><h3>Classes</h3><ul><li><a href="BoundingBox.html">BoundingBox</a></li><li><a href="Camera.html">Camera</a></li><li><a href="CameraShake.html">CameraShake</a></li><li><a href="CameraState.html">CameraState</a></li><li><a href="CollisionInfo.html">CollisionInfo</a></li><li><a href="FontRenderable.html">FontRenderable</a></li><li><a href="GameObject.html">GameObject</a></li><li><a href="GameObjectSet.html">GameObjectSet</a></li><li><a href="IllumRenderable.html">IllumRenderable</a></li><li><a href="IllumShader.html">IllumShader</a></li><li><a href="Lerp.html">Lerp</a></li><li><a href="LerpVec2.html">LerpVec2</a></li><li><a href="Light.html">Light</a></li><li><a href="LightRenderable.html">LightRenderable</a></li><li><a href="LightSet.html">LightSet</a></li><li><a href="LightShader.html">LightShader</a></li><li><a href="LineRenderable.html">LineRenderable</a></li><li><a href="LineShader.html">LineShader</a></li><li><a href="Material.html">Material</a></li><li><a href="module-font-CharacterInfo.html">CharacterInfo</a></li><li><a href="Oscillate.html">Oscillate</a></li><li><a href="ParallaxGameObject.html">ParallaxGameObject</a></li><li><a href="Particle.html">Particle</a></li><li><a href="ParticleEmitter.html">ParticleEmitter</a></li><li><a href="ParticleRenderable.html">ParticleRenderable</a></li><li><a href="ParticleSet.html">ParticleSet</a></li><li><a href="Renderable.html">Renderable</a></li><li><a href="RigidCircle.html">RigidCircle</a></li><li><a href="RigidRectangle.html">RigidRectangle</a></li><li><a href="RigidShape.html">RigidShape</a></li><li><a href="Scene.html">Scene</a></li><li><a href="ShaderLightAt.html">ShaderLightAt</a></li><li><a href="ShaderMaterial.html">ShaderMaterial</a></li><li><a href="ShadowCaster.html">ShadowCaster</a></li><li><a href="ShadowCasterShader.html">ShadowCasterShader</a></li><li><a href="ShadowReceiver.html">ShadowReceiver</a></li><li><a href="Shake.html">Shake</a></li><li><a href="ShakeVec2.html">ShakeVec2</a></li><li><a href="SimpleShader.html">SimpleShader</a></li><li><a href="SpriteAnimateRenderable.html">SpriteAnimateRenderable</a></li><li><a href="SpriteRenderable.html">SpriteRenderable</a></li><li><a href="SpriteShader.html">SpriteShader</a></li><li><a href="texture.TextureInfo.html">TextureInfo</a></li><li><a href="TextureRenderable.html">TextureRenderable</a></li><li><a href="TextureShader.html">TextureShader</a></li><li><a href="TiledGameObject.html">TiledGameObject</a></li><li><a href="Transform.html">Transform</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu Jun 02 2022 16:09:01 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
