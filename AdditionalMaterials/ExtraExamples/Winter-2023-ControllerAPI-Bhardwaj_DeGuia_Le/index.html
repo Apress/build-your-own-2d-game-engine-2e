@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>4 PLAYER PONG!!!!!!!!!!!!!!!!!!!!</title>
+        <link rel ="icon" type ="image/x-icon" href="./assets/controller.png">
+
+        <!-- the following says there are javascript source code contained in 
+             the external source files
+        -->
+        <!-- external library -->
+        <script type="text/javascript" src="src/lib/gl-matrix.js"></script>
+
+        <!-- our game -->
+        <script type="module" src="./src/my_game/my_game.js"></script>
+    </head>
+
+     <body>  
+        <h1>Final Project Demo: 4 Player Pong</h1>  
+        <h3>Team 1: Epic Gamers, CSS 452</h3>
+        <canvas id="GLCanvas" width="600" height="600">
+            <!-- GLCanvas is the area we will draw in: a 640x480 area. -->
+            Your browser does not support the HTML5 canvas.
+            <!-- this message will show only if WebGL clearing failed -->
+        </canvas>
+        <p><b><u>NOTE</u>: AN (XBOX) CONTROLLER IS NEEDED TO PLAY THIS DEMO!</b></p>
+        <p><b><u>CONTROLS (Player 1 Only)</u>:</b> <b>A</b>: Start Game <b>B</b>: Reset Game <b>X</b>: Pause Game <b>Y</b>: Resume Game</p>
+    </body>
+</html>
