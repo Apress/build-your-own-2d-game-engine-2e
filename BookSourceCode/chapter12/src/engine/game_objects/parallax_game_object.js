@@ -13,7 +13,7 @@
 
 import TiledGameObject from "./tiled_game_object.js";
 
---
+
 class ParallaxGameObject extends TiledGameObject {
     /**
      * @classdesc Represent a GameObject located at some distance D away, thus 
