@@ -19,11 +19,10 @@
                 // Begin of code execution
                 let canvas = document.getElementById("GLCanvas");
     
-                // Get standard webgl2, or experimental
+                // Get standard webgl2
                 // binds webgl2 to the Canvas area on the web-page to the variable "gl"
                 // "gl" will be the context upon which we access all webGL2 functionality
-                let gl = canvas.getContext("webgl2") ||
-                         canvas.getContext("experimental-webgl2");
+                let gl = canvas.getContext("webgl2");
     
                 if (gl !== null) {
                     gl.clearColor(0.0, 0.8, 0.0, 1.0);  // set the color to be cleared
