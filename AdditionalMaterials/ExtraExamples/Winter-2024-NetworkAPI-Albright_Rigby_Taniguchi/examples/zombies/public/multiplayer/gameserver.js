@@ -1,0 +1,360 @@
+// CSS 452, Winter 2024
+// Team 1: Networked Multiplayer API
+// Members: Ethan, Drew, Matt
+
+// gameserver.js: GameServer class
+
+import express from "express";
+import path from "path";
+import http from "http";
+import { WebSocketServer } from "ws";
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+import { Messages, deepCopy } from './multiplayer.js';
+import { GameState } from "./gamestate.js";
+
+/**
+ * Manages the server's side of the game.
+ * 
+ * 
+ * **This class should only be instantiated on the server (using Node.js).**
+ * 
+ * 
+ * **Users of this API should inherit from this class and overwrite the abstract functions.**
+ * 
+ * @class
+ */
+export class GameServer {
+    /**
+     * Constructs a new `GameServer`.
+     * The HTTP server and the WebSocket server will immediately be started.
+     * This `GameServer`'s `GameStateContainer` will initially be empty.
+     * @constructor
+     */
+    constructor() {
+        if (typeof window !== 'undefined') {
+            throw "Error: attempted to construct a GameServer on a client.";
+        }
+
+        // TODO a better configuration system could be added to allow user to change these settings and others:
+        const maxPlayers = 100;
+
+        this.app = express();
+        this.app.use(express.static(path.join(dirname(fileURLToPath(import.meta.url)), '../../public')));
+        this.server = http.createServer(this.app);
+        this.wss = new WebSocketServer({ server: this.server });
+
+        this.mGameState = new GameState();
+
+        // true if used, false if unused
+        this.mPlayerIDs = Array(maxPlayers).fill(false);
+        this.mNextPlayerID = 0;
+        this.mNumPlayers = 0;
+
+        this.mInitFinished = false;
+        this.mClosed = false;
+
+        let getNextID = () => {
+            for (let i = 0; i < this.mPlayerIDs.length; i++) {
+                if (this.mPlayerIDs[i] === false) {
+                    this.mPlayerIDs[i] = true;
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        this.mClientData = {};
+
+        let me = this;
+
+        // this is an event handler for when a websocket connection occurs
+        // i.e. the client connects to the server
+        // the function() (the second argument) is what is called when the connection starts
+        // `ws` is the actual socket
+        me.wss.on("connection", function (ws, req) {
+
+            // wait for user init to finish before accepting connections
+            while (!me.mInitFinished) { }
+
+            // TODO max players is not being handled
+            // we haven't gotten 100 people to connect to one server yet :)
+            const playerID = getNextID();
+
+            // initialize the client's server side data
+            me.mClientData[playerID] = {};
+            me.mClientData[playerID].ws = ws;
+            me.mClientData[playerID].sendFull = false;
+
+            console.log("user " + playerID + " connected");
+
+            me.onConnect(playerID);
+
+            // send initial gamestate packet
+            ws.send(JSON.stringify({
+                "playerID": playerID,
+                "playerInfo": [me.mNumPlayers, me.mPlayerIDs.length],
+                "gameState": me.mGameState.getContainer().capture()
+            }));
+
+            ws.on("error", console.error);
+
+            // this is called when the server closes
+            // could be used for an event handler where the server loses connection to the internet?
+            // or the server crashes?
+            // ws.on("close", function () {});
+
+            // this is where we recieve data from the client
+            ws.on("message", function (data) {
+                me.#messageHandler(data.toString(), playerID);
+            });
+        });
+
+        me.server.listen(8080, function () {
+            console.log("Listening on http://localhost:8080");
+        });
+
+        me.onInit();
+        me.mInitFinished = true;
+
+        // every 1 second client pings are updated here
+        // TODO timing out could be added here, if client doesn't send pong after N seconds
+        // consider them disconnected
+        setInterval(() => {
+            for (let i = 0; i < me.mPlayerIDs.length; i++) {
+                if (me.mPlayerIDs[i] === true) {
+                    let pingTime = performance.now();
+                    me.#sendSystemMessage(Messages.Ping, i);
+                    me.mClientData[i].pongCb = () => {
+                        // TODO add time out here?
+                        me.mClientData[i].latency = Math.round(performance.now() - pingTime);
+                    }
+                }
+            }
+        }, 1000);
+    }
+
+    // private message handler helper
+    #messageHandler(msg, playerID) {
+        if (msg[0] === '{') {
+            // gamestate update (json)
+            let obj = JSON.parse(msg);
+            this.onPacket(obj, playerID);
+        } else if (Messages.hasPrefix(msg)) {
+            // escaped user message
+            this.onMessage(Messages.removePrefix(msg));
+        } else {
+            // regular user message or system message
+            switch (msg) {
+                case Messages.Ping:
+                    this.#sendSystemMessage(Messages.Pong, playerID);
+                    break;
+                case Messages.Pong:
+                    if (this.mClientData[playerID] === undefined) return;
+                    if (typeof this.mClientData[playerID].pongCb !== "function") return;
+                    else this.mClientData[playerID].pongCb();
+                    delete this.mClientData[playerID].pongCb;
+                    break;
+                case Messages.RequestFull:
+                    this.mClientData[playerID].sendFull = true;
+                    break;
+                case Messages.Disconnect:
+                    this.mClientData[playerID].ws.close();
+                    delete this.mClientData[playerID];
+                    this.mPlayerIDs[playerID] = false;
+                    this.onDisconnect(playerID);
+                    break;
+                default:
+                    this.onMessage(msg, playerID);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Returns true if this server is alive. 
+     * @returns {boolean}
+     */
+    isAlive() {
+        return this.mClosed;
+    }
+
+    /**
+     * Returns this `GameServer`'s `GameStateContainer`.
+     * @method
+     * @returns {GameStateContainer}
+     */
+    getContainer() {
+        return this.mGameState.getContainer();
+    }
+
+    /**
+     * Sends an update packet to all connected clients if anything changed in the `GameStateContainer`.
+     * @method
+     */
+    update() {
+        let full = this.mGameState.getContainer().capture();
+        let packet = this.mGameState.generateUpdate();
+
+        if (Object.keys(full).length === 0 && Object.keys(packet).length === 0) return;
+
+        for (let i = 0; i < this.mPlayerIDs.length; i++) {
+            if (this.mPlayerIDs[i] == true) {
+                if (this.mClientData[i].sendFull == true) {
+                    let clientPacket = deepCopy(full);
+                    this.beforeUpdate(clientPacket, i, true);
+                    if (Object.keys(clientPacket).length !== 0) this.mClientData[i].ws.send(JSON.stringify(clientPacket));
+                    this.mClientData[i].sendFull == false;
+                } else {
+                    let clientPacket = deepCopy(packet);
+                    this.beforeUpdate(clientPacket, i, false);
+                    if (Object.keys(clientPacket).length !== 0) this.mClientData[i].ws.send(JSON.stringify(clientPacket));
+                }
+            }
+        }
+    }
+
+    /**
+     * Sends a message to a specific client.
+     * The message must be a string.
+     * If no player ID is provided, the message will be sent to all clients.
+     * @param {string} message the message
+     * @param {(number | undefined)} playerID the player to send the message to
+     * @method
+     */
+    sendMessage(message, playerID) {
+        if (playerID !== undefined) {
+            this.mClientData[playerID].ws.send(Messages.messageOut(message));
+        } else {
+            for (let id = 0; id < this.mPlayerIDs.length; id++) {
+                if (this.mPlayerIDs[id]) {
+                    this.sendMessage(message, id);
+                }
+            }
+        }
+    }
+
+    // private helper to send a message without escaping, for sending reserved messages
+    #sendSystemMessage(message, playerID) {
+        this.mClientData[playerID].ws.send(message);
+    }
+
+    /**
+     * Returns the latency to the given client (in ms).
+     * Returns undefined if the latency is not available for this client.
+     * @returns {(number | undefined)}
+     * @method
+     */
+    getLatency(playerID) {
+        return this.mClientData[playerID].latency;
+    }
+
+    /**
+     * Returns the number of players connected to this server. 
+     * @returns {number} number of players connected to this server
+     */
+    getNumConnected() {
+        return this.mNumPlayers;
+    }
+
+    /**
+     * Returns the maximum number of players that can connect to this server.
+     * @returns {number} maximum number of players that can connect to this server
+     */
+    getMaxNumPlayers() {
+        return this.mPlayerIDs.length;
+    }
+
+    /**
+     * Sends a request to the player to send a full copy of their GameState
+     * in their next update packet.
+     * If no `playerID` is provided, this request will be sent to all players.
+     * @param {number | undefined} playerID the ID of the player to whom the request should be sent
+     * @method
+     */
+    requestFull(playerID) {
+        me.#sendSystemMessage(Messages.RequestFull, playerID);
+    }
+
+    /**
+     * Closes the server.
+     * This `GameServer` is rendered useless after this function is called.
+     * To open another server, another `GameServer` should be constructed.
+     * The `GameStateContainer` can still be accessed.
+     * @method
+     */
+    close() {
+        me.wss.close();
+        this.mClosed = true;
+    }
+
+    // Abstract method stubs:
+
+    /**
+     * Called immediately after this server sucessfully starts up. 
+     * @abstract
+     * @method 
+     */
+    onInit() {
+        console.warn("GameServer: onInit() has not been overwritten!");
+    }
+
+    /**
+     * Called immediately after a player connects to this server.
+     * Takes the player ID allocated to the player who just connected. 
+     * @param {number} playerID the ID of the player who just connected
+     * @abstract
+     * @method
+     */
+    onConnect(playerID) {
+        console.warn("GameServer: onConnection() has not been overwritten!");
+    }
+
+    /**
+     * Called immediately after a player disconnects from the server.
+     * Takes the player ID of the player who disconnected.
+     * @param {number} playerID the ID of the player who just disconnected
+     * @abstract
+     * @method
+     */
+    onDisconnect(playerID) {
+        console.warn("GameServer: onDisconnect() has not been overwritten!");
+    }
+
+    /**
+     * Called when an update packet is recieved from a player.
+     * @param {number} playerID the ID of the player who sent the packet
+     * @param {object} packet a GameState update packet
+     * @abstract
+     * @method
+     */
+    onPacket(packet, playerID) {
+        console.warn("GameServer: onPacket() has not been overwritten!");
+    }
+
+    /**
+     * Called when a message was recieved from a client.
+     * @param {number} playerID the ID of the player who sent the message
+     * @param {string} message the message
+     * @abstract
+     * @method
+     */
+    onMessage(message, playerID) {
+        console.warn("GameServer: onMessage() has not been overwritten!");
+    }
+
+    /**
+     * Called before an update packet is sent to a client.
+     * This allows for modifications to the content of the packet before it is sent.
+     * An empty packet will not be sent to the user.
+     * @param {object} packet the GameState update packet
+     * @param {number} playerID the player the packet will be sent to
+     * @param {boolean} isFull whether the packet is a full copy of the GameState
+     * @abstract
+     * @method
+     */
+    beforeUpdate(packet, playerID, isFull) {
+        console.warn("GameServer: beforeUpdate() has not been overwritten!");
+    }
+}
