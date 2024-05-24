@@ -16,9 +16,10 @@ function getGL() { return mGL; }
 function initWebGL(htmlCanvasID) {
     let canvas = document.getElementById(htmlCanvasID);
 
-    // Get the standard or experimental webgl and binds to the Canvas area
+    // Thanks to Arsen Mazmanyan (Birdman1104 @github) for pointing out that experimental-webgl2 has been deprecated
+    // Get the webgl and binds to the Canvas area 
     // store the results to the instance variable mGL
-    mGL = canvas.getContext("webgl2") || canvas.getContext("experimental-webgl2");
+    mGL = canvas.getContext("webgl2");
 
     if (mGL === null) {
         document.write("<br><b>WebGL 2 is not supported!</b>");
